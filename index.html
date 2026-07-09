@@ -1896,105 +1896,107 @@
     </div>
 </div>
 <!-- ==================== AKHIR BLOK 10 R2 ==================== -->
-// ========== BLOK 11 RESTART SYSTEM  ==========
-function updateRestartStats() {
-    // Total chat (misal dari localStorage chat)
-    const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
-    document.getElementById('total-chat').textContent = chatData.length;
-    
-    // Kontak (misal dari localStorage kontak)
-    const kontakData = JSON.parse(localStorage.getItem('kontakData')) || [];
-    document.getElementById('total-kontak').textContent = kontakData.length;
+<!-- ==================== BLOK 11 R1: RESTART SYSTEM ==================== -->
+<div id="restart-system-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
+                <a href="#" class="nav-item active" data-page="restart-system">Restart System</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
 
-    // Storage size
-    let totalSize = 0;
-    for (let key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-            totalSize += localStorage.getItem(key).length * 2;
-        }
-    }
-    document.getElementById('restart-storage').textContent = (totalSize / 1024).toFixed(1) + ' KB';
-    document.getElementById('storage-keys').textContent = localStorage.length + ' keys';
-    document.getElementById('data-size').textContent = (totalSize / 1024).toFixed(1) + ' KB';
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-restart">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
 
-    // Browser info
-    document.getElementById('browser-info').textContent = navigator.userAgent;
-    // Online status
-    document.getElementById('online-status').textContent = navigator.onLine ? '✅ Ya' : '❌ Tidak';
-    document.getElementById('online-status').style.color = navigator.onLine ? '#27ae60' : '#e74c3c';
-    // Waktu
-    document.getElementById('current-time').textContent = new Date().toLocaleString('id-ID');
-}
-updateRestartStats();
-setInterval(updateRestartStats, 60000); // update setiap 1 menit
+            <div class="content">
+                <h2>🏠 Restart System</h2>
+                <p class="breadcrumb">Home / Restart System</p>
+                <p style="color: #555; margin-bottom: 25px;">Pembersihan chat, cache, maintenance mode.</p>
 
-// Maintenance Mode toggle
-const maintenanceStatus = document.getElementById('maintenance-status');
-const toggleMaintenanceBtn = document.getElementById('toggle-maintenance-btn');
-let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
+                <!-- Ringkasan Statistik -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; max-width: 800px; margin-bottom: 25px;">
+                    <div style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); text-align: center;">
+                        <div style="font-size: 2em;">💬</div>
+                        <div style="font-weight: 600;">Total Chat</div>
+                        <div id="total-chat" style="font-size: 1.5em; color: #FF8C00;">0</div>
+                    </div>
+                    <div style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); text-align: center;">
+                        <div style="font-size: 2em;">👤</div>
+                        <div style="font-weight: 600;">Kontak</div>
+                        <div id="total-kontak" style="font-size: 1.5em; color: #FF8C00;">0</div>
+                    </div>
+                    <div style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); text-align: center;">
+                        <div style="font-size: 2em;">💾</div>
+                        <div style="font-weight: 600;">Storage</div>
+                        <div id="restart-storage" style="font-size: 1.5em; color: #FF8C00;">33 KB</div>
+                    </div>
+                </div>
 
-function updateMaintenanceUI() {
-    if (isMaintenance) {
-        maintenanceStatus.innerHTML = '🚧 MAINTENANCE MODE';
-        maintenanceStatus.style.color = '#e74c3c';
-        toggleMaintenanceBtn.textContent = '✅ Nonaktifkan Maintenance';
-        toggleMaintenanceBtn.style.background = '#27ae60';
-    } else {
-        maintenanceStatus.innerHTML = '✅ APLIKASI NORMAL';
-        maintenanceStatus.style.color = '#27ae60';
-        toggleMaintenanceBtn.textContent = '🚧 Aktifkan Maintenance';
-        toggleMaintenanceBtn.style.background = '#f39c12';
-    }
-}
-updateMaintenanceUI();
+                <!-- Grid Aksi -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 900px;">
 
-toggleMaintenanceBtn.addEventListener('click', function() {
-    isMaintenance = !isMaintenance;
-    localStorage.setItem('maintenanceMode', isMaintenance ? 'true' : 'false');
-    updateMaintenanceUI();
-    alert(isMaintenance ? 'Maintenance Mode diaktifkan.' : 'Maintenance Mode dinonaktifkan.');
-});
+                    <!-- 1. Maintenance Mode -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <h3 style="margin-bottom: 10px;">🚧 Maintenance Mode</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #f8f9fa; padding: 10px; border-radius: 8px;">
+                            <span id="maintenance-status" style="font-weight: 600; color: #27ae60;">✅ APLIKASI NORMAL</span>
+                            <button id="toggle-maintenance-btn" style="padding: 5px 15px; background: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer;">🚧 Aktifkan Maintenance</button>
+                        </div>
+                    </div>
 
-// Hapus chat lama (> 1 bulan)
-document.getElementById('delete-old-chat-btn').addEventListener('click', function() {
-    if (!confirm('⚠️ Semua chat lebih dari 1 bulan akan dihapus permanen. Lanjutkan?')) return;
-    const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-    const filtered = chatData.filter(chat => {
-        const chatDate = new Date(chat.timestamp || chat.date || Date.now());
-        return chatDate > oneMonthAgo;
-    });
-    localStorage.setItem('chatData', JSON.stringify(filtered));
-    alert(`Berhasil menghapus ${chatData.length - filtered.length} chat lama.`);
-    updateRestartStats();
-});
+                    <!-- 2. Hapus Chat Lama -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <h3 style="margin-bottom: 10px;">💬 Hapus Chat Lama (> 1 Bulan)</h3>
+                        <p style="color: #e74c3c; font-size: 0.85em; margin-bottom: 10px;">⚠️ Chat yang dihapus tidak dapat dikembalikan!</p>
+                        <button id="delete-old-chat-btn" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🗑️ Hapus Chat > 1 Bulan</button>
+                    </div>
 
-// Clear cache & optimasi
-document.getElementById('clear-cache-btn').addEventListener('click', function() {
-    if (!confirm('🧹 Hapus semua cache sementara? (Data penting seperti akun, rekening, produk TIDAK akan dihapus)')) return;
-    // Hapus item cache (misal yang berawalan 'cache_' atau item temporary lain)
-    const keysToRemove = [];
-    for (let key in localStorage) {
-        if (localStorage.hasOwnProperty(key) && key.startsWith('cache_')) {
-            keysToRemove.push(key);
-        }
-    }
-    keysToRemove.forEach(key => localStorage.removeItem(key));
-    alert(`Berhasil menghapus ${keysToRemove.length} item cache.`);
-    updateRestartStats();
-});
+                    <!-- 3. Clear Cache & Optimasi -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <h3 style="margin-bottom: 10px;">🧹 Clear Cache & Optimasi</h3>
+                        <button id="clear-cache-btn" style="padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🧹 Clear Cache ⚡ Optimasi</button>
+                    </div>
 
-// Tambahkan navigasi ke restart-system
-document.body.addEventListener('click', function(e) {
-    const link = e.target.closest('.nav-item[data-page]');
-    if (!link) return;
-    const page = link.getAttribute('data-page');
-    if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee','backup-restore','restart-system'].includes(page)) {
-        e.preventDefault();
-        showPage(page);
-        if (page === 'restart-system') updateRestartStats();
-    }
-});
+                    <!-- 4. Info Sistem -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); grid-column: 1 / -1; max-width: 100%;">
+                        <h3 style="margin-bottom: 15px;">ℹ️ Info Sistem</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tbody>
+                                <tr><td style="padding: 6px; font-weight: 600; width: 140px;">Aplikasi</td><td style="padding: 6px;">: APP TOKO ONLINE v1.0</td></tr>
+                                <tr><td style="padding: 6px; font-weight: 600;">Browser</td><td style="padding: 6px;">: <span id="browser-info">Chrome/109.0.0.0 Safari/537.36</span></td></tr>
+                                <tr><td style="padding: 6px; font-weight: 600;">Online</td><td style="padding: 6px;">: <span id="online-status" style="color: #27ae60;">✅ Ya</span></td></tr>
+                                <tr><td style="padding: 6px; font-weight: 600;">Storage Keys</td><td style="padding: 6px;">: <span id="storage-keys">48 keys</span></td></tr>
+                                <tr><td style="padding: 6px; font-weight: 600;">Ukuran Data</td><td style="padding: 6px;">: <span id="data-size">33 KB</span></td></tr>
+                                <tr><td style="padding: 6px; font-weight: 600;">Waktu</td><td style="padding: 6px;">: <span id="current-time">10/7/2026 02.26.26</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 11 R1 ==================== -->
 </body>
 </html>
