@@ -2037,5 +2037,105 @@
     </div>
 </div>
 <!-- ==================== AKHIR BLOK 10 R1 ==================== -->
+    // ========== RESTART SYSTEM (BLOK 11) ==========
+function updateRestartStats() {
+    // Total chat (misal dari localStorage chat)
+    const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
+    document.getElementById('total-chat').textContent = chatData.length;
+    
+    // Kontak (misal dari localStorage kontak)
+    const kontakData = JSON.parse(localStorage.getItem('kontakData')) || [];
+    document.getElementById('total-kontak').textContent = kontakData.length;
+
+    // Storage size
+    let totalSize = 0;
+    for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+            totalSize += localStorage.getItem(key).length * 2;
+        }
+    }
+    document.getElementById('restart-storage').textContent = (totalSize / 1024).toFixed(1) + ' KB';
+    document.getElementById('storage-keys').textContent = localStorage.length + ' keys';
+    document.getElementById('data-size').textContent = (totalSize / 1024).toFixed(1) + ' KB';
+
+    // Browser info
+    document.getElementById('browser-info').textContent = navigator.userAgent;
+    // Online status
+    document.getElementById('online-status').textContent = navigator.onLine ? '✅ Ya' : '❌ Tidak';
+    document.getElementById('online-status').style.color = navigator.onLine ? '#27ae60' : '#e74c3c';
+    // Waktu
+    document.getElementById('current-time').textContent = new Date().toLocaleString('id-ID');
+}
+updateRestartStats();
+setInterval(updateRestartStats, 60000); // update setiap 1 menit
+
+// Maintenance Mode toggle
+const maintenanceStatus = document.getElementById('maintenance-status');
+const toggleMaintenanceBtn = document.getElementById('toggle-maintenance-btn');
+let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
+
+function updateMaintenanceUI() {
+    if (isMaintenance) {
+        maintenanceStatus.innerHTML = '🚧 MAINTENANCE MODE';
+        maintenanceStatus.style.color = '#e74c3c';
+        toggleMaintenanceBtn.textContent = '✅ Nonaktifkan Maintenance';
+        toggleMaintenanceBtn.style.background = '#27ae60';
+    } else {
+        maintenanceStatus.innerHTML = '✅ APLIKASI NORMAL';
+        maintenanceStatus.style.color = '#27ae60';
+        toggleMaintenanceBtn.textContent = '🚧 Aktifkan Maintenance';
+        toggleMaintenanceBtn.style.background = '#f39c12';
+    }
+}
+updateMaintenanceUI();
+
+toggleMaintenanceBtn.addEventListener('click', function() {
+    isMaintenance = !isMaintenance;
+    localStorage.setItem('maintenanceMode', isMaintenance ? 'true' : 'false');
+    updateMaintenanceUI();
+    alert(isMaintenance ? 'Maintenance Mode diaktifkan.' : 'Maintenance Mode dinonaktifkan.');
+});
+
+// Hapus chat lama (> 1 bulan)
+document.getElementById('delete-old-chat-btn').addEventListener('click', function() {
+    if (!confirm('⚠️ Semua chat lebih dari 1 bulan akan dihapus permanen. Lanjutkan?')) return;
+    const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    const filtered = chatData.filter(chat => {
+        const chatDate = new Date(chat.timestamp || chat.date || Date.now());
+        return chatDate > oneMonthAgo;
+    });
+    localStorage.setItem('chatData', JSON.stringify(filtered));
+    alert(`Berhasil menghapus ${chatData.length - filtered.length} chat lama.`);
+    updateRestartStats();
+});
+
+// Clear cache & optimasi
+document.getElementById('clear-cache-btn').addEventListener('click', function() {
+    if (!confirm('🧹 Hapus semua cache sementara? (Data penting seperti akun, rekening, produk TIDAK akan dihapus)')) return;
+    // Hapus item cache (misal yang berawalan 'cache_' atau item temporary lain)
+    const keysToRemove = [];
+    for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key) && key.startsWith('cache_')) {
+            keysToRemove.push(key);
+        }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    alert(`Berhasil menghapus ${keysToRemove.length} item cache.`);
+    updateRestartStats();
+});
+
+// Tambahkan navigasi ke restart-system
+document.body.addEventListener('click', function(e) {
+    const link = e.target.closest('.nav-item[data-page]');
+    if (!link) return;
+    const page = link.getAttribute('data-page');
+    if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee','backup-restore','restart-system'].includes(page)) {
+        e.preventDefault();
+        showPage(page);
+        if (page === 'restart-system') updateRestartStats();
+    }
+});
 </body>
 </html>
