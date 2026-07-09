@@ -917,21 +917,11 @@
     }
 </style>
 <!-- ==================== AKHIR BLOK 3 ==================== -->
-<!-- ==================== BLOK 4 R6: SCRIPT (Revisi 6 - Dropdown Toko & Export Produk) ==================== -->
+<!-- ==================== BLOK 4 R8: SCRIPT (Revisi 8 - Perbaikan Backup/Restore) ==================== -->
 <script>
     // ========== DATA DEFAULT ==========
     const defaultAccounts = [
-        {
-            username: "SuperAdmin",
-            password: "MyHand0286",
-            role: "superadmin",
-            name: "Dede",
-            address: "Ciamis, Jawa Barat",
-            phone: "-",
-            email: "-",
-            position: "CEO TOKO ONLINE",
-            status: "Aktif"
-        }
+        { username: "SuperAdmin", password: "MyHand0286", role: "superadmin", name: "Dede", address: "Ciamis, Jawa Barat", phone: "-", email: "-", position: "CEO TOKO ONLINE", status: "Aktif" }
     ];
 
     const defaultRekening = [
@@ -940,21 +930,41 @@
         { bank: "CASH", nomor: "-", pemilik: "Kas Utama", status: "Aktif" }
     ];
 
+    const defaultTagihan = [
+        { id: 1, toko: "Toko A", jumlah: 50000, status: "Lunas" },
+        { id: 2, toko: "Toko B", jumlah: 75000, status: "Pending" },
+        { id: 3, toko: "Toko C", jumlah: 100000, status: "Lunas" }
+    ];
+
+    const defaultIklan = [
+        { id: 1, judul: "Promo Ramadhan", status: "Aktif" },
+        { id: 2, judul: "Diskon Akhir Tahun", status: "Nonaktif" }
+    ];
+
+    // Pastikan localStorage memiliki default jika belum ada
+    if (!localStorage.getItem('accounts')) localStorage.setItem('accounts', JSON.stringify(defaultAccounts));
+    if (!localStorage.getItem('rekening')) localStorage.setItem('rekening', JSON.stringify(defaultRekening));
+    if (!localStorage.getItem('tagihan')) localStorage.setItem('tagihan', JSON.stringify(defaultTagihan));
+    if (!localStorage.getItem('iklan')) localStorage.setItem('iklan', JSON.stringify(defaultIklan));
+
     // ========== FUNGSI DATA ==========
     function getAccounts() {
-        const stored = localStorage.getItem('accounts');
-        return stored ? JSON.parse(stored) : [...defaultAccounts];
+        return JSON.parse(localStorage.getItem('accounts'));
     }
     function saveAccounts(accounts) {
         localStorage.setItem('accounts', JSON.stringify(accounts));
     }
-
     function getRekening() {
-        const stored = localStorage.getItem('rekening');
-        return stored ? JSON.parse(stored) : [...defaultRekening];
+        return JSON.parse(localStorage.getItem('rekening'));
     }
     function saveRekening(data) {
         localStorage.setItem('rekening', JSON.stringify(data));
+    }
+    function getTagihan() {
+        return JSON.parse(localStorage.getItem('tagihan'));
+    }
+    function getIklan() {
+        return JSON.parse(localStorage.getItem('iklan'));
     }
 
     const defaultProfile = {
@@ -981,6 +991,7 @@
         const importExportPage = document.getElementById('import-export-page');
         const menuAkunPage = document.getElementById('menu-akun-page');
         const rekeningFeePage = document.getElementById('rekening-fee-page');
+        const backupRestorePage = document.getElementById('backup-restore-page');
         const editProfileModal = document.getElementById('edit-profile-modal');
         const accountDetailModal = document.getElementById('account-detail-modal');
 
@@ -994,7 +1005,7 @@
         const errorMsg = document.getElementById('error-msg');
 
         function updateAllUsernames(username) {
-            const ids = ['display-username', 'display-username-kelola', 'display-username-import', 'display-username-menu-akun', 'display-username-rekening'];
+            const ids = ['display-username', 'display-username-kelola', 'display-username-import', 'display-username-menu-akun', 'display-username-rekening', 'display-username-backup'];
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = username;
@@ -1035,7 +1046,7 @@
 
         window.logout = function() {
             sessionStorage.clear();
-            const pages = [dashboardPage, kelolaAkunPage, importExportPage, menuAkunPage, rekeningFeePage];
+            const pages = [dashboardPage, kelolaAkunPage, importExportPage, menuAkunPage, rekeningFeePage, backupRestorePage];
             pages.forEach(p => { if (p) p.style.display = 'none'; });
             loginPage.style.display = 'flex';
             document.getElementById('username').value = '';
@@ -1049,7 +1060,8 @@
                 'kelola-akun': kelolaAkunPage,
                 'import-export': importExportPage,
                 'menu-akun': menuAkunPage,
-                'rekening-fee': rekeningFeePage
+                'rekening-fee': rekeningFeePage,
+                'backup-restore': backupRestorePage
             };
             Object.values(pages).forEach(p => { if (p) p.style.display = 'none'; });
             if (pages[pageId]) pages[pageId].style.display = 'block';
@@ -1059,17 +1071,17 @@
                 if (link.getAttribute('data-page') === pageId) link.classList.add('active');
             });
 
-            // Aksi khusus saat halaman ditampilkan
             if (pageId === 'menu-akun') renderAccountTable();
             if (pageId === 'rekening-fee') renderRekeningTable();
             if (pageId === 'import-export') populateTokoDropdown();
+            if (pageId === 'backup-restore') updateBackupSummary();
         }
 
         document.body.addEventListener('click', function(e) {
             const link = e.target.closest('.nav-item[data-page]');
             if (!link) return;
             const page = link.getAttribute('data-page');
-            if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee'].includes(page)) {
+            if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee','backup-restore'].includes(page)) {
                 e.preventDefault();
                 showPage(page);
             }
@@ -1127,17 +1139,15 @@
         });
 
         // ========== IMPORT / EXPORT ==========
-        // Export pengguna CSV
         document.getElementById('export-users-btn')?.addEventListener('click', function() {
             const accounts = getAccounts();
             let csv = 'Username,Password,Role,Nama,Alamat,HP,Email,Jabatan,Status\n';
             accounts.forEach(a => {
                 csv += `${a.username},${a.password},${a.role},${a.name},${a.address},${a.phone},${a.email},${a.position},${a.status}\n`;
             });
-            downloadCSV(csv, 'pengguna.csv');
+            downloadFile(csv, 'pengguna.csv', 'text/csv');
         });
 
-        // Export produk CSV (per toko)
         document.getElementById('export-product-btn')?.addEventListener('click', function() {
             const select = document.getElementById('export-product-toko');
             const selectedToko = select ? select.value : '';
@@ -1145,14 +1155,12 @@
                 alert('Pilih toko terlebih dahulu.');
                 return;
             }
-            // Data produk dummy, nanti bisa diganti dengan data asli
             let csv = 'ID,Nama Produk,Harga,Stok,Toko\n';
             csv += `1,Produk A,10000,50,${selectedToko}\n`;
             csv += `2,Produk B,20000,30,${selectedToko}\n`;
-            downloadCSV(csv, `produk_${selectedToko}.csv`);
+            downloadFile(csv, `produk_${selectedToko}.csv`, 'text/csv');
         });
 
-        // Import pengguna CSV
         document.getElementById('import-btn')?.addEventListener('click', function() {
             const file = document.getElementById('import-csv-file').files[0];
             if (!file) { alert('Pilih file CSV.'); return; }
@@ -1183,8 +1191,8 @@
             reader.readAsText(file);
         });
 
-        function downloadCSV(csv, filename) {
-            const blob = new Blob([csv], { type: 'text/csv' });
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = filename;
@@ -1192,28 +1200,19 @@
             URL.revokeObjectURL(link.href);
         }
 
-        // ========== FUNGSI DROPDOWN TOKO ==========
         function populateTokoDropdown() {
             const select = document.getElementById('export-product-toko');
             if (!select) return;
-            // Hapus semua opsi kecuali placeholder pertama
-            while (select.options.length > 1) {
-                select.remove(1);
-            }
-            const accounts = getAccounts();
-            // Filter semua akun selain SuperAdmin
-            const tokoAccounts = accounts.filter(acc => acc.username !== 'SuperAdmin');
-            tokoAccounts.forEach(acc => {
+            while (select.options.length > 1) select.remove(1);
+            const accounts = getAccounts().filter(a => a.username !== 'SuperAdmin');
+            accounts.forEach(acc => {
                 const option = document.createElement('option');
                 option.value = acc.username;
                 option.textContent = acc.username + (acc.name ? ' - ' + acc.name : '');
                 select.appendChild(option);
             });
-            // Aktifkan dropdown dan tombol export
             select.disabled = false;
-            const exportProductBtn = document.getElementById('export-product-btn');
-            if (exportProductBtn) exportProductBtn.disabled = false;
-            // Aktifkan juga tombol lainnya jika perlu (sudah dilakukan di R5)
+            document.getElementById('export-product-btn').disabled = false;
             document.getElementById('export-users-btn').disabled = false;
             document.getElementById('import-btn').disabled = false;
             document.getElementById('import-csv-file').disabled = false;
@@ -1246,7 +1245,6 @@
             });
             document.getElementById('total-accounts').textContent = accounts.length;
 
-            // Event listeners
             document.querySelectorAll('.btn-view-account').forEach(b => b.addEventListener('click', function() {
                 viewAccount(this.dataset.username);
             }));
@@ -1311,7 +1309,7 @@
             }
         }
 
-        // ========== REKENING FEE (Blok 9) ==========
+        // ========== REKENING FEE ==========
         const rekeningBank = document.getElementById('rekening-bank');
         const rekeningNomor = document.getElementById('rekening-nomor');
         const rekeningPemilik = document.getElementById('rekening-pemilik');
@@ -1368,7 +1366,6 @@
                     }
                 });
             });
-
             document.querySelectorAll('.btn-delete-rekening').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const index = parseInt(this.dataset.index);
@@ -1389,34 +1386,81 @@
             const nomor = rekeningNomor?.value.trim();
             const pemilik = rekeningPemilik?.value.trim() || 'APP Toko Online';
             const status = rekeningStatus?.value || 'Aktif';
-
-            if (!bank || !nomor) {
-                alert('Nama Bank dan Nomor Rekening wajib diisi.');
-                return;
-            }
-
+            if (!bank || !nomor) { alert('Bank dan Nomor Rekening wajib diisi.'); return; }
             const data = getRekening();
             const newRek = { bank, nomor, pemilik, status };
-
-            if (editingIndex >= 0) {
-                data[editingIndex] = newRek;
-            } else {
-                data.push(newRek);
-            }
+            if (editingIndex >= 0) data[editingIndex] = newRek;
+            else data.push(newRek);
             saveRekening(data);
             renderRekeningTable();
             resetRekeningForm();
         });
-
         btnResetRekening?.addEventListener('click', resetRekeningForm);
 
-        // Inisialisasi data rekening jika belum ada
-        if (!localStorage.getItem('rekening')) {
-            saveRekening(defaultRekening);
+        // ========== BACKUP & RESTORE (BLOK 10) ==========
+        function updateBackupSummary() {
+            const accounts = getAccounts();
+            document.getElementById('summary-pengguna').textContent = accounts.length + ' akun';
+            document.getElementById('summary-tagihan').textContent = getTagihan().length + ' tagihan';
+            document.getElementById('summary-chat').textContent = '0 kontak';
+            document.getElementById('summary-iklan').textContent = getIklan().length + ' iklan';
+
+            let totalSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    totalSize += localStorage.getItem(key).length * 2; // UTF-16
+                }
+            }
+            document.getElementById('summary-storage').textContent = (totalSize / 1024).toFixed(1) + ' KB';
         }
+
+        // Download JSON
+        document.getElementById('download-json-btn')?.addEventListener('click', function() {
+            const backupData = {
+                accounts: getAccounts(),
+                profileData: getProfile(),
+                rekening: getRekening(),
+                tagihan: getTagihan(),
+                iklan: getIklan(),
+                timestamp: new Date().toISOString()
+            };
+            const json = JSON.stringify(backupData, null, 2);
+            downloadFile(json, 'backup_data.json', 'application/json');
+            alert('File JSON berhasil diunduh.');
+        });
+
+        // Download HTML
+        document.getElementById('download-html-btn')?.addEventListener('click', function() {
+            const html = document.documentElement.outerHTML;
+            downloadFile('<!DOCTYPE html>\n' + html, 'index.html', 'text/html');
+            alert('File HTML berhasil diunduh.');
+        });
+
+        // Restore
+        document.getElementById('restore-btn')?.addEventListener('click', function() {
+            const fileInput = document.getElementById('restore-file-input');
+            const file = fileInput.files[0];
+            if (!file) { alert('Pilih file JSON backup terlebih dahulu.'); return; }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.accounts) saveAccounts(data.accounts);
+                    if (data.profileData) saveProfile(data.profileData);
+                    if (data.rekening) saveRekening(data.rekening);
+                    if (data.tagihan) localStorage.setItem('tagihan', JSON.stringify(data.tagihan));
+                    if (data.iklan) localStorage.setItem('iklan', JSON.stringify(data.iklan));
+                    alert('Data berhasil direstore. Halaman akan dimuat ulang.');
+                    location.reload();
+                } catch (error) {
+                    alert('File JSON tidak valid.');
+                }
+            };
+            reader.readAsText(file);
+        });
     });
 </script>
-<!-- ==================== AKHIR BLOK 4 R6 ==================== -->
+<!-- ==================== AKHIR BLOK 4 R8 ==================== -->
 <!-- ==================== BLOK 5: MODAL EDIT PROFIL ==================== -->
 <div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center;">
     <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
