@@ -220,8 +220,92 @@
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 2 R4 ==================== -->
-<!-- ==================== BLOK 3: CSS ==================== -->
+<!-- ==================== BLOK 2 R5: DASHBOARD (Sidebar disamakan) ==================== -->
+<div id="dashboard-page" style="display: none;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>Dashboard</h2>
+                <p class="breadcrumb">Home / Dashboard</p>
+
+                <!-- Kotak Profil Super Admin -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">SA</div>
+                        <div>
+                            <h3>PROFIL SUPER ADMIN</h3>
+                            <span class="role-badge">CEO TOKO ONLINE</span>
+                        </div>
+                    </div>
+                    <div class="profile-body">
+                        <table class="profile-table">
+                            <tbody>
+                                <tr>
+                                    <td>Nama</td>
+                                    <td>: <span id="profile-name">Dede</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Alamat</td>
+                                    <td>: <span id="profile-address">Ciamis, Jawa Barat</span></td>
+                                </tr>
+                                <tr>
+                                    <td>HP</td>
+                                    <td>: <span id="profile-phone">-</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>: <span id="profile-email">-</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Jabatan</td>
+                                    <td>: <span id="profile-position">CEO TOKO ONLINE</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Tombol Edit & Hapus -->
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            <button id="btn-edit-profile" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Edit Profil</button>
+                            <button id="btn-delete-profile" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Hapus Profil</button>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="note">Seluruh fitur kini telah terhubung melalui sidebar. Backup &amp; Restore siap digunakan.</p>
+            </div>
+
+            <!-- Footer Penutup -->
+            <footer class="footer">
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 2 R5 ==================== -->
+<!-- ==================== BLOK 3 R1: CSS (Duplikasi dihapus, hanya 1 Style) ==================== -->
 <style>
     /* === RESET & GLOBAL === */
     * {
@@ -235,7 +319,7 @@
         min-height: 100vh;
     }
 
-    /* ========== HALAMAN LOGIN (Blok 1) ========== */
+    /* ========== HALAMAN LOGIN ========== */
     #login-page {
         min-height: 100vh;
         background: linear-gradient(135deg, #FF6B00, #FF8C00, #FFA500);
@@ -332,7 +416,7 @@
         min-height: 20px;
     }
 
-    /* ========== DASHBOARD (Blok 2) ========== */
+    /* ========== DASHBOARD ========== */
     #dashboard-page {
         display: none;
         min-height: 100vh;
@@ -568,356 +652,8 @@
         }
     }
 </style>
-<!-- ==================== AKHIR BLOK 3 ==================== -->
-<!-- ==================== BLOK 3: CSS ==================== -->
-<style>
-    /* === RESET & GLOBAL === */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-        min-height: 100vh;
-    }
-
-    /* ========== HALAMAN LOGIN (Blok 1) ========== */
-    #login-page {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #FF6B00, #FF8C00, #FFA500);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    .login-card {
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        animation: slideUp 0.5s ease;
-    }
-
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .login-header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .login-header h1 {
-        color: #FF6B00;
-        font-size: 2em;
-        margin-bottom: 5px;
-    }
-
-    .login-header p {
-        color: #777;
-        font-size: 0.95em;
-    }
-
-    .input-group {
-        margin-bottom: 20px;
-    }
-
-    .input-group label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 600;
-        color: #333;
-        font-size: 0.9em;
-    }
-
-    .input-group input {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 1em;
-        transition: border 0.3s;
-    }
-
-    .input-group input:focus {
-        outline: none;
-        border-color: #FF6B00;
-    }
-
-    .btn-login {
-        width: 100%;
-        padding: 14px;
-        background: #FF6B00;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 1.1em;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s, transform 0.2s;
-    }
-
-    .btn-login:hover {
-        background: #E55D00;
-        transform: translateY(-2px);
-    }
-
-    .btn-login:active {
-        transform: translateY(0);
-    }
-
-    .error-msg {
-        color: #e74c3c;
-        text-align: center;
-        margin-top: 10px;
-        font-size: 0.9em;
-        min-height: 20px;
-    }
-
-    /* ========== DASHBOARD (Blok 2) ========== */
-    #dashboard-page {
-        display: none;
-        min-height: 100vh;
-        background: #f5f6fa;
-    }
-
-    .dashboard-container {
-        display: flex;
-        min-height: 100vh;
-    }
-
-    .sidebar {
-        width: 250px;
-        background: #1a1a2e;
-        color: white;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        display: flex;
-        flex-direction: column;
-        z-index: 100;
-    }
-
-    .sidebar-header {
-        padding: 25px 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar-header h2 {
-        font-size: 1.3em;
-        color: #FF8C00;
-    }
-
-    .sidebar-nav {
-        flex: 1;
-        padding: 15px 0;
-    }
-
-    .nav-item {
-        display: block;
-        padding: 12px 25px;
-        color: #bbb;
-        text-decoration: none;
-        transition: all 0.3s;
-        font-size: 0.95em;
-    }
-
-    .nav-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: white;
-    }
-
-    .nav-item.active {
-        background: rgba(255, 107, 0, 0.2);
-        color: #FF8C00;
-        border-right: 3px solid #FF8C00;
-        font-weight: 600;
-    }
-
-    .nav-item.disabled {
-        color: #666;
-        cursor: not-allowed;
-        pointer-events: none;
-    }
-
-    .main-content {
-        flex: 1;
-        margin-left: 250px;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-
-    .topbar {
-        background: white;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .topbar span {
-        color: #333;
-    }
-
-    .btn-logout {
-        padding: 8px 20px;
-        background: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.9em;
-        transition: background 0.3s;
-    }
-
-    .btn-logout:hover {
-        background: #c0392b;
-    }
-
-    .content {
-        padding: 30px;
-        flex: 1;
-    }
-
-    .content h2 {
-        color: #1a1a2e;
-        margin-bottom: 5px;
-    }
-
-    .breadcrumb {
-        color: #999;
-        font-size: 0.85em;
-        margin-bottom: 25px;
-    }
-
-    .profile-card {
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-        max-width: 600px;
-    }
-
-    .profile-header {
-        background: linear-gradient(135deg, #FF6B00, #FF8C00);
-        padding: 25px 30px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .profile-avatar {
-        width: 60px;
-        height: 60px;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3em;
-        font-weight: bold;
-        color: white;
-    }
-
-    .profile-header h3 {
-        color: white;
-        margin: 0;
-        font-size: 1.1em;
-    }
-
-    .role-badge {
-        background: rgba(255, 255, 255, 0.25);
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.8em;
-        color: white;
-        display: inline-block;
-        margin-top: 5px;
-    }
-
-    .profile-body {
-        padding: 25px 30px;
-    }
-
-    .profile-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .profile-table td {
-        padding: 10px 5px;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    .profile-table td:first-child {
-        font-weight: 600;
-        color: #555;
-        width: 100px;
-    }
-
-    .profile-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    .note {
-        margin-top: 25px;
-        padding: 15px 20px;
-        background: #fff3e0;
-        border-left: 4px solid #FF8C00;
-        border-radius: 5px;
-        color: #666;
-        font-size: 0.9em;
-        max-width: 600px;
-    }
-
-    .footer {
-        background: white;
-        padding: 15px 30px;
-        text-align: center;
-        color: #999;
-        font-size: 0.85em;
-        border-top: 1px solid #eee;
-    }
-
-    /* ========== RESPONSIVE ========== */
-    @media (max-width: 768px) {
-        .sidebar {
-            width: 70px;
-        }
-        .sidebar-header h2 {
-            font-size: 0;
-        }
-        .sidebar-header h2::first-letter {
-            font-size: 1.3em;
-        }
-        .nav-item {
-            padding: 12px;
-            text-align: center;
-            font-size: 0;
-        }
-        .nav-item::first-letter {
-            font-size: 1.2em;
-        }
-        .main-content {
-            margin-left: 70px;
-        }
-        .profile-header {
-            flex-direction: column;
-            text-align: center;
-        }
-    }
-</style>
-<!-- ==================== AKHIR BLOK 3 ==================== -->
-<!-- ==================== BLOK 4 R8: SCRIPT (Revisi 8 - Perbaikan Backup/Restore) ==================== -->
+<!-- ==================== AKHIR BLOK 3 R1 ==================== -->
+<!-- ==================== BLOK 4 R9: SCRIPT (Data produk, modal akun, restore) ==================== -->
 <script>
     // ========== DATA DEFAULT ==========
     const defaultAccounts = [
@@ -941,31 +677,29 @@
         { id: 2, judul: "Diskon Akhir Tahun", status: "Nonaktif" }
     ];
 
+    // --- TAMBAHAN: DATA PRODUK ---
+    const defaultProduk = [
+        { id: 1, nama: "Produk A", harga: 10000, stok: 50, toko: "Toko A" },
+        { id: 2, nama: "Produk B", harga: 20000, stok: 30, toko: "Toko B" },
+        { id: 3, nama: "Produk C", harga: 15000, stok: 20, toko: "Toko C" }
+    ];
+
     // Pastikan localStorage memiliki default jika belum ada
     if (!localStorage.getItem('accounts')) localStorage.setItem('accounts', JSON.stringify(defaultAccounts));
     if (!localStorage.getItem('rekening')) localStorage.setItem('rekening', JSON.stringify(defaultRekening));
     if (!localStorage.getItem('tagihan')) localStorage.setItem('tagihan', JSON.stringify(defaultTagihan));
     if (!localStorage.getItem('iklan')) localStorage.setItem('iklan', JSON.stringify(defaultIklan));
+    if (!localStorage.getItem('produk')) localStorage.setItem('produk', JSON.stringify(defaultProduk));
 
     // ========== FUNGSI DATA ==========
-    function getAccounts() {
-        return JSON.parse(localStorage.getItem('accounts'));
-    }
-    function saveAccounts(accounts) {
-        localStorage.setItem('accounts', JSON.stringify(accounts));
-    }
-    function getRekening() {
-        return JSON.parse(localStorage.getItem('rekening'));
-    }
-    function saveRekening(data) {
-        localStorage.setItem('rekening', JSON.stringify(data));
-    }
-    function getTagihan() {
-        return JSON.parse(localStorage.getItem('tagihan'));
-    }
-    function getIklan() {
-        return JSON.parse(localStorage.getItem('iklan'));
-    }
+    function getAccounts() { return JSON.parse(localStorage.getItem('accounts')); }
+    function saveAccounts(accounts) { localStorage.setItem('accounts', JSON.stringify(accounts)); }
+    function getRekening() { return JSON.parse(localStorage.getItem('rekening')); }
+    function saveRekening(data) { localStorage.setItem('rekening', JSON.stringify(data)); }
+    function getTagihan() { return JSON.parse(localStorage.getItem('tagihan')); }
+    function getIklan() { return JSON.parse(localStorage.getItem('iklan')); }
+    // --- TAMBAHAN: GET PRODUK ---
+    function getProduk() { return JSON.parse(localStorage.getItem('produk')); }
 
     const defaultProfile = {
         name: "Dede",
@@ -978,9 +712,7 @@
         const stored = localStorage.getItem('profileData');
         return stored ? JSON.parse(stored) : { ...defaultProfile };
     }
-    function saveProfile(data) {
-        localStorage.setItem('profileData', JSON.stringify(data));
-    }
+    function saveProfile(data) { localStorage.setItem('profileData', JSON.stringify(data)); }
 
     // ========== DOM CONTENT LOADED ==========
     document.addEventListener('DOMContentLoaded', function() {
@@ -994,6 +726,7 @@
         const backupRestorePage = document.getElementById('backup-restore-page');
         const editProfileModal = document.getElementById('edit-profile-modal');
         const accountDetailModal = document.getElementById('account-detail-modal');
+        const addAccountModal = document.getElementById('add-account-modal');
 
         if (!loginPage || !dashboardPage) {
             console.error('Halaman login/dashboard tidak ditemukan.');
@@ -1148,6 +881,7 @@
             downloadFile(csv, 'pengguna.csv', 'text/csv');
         });
 
+        // --- PERBAIKAN: EXPORT PRODUK MENGGUNAKAN DATA PRODUK NYATA ---
         document.getElementById('export-product-btn')?.addEventListener('click', function() {
             const select = document.getElementById('export-product-toko');
             const selectedToko = select ? select.value : '';
@@ -1155,9 +889,15 @@
                 alert('Pilih toko terlebih dahulu.');
                 return;
             }
+            const produk = getProduk().filter(p => p.toko === selectedToko);
+            if (produk.length === 0) {
+                alert('Tidak ada produk untuk toko ini.');
+                return;
+            }
             let csv = 'ID,Nama Produk,Harga,Stok,Toko\n';
-            csv += `1,Produk A,10000,50,${selectedToko}\n`;
-            csv += `2,Produk B,20000,30,${selectedToko}\n`;
+            produk.forEach(p => {
+                csv += `${p.id},${p.nama},${p.harga},${p.stok},${p.toko}\n`;
+            });
             downloadFile(csv, `produk_${selectedToko}.csv`, 'text/csv');
         });
 
@@ -1397,7 +1137,7 @@
         });
         btnResetRekening?.addEventListener('click', resetRekeningForm);
 
-        // ========== BACKUP & RESTORE (BLOK 10) ==========
+        // ========== BACKUP & RESTORE ==========
         function updateBackupSummary() {
             const accounts = getAccounts();
             document.getElementById('summary-pengguna').textContent = accounts.length + ' akun';
@@ -1422,6 +1162,7 @@
                 rekening: getRekening(),
                 tagihan: getTagihan(),
                 iklan: getIklan(),
+                produk: getProduk(), // TAMBAHAN
                 timestamp: new Date().toISOString()
             };
             const json = JSON.stringify(backupData, null, 2);
@@ -1450,6 +1191,7 @@
                     if (data.rekening) saveRekening(data.rekening);
                     if (data.tagihan) localStorage.setItem('tagihan', JSON.stringify(data.tagihan));
                     if (data.iklan) localStorage.setItem('iklan', JSON.stringify(data.iklan));
+                    if (data.produk) localStorage.setItem('produk', JSON.stringify(data.produk)); // TAMBAHAN
                     alert('Data berhasil direstore. Halaman akan dimuat ulang.');
                     location.reload();
                 } catch (error) {
@@ -1458,9 +1200,92 @@
             };
             reader.readAsText(file);
         });
+
+        // ========== LOGIKA MODAL TAMBAH AKUN BARU (BLOK 6 R2) ==========
+        if (addAccountModal) {
+            const addRoleDisplay = document.getElementById('add-role-display');
+            const addUsername = document.getElementById('add-username');
+            const addPassword = document.getElementById('add-password');
+            const addName = document.getElementById('add-name');
+            const addAddress = document.getElementById('add-address');
+            const addPhone = document.getElementById('add-phone');
+            const addEmail = document.getElementById('add-email');
+            const addPosition = document.getElementById('add-position');
+            const btnSaveNewAccount = document.getElementById('btn-save-new-account');
+            const btnCancelAddAccount = document.getElementById('btn-cancel-add-account');
+            let selectedRoleForNewAccount = '';
+
+            document.querySelectorAll('.btn-buat-akun').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const roleMap = {
+                        'staf': 'Staf',
+                        'cs': 'Customer Service',
+                        'marketing': 'Marketing',
+                        'owner-toko': 'Owner Toko',
+                        'owner-ojek': 'Owner Ojek',
+                        'pangkalan': 'Pemilik Pangkalan',
+                        'grosir': 'Grosir',
+                        'toko-standar': 'Toko Standar',
+                        'toko-kecil': 'Toko Kecil',
+                        'seller': 'Toko Seller',
+                        'toko-makanan': 'Toko Makanan',
+                        'cod-seller': 'COD Seller',
+                        'ojek': 'Ojek'
+                    };
+                    selectedRoleForNewAccount = this.dataset.role;
+                    addRoleDisplay.value = roleMap[selectedRoleForNewAccount] || selectedRoleForNewAccount;
+                    addAccountModal.style.display = 'flex';
+                });
+            });
+
+            btnCancelAddAccount?.addEventListener('click', function() {
+                addAccountModal.style.display = 'none';
+            });
+            addAccountModal?.addEventListener('click', function(e) {
+                if (e.target === addAccountModal) addAccountModal.style.display = 'none';
+            });
+
+            btnSaveNewAccount?.addEventListener('click', function() {
+                const username = addUsername.value.trim();
+                const password = addPassword.value.trim();
+                if (!username || !password) {
+                    alert('Username dan Password wajib diisi!');
+                    return;
+                }
+                const accounts = getAccounts();
+                if (accounts.find(a => a.username === username)) {
+                    alert('Username sudah digunakan!');
+                    return;
+                }
+                const newAccount = {
+                    username: username,
+                    password: password,
+                    role: selectedRoleForNewAccount,
+                    name: addName.value.trim(),
+                    address: addAddress.value.trim(),
+                    phone: addPhone.value.trim(),
+                    email: addEmail.value.trim(),
+                    position: addPosition.value.trim(),
+                    status: 'Aktif'
+                };
+                accounts.push(newAccount);
+                saveAccounts(accounts);
+                alert('Akun berhasil ditambahkan!');
+                addAccountModal.style.display = 'none';
+                // Reset form
+                addUsername.value = '';
+                addPassword.value = '';
+                addName.value = '';
+                addAddress.value = '';
+                addPhone.value = '';
+                addEmail.value = '';
+                addPosition.value = '';
+                renderAccountTable();
+            });
+        }
     });
 </script>
-<!-- ==================== AKHIR BLOK 4 R8 ==================== -->
+<!-- ==================== AKHIR BLOK 4 R9 ==================== -->
 <!-- ==================== BLOK 5: MODAL EDIT PROFIL ==================== -->
 <div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center;">
     <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
