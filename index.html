@@ -212,5 +212,794 @@
     </div>
 </div>
 <!-- ==================== AKHIR BLOK 2 ==================== -->
+<!-- ==================== BLOK 3: CSS ==================== -->
+<style>
+    /* === RESET & GLOBAL === */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+    }
+
+    /* ========== HALAMAN LOGIN (Blok 1) ========== */
+    #login-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #FF6B00, #FF8C00, #FFA500);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .login-header h1 {
+        color: #FF6B00;
+        font-size: 2em;
+        margin-bottom: 5px;
+    }
+
+    .login-header p {
+        color: #777;
+        font-size: 0.95em;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.9em;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1em;
+        transition: border 0.3s;
+    }
+
+    .input-group input:focus {
+        outline: none;
+        border-color: #FF6B00;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 14px;
+        background: #FF6B00;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-login:hover {
+        background: #E55D00;
+        transform: translateY(-2px);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    .error-msg {
+        color: #e74c3c;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.9em;
+        min-height: 20px;
+    }
+
+    /* ========== DASHBOARD (Blok 2) ========== */
+    #dashboard-page {
+        display: none;
+        min-height: 100vh;
+        background: #f5f6fa;
+    }
+
+    .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        background: #1a1a2e;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+    }
+
+    .sidebar-header {
+        padding: 25px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.3em;
+        color: #FF8C00;
+    }
+
+    .sidebar-nav {
+        flex: 1;
+        padding: 15px 0;
+    }
+
+    .nav-item {
+        display: block;
+        padding: 12px 25px;
+        color: #bbb;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-size: 0.95em;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .nav-item.active {
+        background: rgba(255, 107, 0, 0.2);
+        color: #FF8C00;
+        border-right: 3px solid #FF8C00;
+        font-weight: 600;
+    }
+
+    .nav-item.disabled {
+        color: #666;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .main-content {
+        flex: 1;
+        margin-left: 250px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .topbar {
+        background: white;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .topbar span {
+        color: #333;
+    }
+
+    .btn-logout {
+        padding: 8px 20px;
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background 0.3s;
+    }
+
+    .btn-logout:hover {
+        background: #c0392b;
+    }
+
+    .content {
+        padding: 30px;
+        flex: 1;
+    }
+
+    .content h2 {
+        color: #1a1a2e;
+        margin-bottom: 5px;
+    }
+
+    .breadcrumb {
+        color: #999;
+        font-size: 0.85em;
+        margin-bottom: 25px;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        max-width: 600px;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #FF6B00, #FF8C00);
+        padding: 25px 30px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .profile-avatar {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3em;
+        font-weight: bold;
+        color: white;
+    }
+
+    .profile-header h3 {
+        color: white;
+        margin: 0;
+        font-size: 1.1em;
+    }
+
+    .role-badge {
+        background: rgba(255, 255, 255, 0.25);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        color: white;
+        display: inline-block;
+        margin-top: 5px;
+    }
+
+    .profile-body {
+        padding: 25px 30px;
+    }
+
+    .profile-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .profile-table td {
+        padding: 10px 5px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .profile-table td:first-child {
+        font-weight: 600;
+        color: #555;
+        width: 100px;
+    }
+
+    .profile-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .note {
+        margin-top: 25px;
+        padding: 15px 20px;
+        background: #fff3e0;
+        border-left: 4px solid #FF8C00;
+        border-radius: 5px;
+        color: #666;
+        font-size: 0.9em;
+        max-width: 600px;
+    }
+
+    .footer {
+        background: white;
+        padding: 15px 30px;
+        text-align: center;
+        color: #999;
+        font-size: 0.85em;
+        border-top: 1px solid #eee;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 70px;
+        }
+        .sidebar-header h2 {
+            font-size: 0;
+        }
+        .sidebar-header h2::first-letter {
+            font-size: 1.3em;
+        }
+        .nav-item {
+            padding: 12px;
+            text-align: center;
+            font-size: 0;
+        }
+        .nav-item::first-letter {
+            font-size: 1.2em;
+        }
+        .main-content {
+            margin-left: 70px;
+        }
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+<!-- ==================== AKHIR BLOK 3 ==================== -->
+<!-- ==================== BLOK 3: CSS ==================== -->
+<style>
+    /* === RESET & GLOBAL === */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+    }
+
+    /* ========== HALAMAN LOGIN (Blok 1) ========== */
+    #login-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #FF6B00, #FF8C00, #FFA500);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .login-header h1 {
+        color: #FF6B00;
+        font-size: 2em;
+        margin-bottom: 5px;
+    }
+
+    .login-header p {
+        color: #777;
+        font-size: 0.95em;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.9em;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1em;
+        transition: border 0.3s;
+    }
+
+    .input-group input:focus {
+        outline: none;
+        border-color: #FF6B00;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 14px;
+        background: #FF6B00;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-login:hover {
+        background: #E55D00;
+        transform: translateY(-2px);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    .error-msg {
+        color: #e74c3c;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.9em;
+        min-height: 20px;
+    }
+
+    /* ========== DASHBOARD (Blok 2) ========== */
+    #dashboard-page {
+        display: none;
+        min-height: 100vh;
+        background: #f5f6fa;
+    }
+
+    .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        background: #1a1a2e;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+    }
+
+    .sidebar-header {
+        padding: 25px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.3em;
+        color: #FF8C00;
+    }
+
+    .sidebar-nav {
+        flex: 1;
+        padding: 15px 0;
+    }
+
+    .nav-item {
+        display: block;
+        padding: 12px 25px;
+        color: #bbb;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-size: 0.95em;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .nav-item.active {
+        background: rgba(255, 107, 0, 0.2);
+        color: #FF8C00;
+        border-right: 3px solid #FF8C00;
+        font-weight: 600;
+    }
+
+    .nav-item.disabled {
+        color: #666;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .main-content {
+        flex: 1;
+        margin-left: 250px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .topbar {
+        background: white;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .topbar span {
+        color: #333;
+    }
+
+    .btn-logout {
+        padding: 8px 20px;
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background 0.3s;
+    }
+
+    .btn-logout:hover {
+        background: #c0392b;
+    }
+
+    .content {
+        padding: 30px;
+        flex: 1;
+    }
+
+    .content h2 {
+        color: #1a1a2e;
+        margin-bottom: 5px;
+    }
+
+    .breadcrumb {
+        color: #999;
+        font-size: 0.85em;
+        margin-bottom: 25px;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        max-width: 600px;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #FF6B00, #FF8C00);
+        padding: 25px 30px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .profile-avatar {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3em;
+        font-weight: bold;
+        color: white;
+    }
+
+    .profile-header h3 {
+        color: white;
+        margin: 0;
+        font-size: 1.1em;
+    }
+
+    .role-badge {
+        background: rgba(255, 255, 255, 0.25);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        color: white;
+        display: inline-block;
+        margin-top: 5px;
+    }
+
+    .profile-body {
+        padding: 25px 30px;
+    }
+
+    .profile-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .profile-table td {
+        padding: 10px 5px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .profile-table td:first-child {
+        font-weight: 600;
+        color: #555;
+        width: 100px;
+    }
+
+    .profile-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .note {
+        margin-top: 25px;
+        padding: 15px 20px;
+        background: #fff3e0;
+        border-left: 4px solid #FF8C00;
+        border-radius: 5px;
+        color: #666;
+        font-size: 0.9em;
+        max-width: 600px;
+    }
+
+    .footer {
+        background: white;
+        padding: 15px 30px;
+        text-align: center;
+        color: #999;
+        font-size: 0.85em;
+        border-top: 1px solid #eee;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 70px;
+        }
+        .sidebar-header h2 {
+            font-size: 0;
+        }
+        .sidebar-header h2::first-letter {
+            font-size: 1.3em;
+        }
+        .nav-item {
+            padding: 12px;
+            text-align: center;
+            font-size: 0;
+        }
+        .nav-item::first-letter {
+            font-size: 1.2em;
+        }
+        .main-content {
+            margin-left: 70px;
+        }
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+<!-- ==================== AKHIR BLOK 3 ==================== -->
+<!-- ==================== BLOK 4 R1: SCRIPT (Revisi) ==================== -->
+<script>
+    // Data user (password tidak ditampilkan di HTML)
+    const users = [
+        { username: "SuperAdmin", password: "MyHand0286", role: "superadmin", name: "Dede" }
+    ];
+
+    // Tunggu sampai seluruh halaman selesai dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elemen halaman
+        const loginPage = document.getElementById('login-page');
+        const dashboardPage = document.getElementById('dashboard-page');
+        const loginForm = document.getElementById('loginForm');
+        const displayUsername = document.getElementById('display-username');
+        const errorMsg = document.getElementById('error-msg');
+
+        // Cek keberadaan elemen penting
+        if (!loginPage) {
+            console.error('Blok 1: Elemen dengan id "login-page" tidak ditemukan. Pastikan Blok 1 memiliki <div id="login-page"> sebagai wrapper.');
+            return;
+        }
+        if (!dashboardPage) {
+            console.error('Blok 2: Elemen dengan id "dashboard-page" tidak ditemukan. Pastikan Blok 2 sudah disertakan.');
+            return;
+        }
+
+        // Cek session (jika sudah login, langsung tampilkan dashboard)
+        if (sessionStorage.getItem('loggedIn') === 'true') {
+            loginPage.style.display = 'none';
+            dashboardPage.style.display = 'block';
+            if (displayUsername) {
+                displayUsername.textContent = sessionStorage.getItem('username');
+            }
+        }
+
+        // Event listener form login
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+
+                if (!usernameInput || !passwordInput) {
+                    console.error('Input username atau password tidak ditemukan.');
+                    return;
+                }
+
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    sessionStorage.setItem('loggedIn', 'true');
+                    sessionStorage.setItem('username', user.username);
+                    sessionStorage.setItem('role', user.role);
+
+                    loginPage.style.display = 'none';
+                    dashboardPage.style.display = 'block';
+                    if (displayUsername) {
+                        displayUsername.textContent = user.username;
+                    }
+                    if (errorMsg) {
+                        errorMsg.textContent = '';
+                    }
+                } else {
+                    if (errorMsg) {
+                        errorMsg.textContent = 'Username atau password salah!';
+                    }
+                    if (passwordInput) {
+                        passwordInput.value = '';
+                    }
+                }
+            });
+        } else {
+            console.warn('Form login dengan id "loginForm" tidak ditemukan.');
+        }
+
+        // Fungsi logout didefinisikan secara global agar bisa dipanggil dari onclick di HTML
+        window.logout = function() {
+            sessionStorage.clear();
+            if (dashboardPage) dashboardPage.style.display = 'none';
+            if (loginPage) loginPage.style.display = 'flex';
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            if (usernameInput) usernameInput.value = '';
+            if (passwordInput) passwordInput.value = '';
+        };
+    });
+</script>
+<!-- ==================== AKHIR BLOK 4 R1 ==================== -->
 </body>
 </html>
+
+
