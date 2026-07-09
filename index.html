@@ -1465,8 +1465,159 @@
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 6 R1 ==================== -->
-<!-- ==================== BLOK 7 R1: HALAMAN IMPORT/EXPORT DATA (Revisi Dropdown Toko) ==================== -->
+<!-- ==================== BLOK 6 R2: KELOLA AKUN (Tombol diaktifkan + data-role) ==================== -->
+<div id="kelola-akun-page" style="display: none;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item active" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-kelola">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>Kelola Akun</h2>
+                <p class="breadcrumb">Home / Kelola Akun</p>
+
+                <p style="margin-bottom: 20px; color: #555;">Pilih jenis akun yang ingin dibuat:</p>
+
+                <!-- Grid Daftar Akun -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 900px;">
+                    
+                    <!-- 1. Akun Staf -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">👤</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Staf</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Staf internal toko</p>
+                        <button class="btn-buat-akun" data-role="staf" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 2. Akun Customer Service -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🎧</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Customer Service</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Layanan pelanggan</p>
+                        <button class="btn-buat-akun" data-role="cs" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 3. Akun Marketing -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📈</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Marketing</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Promosi dan iklan</p>
+                        <button class="btn-buat-akun" data-role="marketing" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 4. Owner Toko -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏪</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Owner Toko</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pemilik toko utama</p>
+                        <button class="btn-buat-akun" data-role="owner-toko" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 5. Owner Ojek -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🛵</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Owner Ojek</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pengelola armada ojek</p>
+                        <button class="btn-buat-akun" data-role="owner-ojek" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 6. Akun Pemilik Pangkalan -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏚️</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Pemilik Pangkalan</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pangkalan gas/minyak</p>
+                        <button class="btn-buat-akun" data-role="pangkalan" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 7. Akun Grosir -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📦</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Grosir</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjualan partai besar</p>
+                        <button class="btn-buat-akun" data-role="grosir" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 8. Akun Toko Standar -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏬</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Standar</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Toko umum standar</p>
+                        <button class="btn-buat-akun" data-role="toko-standar" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 9. Akun Toko Kecil -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏪</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Kecil</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Usaha kecil/rumahan</p>
+                        <button class="btn-buat-akun" data-role="toko-kecil" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 10. Akun Toko Seller -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🛒</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Seller</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjual marketplace</p>
+                        <button class="btn-buat-akun" data-role="seller" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 11. Akun Toko Makanan -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🍽️</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Makanan</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Usaha kuliner/makanan</p>
+                        <button class="btn-buat-akun" data-role="toko-makanan" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 12. Akun COD Seller -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">💵</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun COD Seller</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjual sistem COD</p>
+                        <button class="btn-buat-akun" data-role="cod-seller" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                    <!-- 13. Akun Ojek -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏍️</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Ojek</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Driver ojek online</p>
+                        <button class="btn-buat-akun" data-role="ojek" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
+                    </div>
+
+                </div>
+
+                <p class="note" style="max-width: 900px; margin-top: 25px;">Klik tombol untuk membuat akun baru. Modal akan muncul untuk mengisi data.</p>
+            </div>
+
+            <footer class="footer">
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 6 R2 ==================== -->
+<!-- ==================== BLOK 7 R2: IMPORT/EXPORT DATA (Sidebar disamakan) ==================== -->
 <div id="import-export-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -1480,7 +1631,7 @@
                 <a href="#" class="nav-item active" data-page="import-export">Import/Export Data</a>
                 <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
                 <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item disabled">Produk</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
                 <a href="#" class="nav-item disabled">Laporan</a>
                 <a href="#" class="nav-item disabled">Pengaturan</a>
             </nav>
@@ -1507,7 +1658,7 @@
                             <h3 style="color: #1a1a2e;">Export Data Pengguna</h3>
                         </div>
                         <p style="color: #666; font-size: 0.9em; margin-bottom: 20px; flex: 1;">Download semua data pengguna dalam format CSV.</p>
-                        <button id="export-users-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" disabled>📥 Export Pengguna CSV</button>
+                        <button id="export-users-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Export Pengguna CSV</button>
                     </div>
 
                     <!-- 2. Export Data Produk -->
@@ -1518,12 +1669,12 @@
                         </div>
                         <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Download data produk dari toko tertentu.</p>
                         <div style="margin-bottom: 15px;">
-                            <select id="export-product-toko" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em;" disabled>
+                            <select id="export-product-toko" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em;">
                                 <option value="">-- Pilih Toko --</option>
                                 <!-- Opsi toko akan diisi oleh script -->
                             </select>
                         </div>
-                        <button id="export-product-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" disabled>📥 Export Produk CSV</button>
+                        <button id="export-product-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Export Produk CSV</button>
                     </div>
 
                     <!-- 3. Import Data Pengguna -->
@@ -1537,24 +1688,24 @@
                             Format: Username,Password,Role,Nama,Alamat,HP,Email,Jabatan,Status
                         </p>
                         <div style="margin-bottom: 15px;">
-                            <input type="file" id="import-csv-file" accept=".csv" style="width: 100%;" disabled>
+                            <input type="file" id="import-csv-file" accept=".csv" style="width: 100%;">
                         </div>
-                        <button id="import-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" disabled>📤 Upload CSV</button>
+                        <button id="import-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📤 Upload CSV</button>
                     </div>
 
                 </div>
 
-                <p class="note" style="max-width: 1000px; margin-top: 25px;">Fitur import/export akan diaktifkan dan dropdown toko akan terisi otomatis oleh script.</p>
+                <p class="note" style="max-width: 1000px; margin-top: 25px;">Fitur import/export telah terhubung dengan data produk dan pengguna.</p>
             </div>
 
             <footer class="footer">
-                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
             </footer>
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 7 R1 ==================== -->
-<!-- ==================== BLOK 8: HALAMAN MENU AKUN APP ==================== -->
+<!-- ==================== AKHIR BLOK 7 R2 ==================== -->
+<!-- ==================== BLOK 8 R1: MENU AKUN APP (Sidebar disamakan + tambah modal HTML) ==================== -->
 <div id="menu-akun-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -1567,6 +1718,8 @@
                 <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
                 <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
                 <a href="#" class="nav-item active" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
                 <a href="#" class="nav-item disabled">Laporan</a>
                 <a href="#" class="nav-item disabled">Pengaturan</a>
             </nav>
@@ -1606,7 +1759,7 @@
                     <p style="margin-top: 10px; font-size: 0.85em; color: #888;">Total akun: <span id="total-accounts">0</span></p>
                 </div>
 
-                <!-- Tombol navigasi cepat (opsional) -->
+                <!-- Tombol navigasi cepat -->
                 <div style="margin-top: 20px;">
                     <button onclick="navigateTo('kelola-akun')" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">+ Tambah Akun Baru</button>
                 </div>
@@ -1615,25 +1768,27 @@
             </div>
 
             <footer class="footer">
-                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
             </footer>
         </main>
     </div>
 </div>
 
-<!-- ==================== MODAL PROFIL LENGKAP (di dalam Blok 8) ==================== -->
+<!-- ==================== MODAL PROFIL LENGKAP (Tetap ada) ==================== -->
 <div id="account-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;">
     <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; max-height: 80vh; overflow-y: auto;">
         <h2 style="margin-bottom: 20px; color: #FF6B00;">Profil Lengkap Akun</h2>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-            <tr><td style="padding: 8px; font-weight: 600; width: 120px;">Username</td><td style="padding: 8px;">: <span id="modal-username">-</span></td></tr>
-            <tr><td style="padding: 8px; font-weight: 600;">Nama</td><td style="padding: 8px;">: <span id="modal-name">-</span></td></tr>
-            <tr><td style="padding: 8px; font-weight: 600;">Role</td><td style="padding: 8px;">: <span id="modal-role">-</span></td></tr>
-            <tr><td style="padding: 8px; font-weight: 600;">Alamat</td><td style="padding: 8px;">: <span id="modal-address">-</span></td></tr>
-            <tr><td style="padding: 8px; font-weight: 600;">HP</td><td style="padding: 8px;">: <span id="modal-phone">-</span></td></tr>
-            <tr><td style="padding: 8px; font-weight: 600;">Email</td><td style="padding: 8px;">: <span id="modal-email">-</span></td></tr>
-            <tr><td style="padding: 8px; font-weight: 600;">Jabatan</td><td style="padding: 8px;">: <span id="modal-position">-</span></td></tr>
-            <tr><td style="padding: 8px; font-weight: 600;">Status</td><td style="padding: 8px;">: <span id="modal-status">-</span></td></tr>
+            <tbody>
+                <tr><td style="padding: 8px; font-weight: 600; width: 120px;">Username</td><td style="padding: 8px;">: <span id="modal-username">-</span></td></tr>
+                <tr><td style="padding: 8px; font-weight: 600;">Nama</td><td style="padding: 8px;">: <span id="modal-name">-</span></td></tr>
+                <tr><td style="padding: 8px; font-weight: 600;">Role</td><td style="padding: 8px;">: <span id="modal-role">-</span></td></tr>
+                <tr><td style="padding: 8px; font-weight: 600;">Alamat</td><td style="padding: 8px;">: <span id="modal-address">-</span></td></tr>
+                <tr><td style="padding: 8px; font-weight: 600;">HP</td><td style="padding: 8px;">: <span id="modal-phone">-</span></td></tr>
+                <tr><td style="padding: 8px; font-weight: 600;">Email</td><td style="padding: 8px;">: <span id="modal-email">-</span></td></tr>
+                <tr><td style="padding: 8px; font-weight: 600;">Jabatan</td><td style="padding: 8px;">: <span id="modal-position">-</span></td></tr>
+                <tr><td style="padding: 8px; font-weight: 600;">Status</td><td style="padding: 8px;">: <span id="modal-status">-</span></td></tr>
+            </tbody>
         </table>
         <div style="display: flex; gap: 10px; justify-content: flex-end;">
             <button id="modal-nonaktifkan-btn" style="padding: 10px 20px; background: #f39c12; color: white; border: none; border-radius: 8px; cursor: pointer;">Nonaktifkan</button>
@@ -1642,8 +1797,51 @@
         </div>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 8 ==================== -->
-<!-- ==================== BLOK 9: HALAMAN REKENING PENERIMA FEE ==================== -->
+
+<!-- ==================== TAMBAHAN: MODAL TAMBAH AKUN BARU ==================== -->
+<div id="add-account-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1001; justify-content: center; align-items: center;">
+    <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+        <h2 style="margin-bottom: 20px; color: #FF6B00;">Tambah Akun Baru</h2>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Role yang dipilih</label>
+            <input type="text" id="add-role-display" disabled style="width: 100%; padding: 10px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Username *</label>
+            <input type="text" id="add-username" placeholder="Masukkan username" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Password *</label>
+            <input type="password" id="add-password" placeholder="Masukkan password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama Lengkap</label>
+            <input type="text" id="add-name" placeholder="Nama" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Alamat</label>
+            <input type="text" id="add-address" placeholder="Alamat" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">HP</label>
+            <input type="text" id="add-phone" placeholder="Nomor HP" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Email</label>
+            <input type="email" id="add-email" placeholder="Email" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 25px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Jabatan</label>
+            <input type="text" id="add-position" placeholder="Jabatan" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="btn-save-new-account" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Simpan</button>
+            <button id="btn-cancel-add-account" style="padding: 10px 25px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Batal</button>
+        </div>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 8 R1 ==================== -->
+<!-- ==================== BLOK 9 R1: REKENING FEE (Sidebar disamakan) ==================== -->
 <div id="rekening-fee-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -1657,6 +1855,7 @@
                 <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
                 <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
                 <a href="#" class="nav-item active" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
                 <a href="#" class="nav-item disabled">Laporan</a>
                 <a href="#" class="nav-item disabled">Pengaturan</a>
             </nav>
@@ -1688,37 +1887,7 @@
                             </tr>
                         </thead>
                         <tbody id="rekening-table-body">
-                            <!-- Contoh data statis (akan diganti oleh script nanti) -->
-                            <tr>
-                                <td style="padding: 8px; text-align: center;"><span style="color: #3498db; font-size: 1.2em;">🔵</span></td>
-                                <td style="padding: 8px;">BRI</td>
-                                <td style="padding: 8px;">1234-5678-9012-3456</td>
-                                <td style="padding: 8px;">👤 APP Toko Online</td>
-                                <td style="padding: 8px; text-align: center;">
-                                    <button class="btn-edit-rekening" style="padding: 5px 10px; background: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer;">✏️</button>
-                                    <button class="btn-delete-rekening" style="padding: 5px 10px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; text-align: center;"><span style="color: #f1c40f; font-size: 1.2em;">🟡</span></td>
-                                <td style="padding: 8px;">MANDIRI</td>
-                                <td style="padding: 8px;">9876-5432-1098-7654</td>
-                                <td style="padding: 8px;">👤 APP Toko Online</td>
-                                <td style="padding: 8px; text-align: center;">
-                                    <button class="btn-edit-rekening" style="padding: 5px 10px; background: #f39c12; color: white; border: none; border-radius: 5px;">✏️</button>
-                                    <button class="btn-delete-rekening" style="padding: 5px 10px; background: #e74c3c; color: white; border: none; border-radius: 5px;">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; text-align: center;"><span style="color: #2ecc71; font-size: 1.2em;">💵</span></td>
-                                <td style="padding: 8px;">CASH</td>
-                                <td style="padding: 8px;">-</td>
-                                <td style="padding: 8px;">👤 Kas Utama</td>
-                                <td style="padding: 8px; text-align: center;">
-                                    <button class="btn-edit-rekening" style="padding: 5px 10px; background: #f39c12; color: white; border: none; border-radius: 5px;">✏️</button>
-                                    <button class="btn-delete-rekening" style="padding: 5px 10px; background: #e74c3c; color: white; border: none; border-radius: 5px;">🗑️</button>
-                                </td>
-                            </tr>
+                            <!-- Data akan diisi oleh script -->
                         </tbody>
                     </table>
                 </div>
@@ -1760,13 +1929,13 @@
             </div>
 
             <footer class="footer">
-                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
             </footer>
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 9 ==================== -->
-<!-- ==================== BLOK 10: HALAMAN BACKUP & RESTORE ==================== -->
+<!-- ==================== AKHIR BLOK 9 R1 ==================== -->
+<!-- ==================== BLOK 10 R1: BACKUP & RESTORE (display block → none) ==================== -->
 <div id="backup-restore-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -1780,7 +1949,7 @@
                 <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
                 <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
                 <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item active" data-page="backup-restore">Backup & Restore</a>
+                <a href="#" class="nav-item active" data-page="backup-restore">Backup &amp; Restore</a>
                 <a href="#" class="nav-item disabled">Laporan</a>
                 <a href="#" class="nav-item disabled">Pengaturan</a>
             </nav>
@@ -1794,8 +1963,8 @@
             </header>
 
             <div class="content">
-                <h2>💾 Backup & Restore</h2>
-                <p class="breadcrumb">Home / Backup & Restore</p>
+                <h2>💾 Backup &amp; Restore</h2>
+                <p class="breadcrumb">Home / Backup &amp; Restore</p>
                 <p style="color: #555; margin-bottom: 25px;">Backup dan pulihkan data aplikasi.</p>
 
                 <!-- Ringkasan Data -->
@@ -1805,12 +1974,12 @@
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 2em;">👥</div>
                             <div style="font-weight: 600;">Data Pengguna</div>
-                            <div id="summary-pengguna" style="font-size: 1.5em; color: #FF8C00;">0 akun</div>
+                            <div id="summary-pengguna" style="font-size: 1.5em; color: #FF8C00;">1 akun</div>
                         </div>
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 2em;">💰</div>
                             <div style="font-weight: 600;">Data Tagihan</div>
-                            <div id="summary-tagihan" style="font-size: 1.5em; color: #FF8C00;">0 tagihan</div>
+                            <div id="summary-tagihan" style="font-size: 1.5em; color: #FF8C00;">3 tagihan</div>
                         </div>
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 2em;">💬</div>
@@ -1820,12 +1989,12 @@
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 2em;">📺</div>
                             <div style="font-weight: 600;">Data Iklan</div>
-                            <div id="summary-iklan" style="font-size: 1.5em; color: #FF8C00;">0 iklan</div>
+                            <div id="summary-iklan" style="font-size: 1.5em; color: #FF8C00;">2 iklan</div>
                         </div>
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 2em;">💾</div>
                             <div style="font-weight: 600;">Ukuran Storage</div>
-                            <div id="summary-storage" style="font-size: 1.5em; color: #FF8C00;">0 KB</div>
+                            <div id="summary-storage" style="font-size: 1.5em; color: #FF8C00;">9.0 KB</div>
                         </div>
                     </div>
                 </div>
@@ -1862,11 +2031,11 @@
             </div>
 
             <footer class="footer">
-                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
             </footer>
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 10 ==================== -->
+<!-- ==================== AKHIR BLOK 10 R1 ==================== -->
 </body>
 </html>
