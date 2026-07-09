@@ -138,7 +138,7 @@
     </div>
     <!-- Script akan ditambahkan di blok berikutnya -->
 <!-- ==================== AKHIR BLOK 1 ==================== -->
-<!-- ==================== BLOK 2: DASHBOARD ==================== -->
+<!-- ==================== BLOK 2 R1: DASHBOARD (Revisi Tombol Edit & Hapus) ==================== -->
 <div id="dashboard-page">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -179,25 +179,31 @@
                         <table class="profile-table">
                             <tr>
                                 <td>Nama</td>
-                                <td>: Dede</td>
+                                <td>: <span id="profile-name">Dede</span></td>
                             </tr>
                             <tr>
                                 <td>Alamat</td>
-                                <td>: Ciamis, Jawa Barat</td>
+                                <td>: <span id="profile-address">Ciamis, Jawa Barat</span></td>
                             </tr>
                             <tr>
                                 <td>HP</td>
-                                <td>: -</td>
+                                <td>: <span id="profile-phone">-</span></td>
                             </tr>
                             <tr>
                                 <td>Email</td>
-                                <td>: -</td>
+                                <td>: <span id="profile-email">-</span></td>
                             </tr>
                             <tr>
                                 <td>Jabatan</td>
-                                <td>: CEO TOKO ONLINE</td>
+                                <td>: <span id="profile-position">CEO TOKO ONLINE</span></td>
                             </tr>
                         </table>
+
+                        <!-- Tombol Edit & Hapus -->
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            <button id="btn-edit-profile" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Edit Profil</button>
+                            <button id="btn-delete-profile" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Hapus Profil</button>
+                        </div>
                     </div>
                 </div>
 
@@ -211,7 +217,7 @@
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 2 ==================== -->
+<!-- ==================== AKHIR BLOK 2 R1 ==================== -->
 <!-- ==================== BLOK 3: CSS ==================== -->
 <style>
     /* === RESET & GLOBAL === */
@@ -908,32 +914,150 @@
     }
 </style>
 <!-- ==================== AKHIR BLOK 3 ==================== -->
-<!-- ==================== BLOK 4 R1: SCRIPT (Revisi) ==================== -->
+
+<!-- ==================== BLOK 4 R2: SCRIPT (Revisi 2 - Edit, Simpan, Hapus Profil) ==================== -->
 <script>
     // Data user (password tidak ditampilkan di HTML)
     const users = [
         { username: "SuperAdmin", password: "MyHand0286", role: "superadmin", name: "Dede" }
     ];
 
+    // Data profil default SuperAdmin
+    const defaultProfile = {
+        name: "Dede",
+        address: "Ciamis, Jawa Barat",
+        phone: "-",
+        email: "-",
+        position: "CEO TOKO ONLINE"
+    };
+
     // Tunggu sampai seluruh halaman selesai dimuat
     document.addEventListener('DOMContentLoaded', function() {
-        // Elemen halaman
+        // ========== ELEMEN HALAMAN ==========
         const loginPage = document.getElementById('login-page');
         const dashboardPage = document.getElementById('dashboard-page');
         const loginForm = document.getElementById('loginForm');
         const displayUsername = document.getElementById('display-username');
         const errorMsg = document.getElementById('error-msg');
 
+        // Elemen profil
+        const profileName = document.getElementById('profile-name');
+        const profileAddress = document.getElementById('profile-address');
+        const profilePhone = document.getElementById('profile-phone');
+        const profileEmail = document.getElementById('profile-email');
+        const profilePosition = document.getElementById('profile-position');
+        const btnEdit = document.getElementById('btn-edit-profile');
+        const btnDelete = document.getElementById('btn-delete-profile');
+
         // Cek keberadaan elemen penting
-        if (!loginPage) {
-            console.error('Blok 1: Elemen dengan id "login-page" tidak ditemukan. Pastikan Blok 1 memiliki <div id="login-page"> sebagai wrapper.');
-            return;
-        }
-        if (!dashboardPage) {
-            console.error('Blok 2: Elemen dengan id "dashboard-page" tidak ditemukan. Pastikan Blok 2 sudah disertakan.');
+        if (!loginPage || !dashboardPage) {
+            console.error('Elemen login-page atau dashboard-page tidak ditemukan.');
             return;
         }
 
+        // ========== FUNGSI PROFIL ==========
+        function getProfile() {
+            const stored = localStorage.getItem('profileData');
+            return stored ? JSON.parse(stored) : { ...defaultProfile };
+        }
+
+        function saveProfile(data) {
+            localStorage.setItem('profileData', JSON.stringify(data));
+        }
+
+        function renderProfile(data) {
+            if (profileName) profileName.textContent = data.name;
+            if (profileAddress) profileAddress.textContent = data.address;
+            if (profilePhone) profilePhone.textContent = data.phone;
+            if (profileEmail) profileEmail.textContent = data.email;
+            if (profilePosition) profilePosition.textContent = data.position;
+        }
+
+        // Inisialisasi profil
+        let currentProfile = getProfile();
+        renderProfile(currentProfile);
+
+        // ========== EDIT PROFIL ==========
+        let isEditing = false;
+        let originalProfile = { ...currentProfile };
+
+        btnEdit.addEventListener('click', function() {
+            if (!isEditing) {
+                // Masuk mode edit
+                isEditing = true;
+                originalProfile = { ...currentProfile };
+
+                // Ubah span menjadi input
+                const fields = [
+                    { id: 'profile-name', key: 'name' },
+                    { id: 'profile-address', key: 'address' },
+                    { id: 'profile-phone', key: 'phone' },
+                    { id: 'profile-email', key: 'email' },
+                    { id: 'profile-position', key: 'position' }
+                ];
+
+                fields.forEach(f => {
+                    const span = document.getElementById(f.id);
+                    if (span) {
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = currentProfile[f.key];
+                        input.id = f.id + '-input';
+                        input.style.width = '100%';
+                        input.style.padding = '5px';
+                        input.style.border = '1px solid #ccc';
+                        input.style.borderRadius = '4px';
+                        span.replaceWith(input);
+                    }
+                });
+
+                // Ubah tombol
+                btnEdit.textContent = 'Simpan';
+                btnEdit.style.background = '#27ae60';
+                btnDelete.textContent = 'Batal';
+                btnDelete.style.background = '#95a5a6';
+            } else {
+                // Simpan perubahan
+                const newProfile = {
+                    name: document.getElementById('profile-name-input')?.value || currentProfile.name,
+                    address: document.getElementById('profile-address-input')?.value || currentProfile.address,
+                    phone: document.getElementById('profile-phone-input')?.value || currentProfile.phone,
+                    email: document.getElementById('profile-email-input')?.value || currentProfile.email,
+                    position: document.getElementById('profile-position-input')?.value || currentProfile.position
+                };
+
+                saveProfile(newProfile);
+                currentProfile = newProfile;
+                renderProfile(currentProfile);
+                exitEditMode();
+            }
+        });
+
+        btnDelete.addEventListener('click', function() {
+            if (isEditing) {
+                // Batal edit
+                currentProfile = { ...originalProfile };
+                renderProfile(currentProfile);
+                exitEditMode();
+            } else {
+                // Hapus profil (reset ke default)
+                if (confirm('Yakin ingin menghapus profil? Data akan dikembalikan ke default.')) {
+                    localStorage.removeItem('profileData');
+                    currentProfile = { ...defaultProfile };
+                    renderProfile(currentProfile);
+                }
+            }
+        });
+
+        function exitEditMode() {
+            isEditing = false;
+            btnEdit.textContent = 'Edit Profil';
+            btnEdit.style.background = '#FF8C00';
+            btnDelete.textContent = 'Hapus Profil';
+            btnDelete.style.background = '#e74c3c';
+        }
+
+        // ========== LOGIN & SESSION ==========
         // Cek session (jika sudah login, langsung tampilkan dashboard)
         if (sessionStorage.getItem('loggedIn') === 'true') {
             loginPage.style.display = 'none';
@@ -943,7 +1067,6 @@
             }
         }
 
-        // Event listener form login
         if (loginForm) {
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -986,7 +1109,7 @@
             console.warn('Form login dengan id "loginForm" tidak ditemukan.');
         }
 
-        // Fungsi logout didefinisikan secara global agar bisa dipanggil dari onclick di HTML
+        // Fungsi logout global
         window.logout = function() {
             sessionStorage.clear();
             if (dashboardPage) dashboardPage.style.display = 'none';
@@ -998,8 +1121,37 @@
         };
     });
 </script>
-<!-- ==================== AKHIR BLOK 4 R1 ==================== -->
+<!-- ==================== AKHIR BLOK 4 R2 ==================== -->
+<!-- ==================== BLOK 5: MODAL EDIT PROFIL ==================== -->
+<div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+        <h2 style="margin-bottom: 20px; color: #FF6B00;">Edit Profil</h2>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama</label>
+            <input type="text" id="edit-name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Alamat</label>
+            <input type="text" id="edit-address" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">HP</label>
+            <input type="text" id="edit-phone" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Email</label>
+            <input type="email" id="edit-email" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 25px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Jabatan</label>
+            <input type="text" id="edit-position" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="btn-save-profile" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Simpan</button>
+            <button id="btn-cancel-edit" style="padding: 10px 25px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Batal</button>
+        </div>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 5 ==================== -->
 </body>
 </html>
-
-
