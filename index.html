@@ -917,7 +917,7 @@
     }
 </style>
 <!-- ==================== AKHIR BLOK 3 ==================== -->
-<!-- ==================== BLOK 4 R5: SCRIPT (Revisi 5 - Rekening Fee & Navigasi Lengkap) ==================== -->
+<!-- ==================== BLOK 4 R6: SCRIPT (Revisi 6 - Dropdown Toko & Export Produk) ==================== -->
 <script>
     // ========== DATA DEFAULT ==========
     const defaultAccounts = [
@@ -1059,8 +1059,10 @@
                 if (link.getAttribute('data-page') === pageId) link.classList.add('active');
             });
 
+            // Aksi khusus saat halaman ditampilkan
             if (pageId === 'menu-akun') renderAccountTable();
             if (pageId === 'rekening-fee') renderRekeningTable();
+            if (pageId === 'import-export') populateTokoDropdown();
         }
 
         document.body.addEventListener('click', function(e) {
@@ -1125,6 +1127,7 @@
         });
 
         // ========== IMPORT / EXPORT ==========
+        // Export pengguna CSV
         document.getElementById('export-users-btn')?.addEventListener('click', function() {
             const accounts = getAccounts();
             let csv = 'Username,Password,Role,Nama,Alamat,HP,Email,Jabatan,Status\n';
@@ -1134,11 +1137,22 @@
             downloadCSV(csv, 'pengguna.csv');
         });
 
+        // Export produk CSV (per toko)
         document.getElementById('export-product-btn')?.addEventListener('click', function() {
-            let csv = 'ID,Nama Produk,Harga,Stok,Toko\n1,Produk Contoh,10000,50,Semua\n';
-            downloadCSV(csv, 'produk.csv');
+            const select = document.getElementById('export-product-toko');
+            const selectedToko = select ? select.value : '';
+            if (!selectedToko) {
+                alert('Pilih toko terlebih dahulu.');
+                return;
+            }
+            // Data produk dummy, nanti bisa diganti dengan data asli
+            let csv = 'ID,Nama Produk,Harga,Stok,Toko\n';
+            csv += `1,Produk A,10000,50,${selectedToko}\n`;
+            csv += `2,Produk B,20000,30,${selectedToko}\n`;
+            downloadCSV(csv, `produk_${selectedToko}.csv`);
         });
 
+        // Import pengguna CSV
         document.getElementById('import-btn')?.addEventListener('click', function() {
             const file = document.getElementById('import-csv-file').files[0];
             if (!file) { alert('Pilih file CSV.'); return; }
@@ -1176,6 +1190,33 @@
             link.download = filename;
             link.click();
             URL.revokeObjectURL(link.href);
+        }
+
+        // ========== FUNGSI DROPDOWN TOKO ==========
+        function populateTokoDropdown() {
+            const select = document.getElementById('export-product-toko');
+            if (!select) return;
+            // Hapus semua opsi kecuali placeholder pertama
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+            const accounts = getAccounts();
+            // Filter semua akun selain SuperAdmin
+            const tokoAccounts = accounts.filter(acc => acc.username !== 'SuperAdmin');
+            tokoAccounts.forEach(acc => {
+                const option = document.createElement('option');
+                option.value = acc.username;
+                option.textContent = acc.username + (acc.name ? ' - ' + acc.name : '');
+                select.appendChild(option);
+            });
+            // Aktifkan dropdown dan tombol export
+            select.disabled = false;
+            const exportProductBtn = document.getElementById('export-product-btn');
+            if (exportProductBtn) exportProductBtn.disabled = false;
+            // Aktifkan juga tombol lainnya jika perlu (sudah dilakukan di R5)
+            document.getElementById('export-users-btn').disabled = false;
+            document.getElementById('import-btn').disabled = false;
+            document.getElementById('import-csv-file').disabled = false;
         }
 
         // ========== MENU AKUN APP ==========
@@ -1277,7 +1318,7 @@
         const rekeningStatus = document.getElementById('rekening-status');
         const btnSimpanRekening = document.getElementById('btn-simpan-rekening');
         const btnResetRekening = document.getElementById('btn-reset-rekening');
-        let editingIndex = -1; // -1 berarti mode tambah baru
+        let editingIndex = -1;
 
         function resetRekeningForm() {
             if (rekeningBank) rekeningBank.value = '';
@@ -1343,7 +1384,6 @@
             });
         }
 
-        // Simpan/Tambah rekening
         btnSimpanRekening?.addEventListener('click', function() {
             const bank = rekeningBank?.value.trim();
             const nomor = rekeningNomor?.value.trim();
@@ -1368,16 +1408,15 @@
             resetRekeningForm();
         });
 
-        // Reset form
         btnResetRekening?.addEventListener('click', resetRekeningForm);
 
-        // Inisialisasi: jika halaman rekening belum punya data, simpan default (jika localStorage kosong)
+        // Inisialisasi data rekening jika belum ada
         if (!localStorage.getItem('rekening')) {
             saveRekening(defaultRekening);
         }
     });
 </script>
-<!-- ==================== AKHIR BLOK 4 R5 ==================== -->
+<!-- ==================== AKHIR BLOK 4 R6 ==================== -->
 <!-- ==================== BLOK 5: MODAL EDIT PROFIL ==================== -->
 <div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center;">
     <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
@@ -1558,7 +1597,7 @@
     </div>
 </div>
 <!-- ==================== AKHIR BLOK 6 R1 ==================== -->
-<!-- ==================== BLOK 7: HALAMAN IMPORT/EXPORT DATA ==================== -->
+<!-- ==================== BLOK 7 R1: HALAMAN IMPORT/EXPORT DATA (Revisi Dropdown Toko) ==================== -->
 <div id="import-export-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -1570,6 +1609,8 @@
                 <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
                 <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
                 <a href="#" class="nav-item active" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
                 <a href="#" class="nav-item disabled">Produk</a>
                 <a href="#" class="nav-item disabled">Laporan</a>
                 <a href="#" class="nav-item disabled">Pengaturan</a>
@@ -1610,7 +1651,7 @@
                         <div style="margin-bottom: 15px;">
                             <select id="export-product-toko" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em;" disabled>
                                 <option value="">-- Pilih Toko --</option>
-                                <!-- Opsi toko akan diisi oleh script nanti -->
+                                <!-- Opsi toko akan diisi oleh script -->
                             </select>
                         </div>
                         <button id="export-product-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" disabled>📥 Export Produk CSV</button>
@@ -1634,7 +1675,7 @@
 
                 </div>
 
-                <p class="note" style="max-width: 1000px; margin-top: 25px;">Fitur import/export akan diaktifkan di blok script berikutnya.</p>
+                <p class="note" style="max-width: 1000px; margin-top: 25px;">Fitur import/export akan diaktifkan dan dropdown toko akan terisi otomatis oleh script.</p>
             </div>
 
             <footer class="footer">
@@ -1643,7 +1684,7 @@
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 7 ==================== -->
+<!-- ==================== AKHIR BLOK 7 R1 ==================== -->
 <!-- ==================== BLOK 8: HALAMAN MENU AKUN APP ==================== -->
 <div id="menu-akun-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
     <div class="dashboard-container">
