@@ -138,7 +138,7 @@
     </div>
     <!-- Script akan ditambahkan di blok berikutnya -->
 <!-- ==================== AKHIR BLOK 1 ==================== -->
-<!-- ==================== BLOK 2 R3: DASHBOARD (Revisi Sidebar Lengkap) ==================== -->
+<!-- ==================== BLOK 2 R4: DASHBOARD (SIDEBAR LENGKAP DENGAN BACKUP & RESTORE) ==================== -->
 <div id="dashboard-page">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -152,13 +152,13 @@
                 <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
                 <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
                 <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item disabled">Produk</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup & Restore</a>
                 <a href="#" class="nav-item disabled">Laporan</a>
                 <a href="#" class="nav-item disabled">Pengaturan</a>
             </nav>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Main Content (tidak berubah) -->
         <main class="main-content">
             <header class="topbar">
                 <span>Selamat datang, <strong id="display-username">SuperAdmin</strong></span>
@@ -210,7 +210,7 @@
                     </div>
                 </div>
 
-                <p class="note">Fitur kelola akun, import/export, menu akun, dan rekening fee sudah tersedia di sidebar.</p>
+                <p class="note">Seluruh fitur kini telah terhubung melalui sidebar. Backup & Restore siap digunakan.</p>
             </div>
 
             <!-- Footer Penutup -->
@@ -220,7 +220,7 @@
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 2 R3 ==================== -->
+<!-- ==================== AKHIR BLOK 2 R4 ==================== -->
 <!-- ==================== BLOK 3: CSS ==================== -->
 <style>
     /* === RESET & GLOBAL === */
@@ -1897,5 +1897,107 @@
     </div>
 </div>
 <!-- ==================== AKHIR BLOK 9 ==================== -->
+<!-- ==================== BLOK 10: HALAMAN BACKUP & RESTORE ==================== -->
+<div id="backup-restore-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item active" data-page="backup-restore">Backup & Restore</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-backup">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>💾 Backup & Restore</h2>
+                <p class="breadcrumb">Home / Backup & Restore</p>
+                <p style="color: #555; margin-bottom: 25px;">Backup dan pulihkan data aplikasi.</p>
+
+                <!-- Ringkasan Data -->
+                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 900px; margin-bottom: 25px;">
+                    <h3 style="margin-bottom: 15px;">📊 Ringkasan Data</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em;">👥</div>
+                            <div style="font-weight: 600;">Data Pengguna</div>
+                            <div id="summary-pengguna" style="font-size: 1.5em; color: #FF8C00;">0 akun</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em;">💰</div>
+                            <div style="font-weight: 600;">Data Tagihan</div>
+                            <div id="summary-tagihan" style="font-size: 1.5em; color: #FF8C00;">0 tagihan</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em;">💬</div>
+                            <div style="font-weight: 600;">Data Chat</div>
+                            <div id="summary-chat" style="font-size: 1.5em; color: #FF8C00;">0 kontak</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em;">📺</div>
+                            <div style="font-weight: 600;">Data Iklan</div>
+                            <div id="summary-iklan" style="font-size: 1.5em; color: #FF8C00;">0 iklan</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em;">💾</div>
+                            <div style="font-weight: 600;">Ukuran Storage</div>
+                            <div id="summary-storage" style="font-size: 1.5em; color: #FF8C00;">0 KB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Aksi Backup & Restore -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 900px;">
+                    <!-- Download Data JSON -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📦</div>
+                        <h3>Download Data JSON</h3>
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Backup seluruh data aplikasi dalam format JSON.</p>
+                        <button id="download-json-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Download JSON</button>
+                    </div>
+
+                    <!-- Download File App (HTML) -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📄</div>
+                        <h3>Download File App</h3>
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Download file index.html lengkap.</p>
+                        <button id="download-html-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Download HTML</button>
+                    </div>
+
+                    <!-- Restore Data -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📤</div>
+                        <h3>Restore Data</h3>
+                        <p style="color: #e74c3c; font-size: 0.85em; margin-bottom: 10px;">⚠️ Data saat ini akan ditimpa!</p>
+                        <div style="margin-bottom: 15px;">
+                            <input type="file" id="restore-file-input" accept=".json" style="width: 100%;">
+                        </div>
+                        <button id="restore-btn" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📤 Restore Data</button>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 10 ==================== -->
 </body>
 </html>
