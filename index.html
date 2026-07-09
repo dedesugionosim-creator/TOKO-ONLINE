@@ -138,7 +138,7 @@
     </div>
     <!-- Script akan ditambahkan di blok berikutnya -->
 <!-- ==================== AKHIR BLOK 1 ==================== -->
-<!-- ==================== BLOK 2 R1: DASHBOARD (Revisi Tombol Edit & Hapus) ==================== -->
+<!-- ==================== BLOK 2 R2: DASHBOARD (Revisi - Kelola Akun Aktif) ==================== -->
 <div id="dashboard-page">
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -147,8 +147,8 @@
                 <h2>TOKO ONLINE</h2>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active">Dashboard</a>
-                <a href="#" class="nav-item disabled">Kelola Akun</a>
+                <a href="#" class="nav-item active" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
                 <a href="#" class="nav-item disabled">Produk</a>
                 <a href="#" class="nav-item disabled">Laporan</a>
                 <a href="#" class="nav-item disabled">Pengaturan</a>
@@ -217,7 +217,7 @@
         </main>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 2 R1 ==================== -->
+<!-- ==================== AKHIR BLOK 2 R2 ==================== -->
 <!-- ==================== BLOK 3: CSS ==================== -->
 <style>
     /* === RESET & GLOBAL === */
@@ -914,15 +914,46 @@
     }
 </style>
 <!-- ==================== AKHIR BLOK 3 ==================== -->
-
-<!-- ==================== BLOK 4 R2: SCRIPT (Revisi 2 - Edit, Simpan, Hapus Profil) ==================== -->
+<!-- ==================== BLOK 4 R5: SCRIPT (Revisi 5 - Rekening Fee & Navigasi Lengkap) ==================== -->
 <script>
-    // Data user (password tidak ditampilkan di HTML)
-    const users = [
-        { username: "SuperAdmin", password: "MyHand0286", role: "superadmin", name: "Dede" }
+    // ========== DATA DEFAULT ==========
+    const defaultAccounts = [
+        {
+            username: "SuperAdmin",
+            password: "MyHand0286",
+            role: "superadmin",
+            name: "Dede",
+            address: "Ciamis, Jawa Barat",
+            phone: "-",
+            email: "-",
+            position: "CEO TOKO ONLINE",
+            status: "Aktif"
+        }
     ];
 
-    // Data profil default SuperAdmin
+    const defaultRekening = [
+        { bank: "BRI", nomor: "1234-5678-9012-3456", pemilik: "APP Toko Online", status: "Aktif" },
+        { bank: "MANDIRI", nomor: "9876-5432-1098-7654", pemilik: "APP Toko Online", status: "Aktif" },
+        { bank: "CASH", nomor: "-", pemilik: "Kas Utama", status: "Aktif" }
+    ];
+
+    // ========== FUNGSI DATA ==========
+    function getAccounts() {
+        const stored = localStorage.getItem('accounts');
+        return stored ? JSON.parse(stored) : [...defaultAccounts];
+    }
+    function saveAccounts(accounts) {
+        localStorage.setItem('accounts', JSON.stringify(accounts));
+    }
+
+    function getRekening() {
+        const stored = localStorage.getItem('rekening');
+        return stored ? JSON.parse(stored) : [...defaultRekening];
+    }
+    function saveRekening(data) {
+        localStorage.setItem('rekening', JSON.stringify(data));
+    }
+
     const defaultProfile = {
         name: "Dede",
         address: "Ciamis, Jawa Barat",
@@ -930,198 +961,420 @@
         email: "-",
         position: "CEO TOKO ONLINE"
     };
+    function getProfile() {
+        const stored = localStorage.getItem('profileData');
+        return stored ? JSON.parse(stored) : { ...defaultProfile };
+    }
+    function saveProfile(data) {
+        localStorage.setItem('profileData', JSON.stringify(data));
+    }
 
-    // Tunggu sampai seluruh halaman selesai dimuat
+    // ========== DOM CONTENT LOADED ==========
     document.addEventListener('DOMContentLoaded', function() {
-        // ========== ELEMEN HALAMAN ==========
+        // Elemen halaman
         const loginPage = document.getElementById('login-page');
         const dashboardPage = document.getElementById('dashboard-page');
-        const loginForm = document.getElementById('loginForm');
-        const displayUsername = document.getElementById('display-username');
-        const errorMsg = document.getElementById('error-msg');
+        const kelolaAkunPage = document.getElementById('kelola-akun-page');
+        const importExportPage = document.getElementById('import-export-page');
+        const menuAkunPage = document.getElementById('menu-akun-page');
+        const rekeningFeePage = document.getElementById('rekening-fee-page');
+        const editProfileModal = document.getElementById('edit-profile-modal');
+        const accountDetailModal = document.getElementById('account-detail-modal');
 
-        // Elemen profil
-        const profileName = document.getElementById('profile-name');
-        const profileAddress = document.getElementById('profile-address');
-        const profilePhone = document.getElementById('profile-phone');
-        const profileEmail = document.getElementById('profile-email');
-        const profilePosition = document.getElementById('profile-position');
-        const btnEdit = document.getElementById('btn-edit-profile');
-        const btnDelete = document.getElementById('btn-delete-profile');
-
-        // Cek keberadaan elemen penting
         if (!loginPage || !dashboardPage) {
-            console.error('Elemen login-page atau dashboard-page tidak ditemukan.');
+            console.error('Halaman login/dashboard tidak ditemukan.');
             return;
         }
 
-        // ========== FUNGSI PROFIL ==========
-        function getProfile() {
-            const stored = localStorage.getItem('profileData');
-            return stored ? JSON.parse(stored) : { ...defaultProfile };
+        // ========== SESSION & LOGIN ==========
+        const loginForm = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('error-msg');
+
+        function updateAllUsernames(username) {
+            const ids = ['display-username', 'display-username-kelola', 'display-username-import', 'display-username-menu-akun', 'display-username-rekening'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = username;
+            });
         }
 
-        function saveProfile(data) {
-            localStorage.setItem('profileData', JSON.stringify(data));
-        }
-
-        function renderProfile(data) {
-            if (profileName) profileName.textContent = data.name;
-            if (profileAddress) profileAddress.textContent = data.address;
-            if (profilePhone) profilePhone.textContent = data.phone;
-            if (profileEmail) profileEmail.textContent = data.email;
-            if (profilePosition) profilePosition.textContent = data.position;
-        }
-
-        // Inisialisasi profil
-        let currentProfile = getProfile();
-        renderProfile(currentProfile);
-
-        // ========== EDIT PROFIL ==========
-        let isEditing = false;
-        let originalProfile = { ...currentProfile };
-
-        btnEdit.addEventListener('click', function() {
-            if (!isEditing) {
-                // Masuk mode edit
-                isEditing = true;
-                originalProfile = { ...currentProfile };
-
-                // Ubah span menjadi input
-                const fields = [
-                    { id: 'profile-name', key: 'name' },
-                    { id: 'profile-address', key: 'address' },
-                    { id: 'profile-phone', key: 'phone' },
-                    { id: 'profile-email', key: 'email' },
-                    { id: 'profile-position', key: 'position' }
-                ];
-
-                fields.forEach(f => {
-                    const span = document.getElementById(f.id);
-                    if (span) {
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = currentProfile[f.key];
-                        input.id = f.id + '-input';
-                        input.style.width = '100%';
-                        input.style.padding = '5px';
-                        input.style.border = '1px solid #ccc';
-                        input.style.borderRadius = '4px';
-                        span.replaceWith(input);
-                    }
-                });
-
-                // Ubah tombol
-                btnEdit.textContent = 'Simpan';
-                btnEdit.style.background = '#27ae60';
-                btnDelete.textContent = 'Batal';
-                btnDelete.style.background = '#95a5a6';
-            } else {
-                // Simpan perubahan
-                const newProfile = {
-                    name: document.getElementById('profile-name-input')?.value || currentProfile.name,
-                    address: document.getElementById('profile-address-input')?.value || currentProfile.address,
-                    phone: document.getElementById('profile-phone-input')?.value || currentProfile.phone,
-                    email: document.getElementById('profile-email-input')?.value || currentProfile.email,
-                    position: document.getElementById('profile-position-input')?.value || currentProfile.position
-                };
-
-                saveProfile(newProfile);
-                currentProfile = newProfile;
-                renderProfile(currentProfile);
-                exitEditMode();
-            }
-        });
-
-        btnDelete.addEventListener('click', function() {
-            if (isEditing) {
-                // Batal edit
-                currentProfile = { ...originalProfile };
-                renderProfile(currentProfile);
-                exitEditMode();
-            } else {
-                // Hapus profil (reset ke default)
-                if (confirm('Yakin ingin menghapus profil? Data akan dikembalikan ke default.')) {
-                    localStorage.removeItem('profileData');
-                    currentProfile = { ...defaultProfile };
-                    renderProfile(currentProfile);
-                }
-            }
-        });
-
-        function exitEditMode() {
-            isEditing = false;
-            btnEdit.textContent = 'Edit Profil';
-            btnEdit.style.background = '#FF8C00';
-            btnDelete.textContent = 'Hapus Profil';
-            btnDelete.style.background = '#e74c3c';
-        }
-
-        // ========== LOGIN & SESSION ==========
-        // Cek session (jika sudah login, langsung tampilkan dashboard)
         if (sessionStorage.getItem('loggedIn') === 'true') {
             loginPage.style.display = 'none';
-            dashboardPage.style.display = 'block';
-            if (displayUsername) {
-                displayUsername.textContent = sessionStorage.getItem('username');
-            }
+            showPage('dashboard');
+            updateAllUsernames(sessionStorage.getItem('username'));
         }
 
         if (loginForm) {
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const usernameInput = document.getElementById('username');
-                const passwordInput = document.getElementById('password');
-
-                if (!usernameInput || !passwordInput) {
-                    console.error('Input username atau password tidak ditemukan.');
-                    return;
-                }
-
-                const username = usernameInput.value;
-                const password = passwordInput.value;
-
-                const user = users.find(u => u.username === username && u.password === password);
-
-                if (user) {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const accounts = getAccounts();
+                const acc = accounts.find(a => a.username === username && a.password === password);
+                if (acc) {
+                    if (acc.status === 'Nonaktif') {
+                        if (errorMsg) errorMsg.textContent = 'Akun ini dinonaktifkan.';
+                        return;
+                    }
                     sessionStorage.setItem('loggedIn', 'true');
-                    sessionStorage.setItem('username', user.username);
-                    sessionStorage.setItem('role', user.role);
-
+                    sessionStorage.setItem('username', acc.username);
+                    sessionStorage.setItem('role', acc.role);
                     loginPage.style.display = 'none';
-                    dashboardPage.style.display = 'block';
-                    if (displayUsername) {
-                        displayUsername.textContent = user.username;
-                    }
-                    if (errorMsg) {
-                        errorMsg.textContent = '';
-                    }
+                    showPage('dashboard');
+                    updateAllUsernames(acc.username);
+                    if (errorMsg) errorMsg.textContent = '';
                 } else {
-                    if (errorMsg) {
-                        errorMsg.textContent = 'Username atau password salah!';
-                    }
-                    if (passwordInput) {
-                        passwordInput.value = '';
-                    }
+                    if (errorMsg) errorMsg.textContent = 'Username atau password salah!';
+                    document.getElementById('password').value = '';
                 }
             });
-        } else {
-            console.warn('Form login dengan id "loginForm" tidak ditemukan.');
         }
 
-        // Fungsi logout global
         window.logout = function() {
             sessionStorage.clear();
-            if (dashboardPage) dashboardPage.style.display = 'none';
-            if (loginPage) loginPage.style.display = 'flex';
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            if (usernameInput) usernameInput.value = '';
-            if (passwordInput) passwordInput.value = '';
+            const pages = [dashboardPage, kelolaAkunPage, importExportPage, menuAkunPage, rekeningFeePage];
+            pages.forEach(p => { if (p) p.style.display = 'none'; });
+            loginPage.style.display = 'flex';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
         };
+
+        // ========== NAVIGASI ==========
+        function showPage(pageId) {
+            const pages = {
+                'dashboard': dashboardPage,
+                'kelola-akun': kelolaAkunPage,
+                'import-export': importExportPage,
+                'menu-akun': menuAkunPage,
+                'rekening-fee': rekeningFeePage
+            };
+            Object.values(pages).forEach(p => { if (p) p.style.display = 'none'; });
+            if (pages[pageId]) pages[pageId].style.display = 'block';
+
+            document.querySelectorAll('.nav-item[data-page]').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageId) link.classList.add('active');
+            });
+
+            if (pageId === 'menu-akun') renderAccountTable();
+            if (pageId === 'rekening-fee') renderRekeningTable();
+        }
+
+        document.body.addEventListener('click', function(e) {
+            const link = e.target.closest('.nav-item[data-page]');
+            if (!link) return;
+            const page = link.getAttribute('data-page');
+            if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee'].includes(page)) {
+                e.preventDefault();
+                showPage(page);
+            }
+        });
+
+        window.navigateTo = function(page) {
+            showPage(page);
+        };
+
+        // ========== PROFIL SUPER ADMIN ==========
+        let currentProfile = getProfile();
+        function renderProfile(data) {
+            document.getElementById('profile-name').textContent = data.name;
+            document.getElementById('profile-address').textContent = data.address;
+            document.getElementById('profile-phone').textContent = data.phone;
+            document.getElementById('profile-email').textContent = data.email;
+            document.getElementById('profile-position').textContent = data.position;
+        }
+        renderProfile(currentProfile);
+
+        document.getElementById('btn-edit-profile')?.addEventListener('click', function() {
+            const d = getProfile();
+            document.getElementById('edit-name').value = d.name;
+            document.getElementById('edit-address').value = d.address;
+            document.getElementById('edit-phone').value = d.phone;
+            document.getElementById('edit-email').value = d.email;
+            document.getElementById('edit-position').value = d.position;
+            editProfileModal.style.display = 'flex';
+        });
+        document.getElementById('btn-save-profile')?.addEventListener('click', function() {
+            currentProfile = {
+                name: document.getElementById('edit-name').value,
+                address: document.getElementById('edit-address').value,
+                phone: document.getElementById('edit-phone').value,
+                email: document.getElementById('edit-email').value,
+                position: document.getElementById('edit-position').value
+            };
+            saveProfile(currentProfile);
+            renderProfile(currentProfile);
+            editProfileModal.style.display = 'none';
+        });
+        document.getElementById('btn-cancel-edit')?.addEventListener('click', function() {
+            editProfileModal.style.display = 'none';
+        });
+        editProfileModal?.addEventListener('click', function(e) {
+            if (e.target === editProfileModal) editProfileModal.style.display = 'none';
+        });
+        document.getElementById('btn-delete-profile')?.addEventListener('click', function() {
+            if (confirm('Reset profil ke default?')) {
+                localStorage.removeItem('profileData');
+                currentProfile = { ...defaultProfile };
+                renderProfile(currentProfile);
+                editProfileModal.style.display = 'none';
+            }
+        });
+
+        // ========== IMPORT / EXPORT ==========
+        document.getElementById('export-users-btn')?.addEventListener('click', function() {
+            const accounts = getAccounts();
+            let csv = 'Username,Password,Role,Nama,Alamat,HP,Email,Jabatan,Status\n';
+            accounts.forEach(a => {
+                csv += `${a.username},${a.password},${a.role},${a.name},${a.address},${a.phone},${a.email},${a.position},${a.status}\n`;
+            });
+            downloadCSV(csv, 'pengguna.csv');
+        });
+
+        document.getElementById('export-product-btn')?.addEventListener('click', function() {
+            let csv = 'ID,Nama Produk,Harga,Stok,Toko\n1,Produk Contoh,10000,50,Semua\n';
+            downloadCSV(csv, 'produk.csv');
+        });
+
+        document.getElementById('import-btn')?.addEventListener('click', function() {
+            const file = document.getElementById('import-csv-file').files[0];
+            if (!file) { alert('Pilih file CSV.'); return; }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lines = e.target.result.split('\n').filter(l => l.trim());
+                if (lines.length < 2) { alert('File kosong.'); return; }
+                const header = lines[0].split(',');
+                if (header.length < 9 || header[0] !== 'Username') { alert('Format salah.'); return; }
+                const accounts = getAccounts();
+                let added = 0;
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = lines[i].split(',');
+                    if (cols.length < 9) continue;
+                    const username = cols[0].trim();
+                    if (accounts.find(a => a.username === username)) continue;
+                    accounts.push({
+                        username, password: cols[1].trim(), role: cols[2].trim(), name: cols[3].trim(),
+                        address: cols[4].trim(), phone: cols[5].trim(), email: cols[6].trim(),
+                        position: cols[7].trim(), status: cols[8].trim() || 'Aktif'
+                    });
+                    added++;
+                }
+                saveAccounts(accounts);
+                alert(`${added} akun ditambahkan.`);
+                document.getElementById('import-csv-file').value = '';
+            };
+            reader.readAsText(file);
+        });
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        // ========== MENU AKUN APP ==========
+        function renderAccountTable() {
+            const tbody = document.getElementById('account-table-body');
+            if (!tbody) return;
+            const accounts = getAccounts();
+            tbody.innerHTML = '';
+            if (accounts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Tidak ada akun.</td></tr>';
+                document.getElementById('total-accounts').textContent = '0';
+                return;
+            }
+            accounts.forEach(acc => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding:8px;">${acc.username}</td>
+                    <td style="padding:8px;">${acc.name}</td>
+                    <td style="padding:8px;">${acc.role}</td>
+                    <td style="text-align:center; color:${acc.status==='Aktif'?'green':'red'};">${acc.status}</td>
+                    <td style="text-align:center;">
+                        <button class="btn-view-account" data-username="${acc.username}" style="background:#3498db;">Lihat</button>
+                        <button class="btn-toggle-account" data-username="${acc.username}" style="background:#f39c12;">${acc.status==='Aktif'?'Nonaktifkan':'Aktifkan'}</button>
+                        <button class="btn-delete-account" data-username="${acc.username}" style="background:#e74c3c;">Hapus</button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('total-accounts').textContent = accounts.length;
+
+            // Event listeners
+            document.querySelectorAll('.btn-view-account').forEach(b => b.addEventListener('click', function() {
+                viewAccount(this.dataset.username);
+            }));
+            document.querySelectorAll('.btn-toggle-account').forEach(b => b.addEventListener('click', function() {
+                toggleAccountStatus(this.dataset.username);
+            }));
+            document.querySelectorAll('.btn-delete-account').forEach(b => b.addEventListener('click', function() {
+                deleteAccount(this.dataset.username);
+            }));
+        }
+
+        function viewAccount(username) {
+            const acc = getAccounts().find(a => a.username === username);
+            if (!acc) return;
+            document.getElementById('modal-username').textContent = acc.username;
+            document.getElementById('modal-name').textContent = acc.name;
+            document.getElementById('modal-role').textContent = acc.role;
+            document.getElementById('modal-address').textContent = acc.address;
+            document.getElementById('modal-phone').textContent = acc.phone;
+            document.getElementById('modal-email').textContent = acc.email;
+            document.getElementById('modal-position').textContent = acc.position;
+            document.getElementById('modal-status').textContent = acc.status;
+            accountDetailModal.style.display = 'flex';
+            window.currentViewAccount = acc;
+        }
+
+        document.getElementById('modal-nonaktifkan-btn')?.addEventListener('click', function() {
+            if (window.currentViewAccount) {
+                toggleAccountStatus(window.currentViewAccount.username);
+                accountDetailModal.style.display = 'none';
+            }
+        });
+        document.getElementById('modal-hapus-btn')?.addEventListener('click', function() {
+            if (window.currentViewAccount) {
+                deleteAccount(window.currentViewAccount.username);
+                accountDetailModal.style.display = 'none';
+            }
+        });
+        document.getElementById('modal-close-btn')?.addEventListener('click', function() {
+            accountDetailModal.style.display = 'none';
+        });
+        accountDetailModal?.addEventListener('click', function(e) {
+            if (e.target === accountDetailModal) accountDetailModal.style.display = 'none';
+        });
+
+        function toggleAccountStatus(username) {
+            if (username === 'SuperAdmin') { alert('Tidak bisa menonaktifkan SuperAdmin.'); return; }
+            const accounts = getAccounts();
+            const acc = accounts.find(a => a.username === username);
+            if (acc) {
+                acc.status = acc.status === 'Aktif' ? 'Nonaktif' : 'Aktif';
+                saveAccounts(accounts);
+                renderAccountTable();
+            }
+        }
+        function deleteAccount(username) {
+            if (username === 'SuperAdmin') { alert('SuperAdmin tidak bisa dihapus.'); return; }
+            if (confirm(`Hapus akun ${username}?`)) {
+                const accounts = getAccounts().filter(a => a.username !== username);
+                saveAccounts(accounts);
+                renderAccountTable();
+            }
+        }
+
+        // ========== REKENING FEE (Blok 9) ==========
+        const rekeningBank = document.getElementById('rekening-bank');
+        const rekeningNomor = document.getElementById('rekening-nomor');
+        const rekeningPemilik = document.getElementById('rekening-pemilik');
+        const rekeningStatus = document.getElementById('rekening-status');
+        const btnSimpanRekening = document.getElementById('btn-simpan-rekening');
+        const btnResetRekening = document.getElementById('btn-reset-rekening');
+        let editingIndex = -1; // -1 berarti mode tambah baru
+
+        function resetRekeningForm() {
+            if (rekeningBank) rekeningBank.value = '';
+            if (rekeningNomor) rekeningNomor.value = '';
+            if (rekeningPemilik) rekeningPemilik.value = 'APP Toko Online';
+            if (rekeningStatus) rekeningStatus.value = 'Aktif';
+            editingIndex = -1;
+            if (btnSimpanRekening) btnSimpanRekening.textContent = '💾 Simpan';
+        }
+
+        function renderRekeningTable() {
+            const tbody = document.getElementById('rekening-table-body');
+            if (!tbody) return;
+            const data = getRekening();
+            tbody.innerHTML = '';
+            data.forEach((rek, index) => {
+                const tr = document.createElement('tr');
+                let statusIcon = '';
+                if (rek.bank === 'CASH') statusIcon = '<span style="color:#2ecc71;">💵</span>';
+                else if (rek.bank === 'BRI') statusIcon = '<span style="color:#3498db;">🔵</span>';
+                else if (rek.bank === 'MANDIRI') statusIcon = '<span style="color:#f1c40f;">🟡</span>';
+                else statusIcon = '<span style="color:#95a5a6;">⚪</span>';
+                tr.innerHTML = `
+                    <td style="text-align:center;">${statusIcon}</td>
+                    <td>${rek.bank}</td>
+                    <td>${rek.nomor}</td>
+                    <td>👤 ${rek.pemilik}</td>
+                    <td style="text-align:center;">
+                        <button class="btn-edit-rekening" data-index="${index}" style="background:#f39c12;">✏️</button>
+                        <button class="btn-delete-rekening" data-index="${index}" style="background:#e74c3c;">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.querySelectorAll('.btn-edit-rekening').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const rek = getRekening()[index];
+                    if (rek) {
+                        rekeningBank.value = rek.bank;
+                        rekeningNomor.value = rek.nomor;
+                        rekeningPemilik.value = rek.pemilik;
+                        rekeningStatus.value = rek.status;
+                        editingIndex = index;
+                        btnSimpanRekening.textContent = '✏️ Update';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.btn-delete-rekening').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const rek = getRekening()[index];
+                    if (confirm(`Hapus rekening ${rek.bank} - ${rek.nomor}?`)) {
+                        const data = getRekening();
+                        data.splice(index, 1);
+                        saveRekening(data);
+                        renderRekeningTable();
+                        resetRekeningForm();
+                    }
+                });
+            });
+        }
+
+        // Simpan/Tambah rekening
+        btnSimpanRekening?.addEventListener('click', function() {
+            const bank = rekeningBank?.value.trim();
+            const nomor = rekeningNomor?.value.trim();
+            const pemilik = rekeningPemilik?.value.trim() || 'APP Toko Online';
+            const status = rekeningStatus?.value || 'Aktif';
+
+            if (!bank || !nomor) {
+                alert('Nama Bank dan Nomor Rekening wajib diisi.');
+                return;
+            }
+
+            const data = getRekening();
+            const newRek = { bank, nomor, pemilik, status };
+
+            if (editingIndex >= 0) {
+                data[editingIndex] = newRek;
+            } else {
+                data.push(newRek);
+            }
+            saveRekening(data);
+            renderRekeningTable();
+            resetRekeningForm();
+        });
+
+        // Reset form
+        btnResetRekening?.addEventListener('click', resetRekeningForm);
+
+        // Inisialisasi: jika halaman rekening belum punya data, simpan default (jika localStorage kosong)
+        if (!localStorage.getItem('rekening')) {
+            saveRekening(defaultRekening);
+        }
     });
 </script>
-<!-- ==================== AKHIR BLOK 4 R2 ==================== -->
+<!-- ==================== AKHIR BLOK 4 R5 ==================== -->
 <!-- ==================== BLOK 5: MODAL EDIT PROFIL ==================== -->
 <div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center;">
     <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
@@ -1153,5 +1406,452 @@
     </div>
 </div>
 <!-- ==================== AKHIR BLOK 5 ==================== -->
+<!-- ==================== BLOK 6 R1: HALAMAN KELOLA AKUN (Revisi Tambah Toko Makanan) ==================== -->
+<div id="kelola-akun-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item active" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item disabled">Produk</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-kelola">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>Kelola Akun</h2>
+                <p class="breadcrumb">Home / Kelola Akun</p>
+
+                <p style="margin-bottom: 20px; color: #555;">Pilih jenis akun yang ingin dibuat:</p>
+
+                <!-- Grid Daftar Akun -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 900px;">
+                    
+                    <!-- 1. Akun Staf -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">👤</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Staf</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Staf internal toko</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 2. Akun Customer Service -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🎧</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Customer Service</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Layanan pelanggan</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 3. Akun Marketing -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📈</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Marketing</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Promosi dan iklan</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 4. Owner Toko -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏪</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Owner Toko</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pemilik toko utama</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 5. Owner Ojek -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🛵</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Owner Ojek</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pengelola armada ojek</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 6. Akun Pemilik Pangkalan -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏚️</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Pemilik Pangkalan</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pangkalan gas/minyak</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 7. Akun Grosir -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📦</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Grosir</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjualan partai besar</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 8. Akun Toko Standar -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏬</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Standar</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Toko umum standar</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 9. Akun Toko Kecil -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏪</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Kecil</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Usaha kecil/rumahan</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 10. Akun Toko Seller -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🛒</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Seller</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjual marketplace</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 11. Akun Toko Makanan (TAMBAHAN BARU) -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🍽️</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Makanan</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Usaha kuliner/makanan</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 12. Akun COD Seller -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">💵</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun COD Seller</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjual sistem COD</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                    <!-- 13. Akun Ojek -->
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🏍️</div>
+                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Ojek</h3>
+                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Driver ojek online</p>
+                        <button style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;" disabled>Buat Akun</button>
+                    </div>
+
+                </div>
+
+                <p class="note" style="max-width: 900px; margin-top: 25px;">Fitur pembuatan akun akan diaktifkan di blok berikutnya. Saat ini tombol dalam kondisi nonaktif.</p>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 6 R1 ==================== -->
+<!-- ==================== BLOK 7: HALAMAN IMPORT/EXPORT DATA ==================== -->
+<div id="import-export-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item active" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item disabled">Produk</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-import">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>Import/Export Data</h2>
+                <p class="breadcrumb">Home / Import/Export Data</p>
+
+                <!-- Grid Kartu -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 1000px;">
+
+                    <!-- 1. Export Data Pengguna -->
+                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <div style="font-size: 2em;">👤</div>
+                            <h3 style="color: #1a1a2e;">Export Data Pengguna</h3>
+                        </div>
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 20px; flex: 1;">Download semua data pengguna dalam format CSV.</p>
+                        <button id="export-users-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" disabled>📥 Export Pengguna CSV</button>
+                    </div>
+
+                    <!-- 2. Export Data Produk -->
+                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <div style="font-size: 2em;">📦</div>
+                            <h3 style="color: #1a1a2e;">Export Data Produk</h3>
+                        </div>
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Download data produk dari toko tertentu.</p>
+                        <div style="margin-bottom: 15px;">
+                            <select id="export-product-toko" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em;" disabled>
+                                <option value="">-- Pilih Toko --</option>
+                                <!-- Opsi toko akan diisi oleh script nanti -->
+                            </select>
+                        </div>
+                        <button id="export-product-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" disabled>📥 Export Produk CSV</button>
+                    </div>
+
+                    <!-- 3. Import Data Pengguna -->
+                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <div style="font-size: 2em;">📤</div>
+                            <h3 style="color: #1a1a2e;">Import Data Pengguna</h3>
+                        </div>
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Upload file CSV untuk mengimport pengguna baru.</p>
+                        <p style="color: #888; font-size: 0.8em; margin-bottom: 15px; background: #f9f9f9; padding: 8px; border-radius: 5px;">
+                            Format: Username,Password,Role,Nama,Alamat,HP,Email,Jabatan,Status
+                        </p>
+                        <div style="margin-bottom: 15px;">
+                            <input type="file" id="import-csv-file" accept=".csv" style="width: 100%;" disabled>
+                        </div>
+                        <button id="import-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" disabled>📤 Upload CSV</button>
+                    </div>
+
+                </div>
+
+                <p class="note" style="max-width: 1000px; margin-top: 25px;">Fitur import/export akan diaktifkan di blok script berikutnya.</p>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 7 ==================== -->
+<!-- ==================== BLOK 8: HALAMAN MENU AKUN APP ==================== -->
+<div id="menu-akun-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item active" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-menu-akun">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>Menu Akun App</h2>
+                <p class="breadcrumb">Home / Menu Akun App</p>
+
+                <!-- Tabel Daftar Akun -->
+                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 1100px; overflow-x: auto;">
+                    <h3 style="margin-bottom: 15px; color: #1a1a2e;">Daftar Semua Akun</h3>
+                    <table id="account-table" style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                        <thead>
+                            <tr style="background: #f5f6fa; color: #333;">
+                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Username</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Nama</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Role</th>
+                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Status</th>
+                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="account-table-body">
+                            <!-- Data akan diisi oleh script -->
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 20px; color: #999;">Memuat data akun...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 10px; font-size: 0.85em; color: #888;">Total akun: <span id="total-accounts">0</span></p>
+                </div>
+
+                <!-- Tombol navigasi cepat (opsional) -->
+                <div style="margin-top: 20px;">
+                    <button onclick="navigateTo('kelola-akun')" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">+ Tambah Akun Baru</button>
+                </div>
+
+                <p class="note" style="max-width: 1100px; margin-top: 20px;">Gunakan tombol <strong>Lihat Profil</strong> untuk melihat detail lengkap. <strong>Nonaktifkan</strong> untuk menangguhkan akun tanpa menghapus data. <strong>Hapus</strong> untuk menghapus permanen.</p>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+
+<!-- ==================== MODAL PROFIL LENGKAP (di dalam Blok 8) ==================== -->
+<div id="account-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; max-height: 80vh; overflow-y: auto;">
+        <h2 style="margin-bottom: 20px; color: #FF6B00;">Profil Lengkap Akun</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <tr><td style="padding: 8px; font-weight: 600; width: 120px;">Username</td><td style="padding: 8px;">: <span id="modal-username">-</span></td></tr>
+            <tr><td style="padding: 8px; font-weight: 600;">Nama</td><td style="padding: 8px;">: <span id="modal-name">-</span></td></tr>
+            <tr><td style="padding: 8px; font-weight: 600;">Role</td><td style="padding: 8px;">: <span id="modal-role">-</span></td></tr>
+            <tr><td style="padding: 8px; font-weight: 600;">Alamat</td><td style="padding: 8px;">: <span id="modal-address">-</span></td></tr>
+            <tr><td style="padding: 8px; font-weight: 600;">HP</td><td style="padding: 8px;">: <span id="modal-phone">-</span></td></tr>
+            <tr><td style="padding: 8px; font-weight: 600;">Email</td><td style="padding: 8px;">: <span id="modal-email">-</span></td></tr>
+            <tr><td style="padding: 8px; font-weight: 600;">Jabatan</td><td style="padding: 8px;">: <span id="modal-position">-</span></td></tr>
+            <tr><td style="padding: 8px; font-weight: 600;">Status</td><td style="padding: 8px;">: <span id="modal-status">-</span></td></tr>
+        </table>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="modal-nonaktifkan-btn" style="padding: 10px 20px; background: #f39c12; color: white; border: none; border-radius: 8px; cursor: pointer;">Nonaktifkan</button>
+            <button id="modal-hapus-btn" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer;">Hapus Akun</button>
+            <button id="modal-close-btn" style="padding: 10px 20px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer;">Tutup</button>
+        </div>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 8 ==================== -->
+<!-- ==================== BLOK 9: HALAMAN REKENING PENERIMA FEE ==================== -->
+<div id="rekening-fee-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item active" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-rekening">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>🏠 Rekening Penerima Fee</h2>
+                <p class="breadcrumb">Home / Rekening Penerima Fee</p>
+                <p style="color: #555; margin-bottom: 20px;">Kelola rekening untuk pembayaran sewa aplikasi dan fee penjualan.</p>
+
+                <!-- Tabel Daftar Rekening -->
+                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 900px; margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 15px; color: #1a1a2e;">Daftar Rekening Aktif</h3>
+                    <table style="width: 100%; border-collapse: collapse;" id="rekening-table">
+                        <thead>
+                            <tr style="background: #f5f6fa;">
+                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Status</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Bank</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Nomor Rekening</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Nama Pemilik</th>
+                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rekening-table-body">
+                            <!-- Contoh data statis (akan diganti oleh script nanti) -->
+                            <tr>
+                                <td style="padding: 8px; text-align: center;"><span style="color: #3498db; font-size: 1.2em;">🔵</span></td>
+                                <td style="padding: 8px;">BRI</td>
+                                <td style="padding: 8px;">1234-5678-9012-3456</td>
+                                <td style="padding: 8px;">👤 APP Toko Online</td>
+                                <td style="padding: 8px; text-align: center;">
+                                    <button class="btn-edit-rekening" style="padding: 5px 10px; background: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer;">✏️</button>
+                                    <button class="btn-delete-rekening" style="padding: 5px 10px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; text-align: center;"><span style="color: #f1c40f; font-size: 1.2em;">🟡</span></td>
+                                <td style="padding: 8px;">MANDIRI</td>
+                                <td style="padding: 8px;">9876-5432-1098-7654</td>
+                                <td style="padding: 8px;">👤 APP Toko Online</td>
+                                <td style="padding: 8px; text-align: center;">
+                                    <button class="btn-edit-rekening" style="padding: 5px 10px; background: #f39c12; color: white; border: none; border-radius: 5px;">✏️</button>
+                                    <button class="btn-delete-rekening" style="padding: 5px 10px; background: #e74c3c; color: white; border: none; border-radius: 5px;">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; text-align: center;"><span style="color: #2ecc71; font-size: 1.2em;">💵</span></td>
+                                <td style="padding: 8px;">CASH</td>
+                                <td style="padding: 8px;">-</td>
+                                <td style="padding: 8px;">👤 Kas Utama</td>
+                                <td style="padding: 8px; text-align: center;">
+                                    <button class="btn-edit-rekening" style="padding: 5px 10px; background: #f39c12; color: white; border: none; border-radius: 5px;">✏️</button>
+                                    <button class="btn-delete-rekening" style="padding: 5px 10px; background: #e74c3c; color: white; border: none; border-radius: 5px;">🗑️</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Form Tambah Rekening Baru -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 600px;">
+                    <h3 style="margin-bottom: 20px; color: #1a1a2e;">➕ Tambah Rekening Baru</h3>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama Bank *</label>
+                        <select id="rekening-bank" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="">-- Pilih --</option>
+                            <option value="BRI">BRI</option>
+                            <option value="MANDIRI">MANDIRI</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BNI">BNI</option>
+                            <option value="CASH">CASH</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nomor Rekening *</label>
+                        <input type="text" id="rekening-nomor" placeholder="Masukkan nomor rekening" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama Pemilik</label>
+                        <input type="text" id="rekening-pemilik" value="APP Toko Online" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div style="margin-bottom: 25px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Status</label>
+                        <select id="rekening-status" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Nonaktif">Nonaktif</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="btn-simpan-rekening" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💾 Simpan</button>
+                        <button id="btn-reset-rekening" style="padding: 10px 25px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🔄 Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 9 ==================== -->
 </body>
 </html>
