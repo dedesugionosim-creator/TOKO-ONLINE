@@ -572,7 +572,7 @@
     }
 </style>
 <!-- ==================== AKHIR BLOK 3 R1 ==================== -->
-<!-- ==================== BLOK 4 R10: SCRIPT FINAL (Navigasi Restart System + semua fitur) ==================== -->
+<!-- ==================== BLOK 4 R11: SCRIPT FINAL (Sewa & Fee + semua fitur) ==================== -->
 <script>
     // ========== DATA DEFAULT ==========
     const defaultAccounts = [
@@ -602,11 +602,26 @@
         { id: 3, nama: "Produk C", harga: 15000, stok: 20, toko: "Toko C" }
     ];
 
+    // --- Data default Sewa & Fee (Blok 12) ---
+    const defaultSewaFee = [
+        { role: "Toko Grosir", sewa: 100000, fee: 5, estimasi: 250000 },
+        { role: "Toko Standar", sewa: 50000, fee: 3, estimasi: 140000 },
+        { role: "Toko Kecil", sewa: 25000, fee: 2, estimasi: 85000 },
+        { role: "Kaki Lima", sewa: 15000, fee: 1, estimasi: 45000 },
+        { role: "Toko Makanan", sewa: 30000, fee: 2, estimasi: 90000 },
+        { role: "COD Seller", sewa: 20000, fee: 3, estimasi: 110000 },
+        { role: "Owner Toko", sewa: 75000, fee: 4, estimasi: 195000 },
+        { role: "Ojek", sewa: 25000, fee: 5, estimasi: 175000 }
+    ];
+
+    // --- Inisialisasi localStorage ---
     if (!localStorage.getItem('accounts')) localStorage.setItem('accounts', JSON.stringify(defaultAccounts));
     if (!localStorage.getItem('rekening')) localStorage.setItem('rekening', JSON.stringify(defaultRekening));
     if (!localStorage.getItem('tagihan')) localStorage.setItem('tagihan', JSON.stringify(defaultTagihan));
     if (!localStorage.getItem('iklan')) localStorage.setItem('iklan', JSON.stringify(defaultIklan));
     if (!localStorage.getItem('produk')) localStorage.setItem('produk', JSON.stringify(defaultProduk));
+    if (!localStorage.getItem('sewaFeeData')) localStorage.setItem('sewaFeeData', JSON.stringify(defaultSewaFee));
+    if (!localStorage.getItem('sewaRiwayat')) localStorage.setItem('sewaRiwayat', JSON.stringify([]));
 
     // ========== FUNGSI DATA ==========
     function getAccounts() { return JSON.parse(localStorage.getItem('accounts')); }
@@ -616,6 +631,11 @@
     function getTagihan() { return JSON.parse(localStorage.getItem('tagihan')); }
     function getIklan() { return JSON.parse(localStorage.getItem('iklan')); }
     function getProduk() { return JSON.parse(localStorage.getItem('produk')); }
+    // --- Fungsi Sewa & Fee ---
+    function getSewaFee() { return JSON.parse(localStorage.getItem('sewaFeeData')); }
+    function saveSewaFee(data) { localStorage.setItem('sewaFeeData', JSON.stringify(data)); }
+    function getSewaRiwayat() { return JSON.parse(localStorage.getItem('sewaRiwayat')); }
+    function saveSewaRiwayat(data) { localStorage.setItem('sewaRiwayat', JSON.stringify(data)); }
 
     const defaultProfile = {
         name: "Dede",
@@ -641,6 +661,7 @@
         const rekeningFeePage = document.getElementById('rekening-fee-page');
         const backupRestorePage = document.getElementById('backup-restore-page');
         const restartSystemPage = document.getElementById('restart-system-page');
+        const sewaFeePage = document.getElementById('sewa-fee-page');
         const editProfileModal = document.getElementById('edit-profile-modal');
         const accountDetailModal = document.getElementById('account-detail-modal');
         const addAccountModal = document.getElementById('add-account-modal');
@@ -655,7 +676,7 @@
         const errorMsg = document.getElementById('error-msg');
 
         function updateAllUsernames(username) {
-            const ids = ['display-username', 'display-username-kelola', 'display-username-import', 'display-username-menu-akun', 'display-username-rekening', 'display-username-backup', 'display-username-restart'];
+            const ids = ['display-username', 'display-username-kelola', 'display-username-import', 'display-username-menu-akun', 'display-username-rekening', 'display-username-backup', 'display-username-restart', 'display-username-sewa'];
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = username;
@@ -696,7 +717,7 @@
 
         window.logout = function() {
             sessionStorage.clear();
-            const pages = [dashboardPage, kelolaAkunPage, importExportPage, menuAkunPage, rekeningFeePage, backupRestorePage, restartSystemPage];
+            const pages = [dashboardPage, kelolaAkunPage, importExportPage, menuAkunPage, rekeningFeePage, backupRestorePage, restartSystemPage, sewaFeePage];
             pages.forEach(p => { if (p) p.style.display = 'none'; });
             loginPage.style.display = 'flex';
             document.getElementById('username').value = '';
@@ -712,7 +733,8 @@
                 'menu-akun': menuAkunPage,
                 'rekening-fee': rekeningFeePage,
                 'backup-restore': backupRestorePage,
-                'restart-system': restartSystemPage
+                'restart-system': restartSystemPage,
+                'sewa-fee': sewaFeePage
             };
             Object.values(pages).forEach(p => { if (p) p.style.display = 'none'; });
             if (pages[pageId]) pages[pageId].style.display = 'block';
@@ -727,13 +749,14 @@
             if (pageId === 'import-export') populateTokoDropdown();
             if (pageId === 'backup-restore') updateBackupSummary();
             if (pageId === 'restart-system') updateRestartStats();
+            if (pageId === 'sewa-fee') renderSewaTable();
         }
 
         document.body.addEventListener('click', function(e) {
             const link = e.target.closest('.nav-item[data-page]');
             if (!link) return;
             const page = link.getAttribute('data-page');
-            if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee','backup-restore','restart-system'].includes(page)) {
+            if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee','backup-restore','restart-system','sewa-fee'].includes(page)) {
                 e.preventDefault();
                 showPage(page);
             }
@@ -1080,6 +1103,8 @@
                 tagihan: getTagihan(),
                 iklan: getIklan(),
                 produk: getProduk(),
+                sewaFeeData: getSewaFee(),         // tambahan
+                sewaRiwayat: getSewaRiwayat(),     // tambahan
                 timestamp: new Date().toISOString()
             };
             const json = JSON.stringify(backupData, null, 2);
@@ -1107,6 +1132,8 @@
                     if (data.tagihan) localStorage.setItem('tagihan', JSON.stringify(data.tagihan));
                     if (data.iklan) localStorage.setItem('iklan', JSON.stringify(data.iklan));
                     if (data.produk) localStorage.setItem('produk', JSON.stringify(data.produk));
+                    if (data.sewaFeeData) saveSewaFee(data.sewaFeeData);
+                    if (data.sewaRiwayat) saveSewaRiwayat(data.sewaRiwayat);
                     alert('Data berhasil direstore. Halaman akan dimuat ulang.');
                     location.reload();
                 } catch (error) {
@@ -1200,15 +1227,12 @@
 
         // ========== RESTART SYSTEM (BLOK 11) ==========
         function updateRestartStats() {
-            // Total chat (misal dari localStorage chatData)
             const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
             document.getElementById('total-chat').textContent = chatData.length;
 
-            // Kontak (misal dari localStorage kontakData)
             const kontakData = JSON.parse(localStorage.getItem('kontakData')) || [];
             document.getElementById('total-kontak').textContent = kontakData.length;
 
-            // Storage size
             let totalSize = 0;
             for (let key in localStorage) {
                 if (localStorage.hasOwnProperty(key)) {
@@ -1219,18 +1243,14 @@
             document.getElementById('storage-keys').textContent = localStorage.length + ' keys';
             document.getElementById('data-size').textContent = (totalSize / 1024).toFixed(1) + ' KB';
 
-            // Browser info
             document.getElementById('browser-info').textContent = navigator.userAgent;
-            // Online status
             document.getElementById('online-status').textContent = navigator.onLine ? '✅ Ya' : '❌ Tidak';
             document.getElementById('online-status').style.color = navigator.onLine ? '#27ae60' : '#e74c3c';
-            // Waktu
             document.getElementById('current-time').textContent = new Date().toLocaleString('id-ID');
         }
         updateRestartStats();
-        setInterval(updateRestartStats, 60000); // update setiap 1 menit
+        setInterval(updateRestartStats, 60000);
 
-        // Maintenance Mode toggle
         const maintenanceStatus = document.getElementById('maintenance-status');
         const toggleMaintenanceBtn = document.getElementById('toggle-maintenance-btn');
         let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
@@ -1257,7 +1277,6 @@
             alert(isMaintenance ? 'Maintenance Mode diaktifkan.' : 'Maintenance Mode dinonaktifkan.');
         });
 
-        // Hapus chat lama (> 1 bulan)
         document.getElementById('delete-old-chat-btn').addEventListener('click', function() {
             if (!confirm('⚠️ Semua chat lebih dari 1 bulan akan dihapus permanen. Lanjutkan?')) return;
             const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
@@ -1272,7 +1291,6 @@
             updateRestartStats();
         });
 
-        // Clear cache & optimasi
         document.getElementById('clear-cache-btn').addEventListener('click', function() {
             if (!confirm('🧹 Hapus semua cache sementara? (Data penting seperti akun, rekening, produk TIDAK akan dihapus)')) return;
             const keysToRemove = [];
@@ -1285,9 +1303,216 @@
             alert(`Berhasil menghapus ${keysToRemove.length} item cache.`);
             updateRestartStats();
         });
+
+        // ========== SEWA & FEE APLIKASI (BLOK 12) ==========
+
+        // --- Tab switching ---
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabHarga = document.getElementById('tab-harga');
+        const tabKalkulator = document.getElementById('tab-kalkulator');
+        const tabRiwayat = document.getElementById('tab-riwayat');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => {
+                    b.style.background = '#e0e0e0';
+                    b.style.color = '#333';
+                });
+                this.style.background = '#FF8C00';
+                this.style.color = 'white';
+
+                const tab = this.dataset.tab;
+                tabHarga.style.display = tab === 'harga' ? 'block' : 'none';
+                tabKalkulator.style.display = tab === 'kalkulator' ? 'block' : 'none';
+                tabRiwayat.style.display = tab === 'riwayat' ? 'block' : 'none';
+            });
+        });
+
+        // --- Render tabel sewa ---
+        function renderSewaTable() {
+            const tbody = document.getElementById('sewa-table-body');
+            if (!tbody) return;
+            const data = getSewaFee();
+            tbody.innerHTML = '';
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                // Gunakan emoji sederhana jika icon tidak tersedia
+                let icon = '';
+                if (item.role.includes('Grosir')) icon = '📦';
+                else if (item.role.includes('Standar')) icon = '🏪';
+                else if (item.role.includes('Kecil')) icon = '🏠';
+                else if (item.role.includes('Kaki Lima')) icon = '🛒';
+                else if (item.role.includes('Makanan')) icon = '🍜';
+                else if (item.role.includes('COD')) icon = '📦';
+                else if (item.role.includes('Owner')) icon = '🏬';
+                else if (item.role.includes('Ojek')) icon = '🏍️';
+                else icon = '📌';
+
+                tr.innerHTML = `
+                    <td style="padding:8px;">${icon} ${item.role}</td>
+                    <td style="padding:8px;">
+                        <input type="number" class="sewa-input" data-index="${index}" value="${item.sewa}" style="width:100px; padding:6px; border:1px solid #ddd; border-radius:5px;">
+                    </td>
+                    <td style="padding:8px;">
+                        <input type="number" class="fee-input" data-index="${index}" value="${item.fee}" step="0.1" style="width:80px; padding:6px; border:1px solid #ddd; border-radius:5px;">
+                    </td>
+                    <td style="padding:8px; font-weight:600; color:#FF8C00;">≈ Rp ${item.estimasi.toLocaleString()}</td>
+                    <td style="text-align:center; padding:8px;">
+                        <button class="btn-save-sewa-row" data-index="${index}" style="padding:6px 12px; background:#f39c12; color:white; border:none; border-radius:5px; cursor:pointer;">💾</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Event listener untuk tombol simpan per baris
+            document.querySelectorAll('.btn-save-sewa-row').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const data = getSewaFee();
+                    const sewaInput = document.querySelector(`.sewa-input[data-index="${index}"]`);
+                    const feeInput = document.querySelector(`.fee-input[data-index="${index}"]`);
+                    const newSewa = parseInt(sewaInput.value);
+                    const newFee = parseFloat(feeInput.value);
+                    if (isNaN(newSewa) || isNaN(newFee)) { alert('Masukkan angka yang valid.'); return; }
+                    const old = data[index];
+                    const oldSewa = old.sewa;
+                    const oldFee = old.fee;
+                    data[index].sewa = newSewa;
+                    data[index].fee = newFee;
+                    // Estimasi sederhana: asumsikan omzet rata-rata 5.000.000 untuk semua role (bisa disesuaikan)
+                    const omzetRata = 5000000;
+                    data[index].estimasi = newSewa + (omzetRata * newFee / 100);
+                    saveSewaFee(data);
+
+                    // Catat riwayat
+                    const riwayat = getSewaRiwayat();
+                    const username = sessionStorage.getItem('username') || 'SuperAdmin';
+                    riwayat.unshift({
+                        timestamp: new Date().toISOString(),
+                        role: old.role,
+                        sewaLama: oldSewa,
+                        sewaBaru: newSewa,
+                        feeLama: oldFee,
+                        feeBaru: newFee,
+                        diubahOleh: username
+                    });
+                    saveSewaRiwayat(riwayat);
+
+                    renderSewaTable();
+                    renderRiwayat();
+                    alert('Data sewa & fee berhasil disimpan.');
+                });
+            });
+        }
+
+        // --- Simpan semua ---
+        document.getElementById('simpan-semua-sewa')?.addEventListener('click', function() {
+            const data = getSewaFee();
+            const inputs = document.querySelectorAll('.sewa-input, .fee-input');
+            const changes = [];
+            inputs.forEach(input => {
+                const index = parseInt(input.dataset.index);
+                const isSewa = input.classList.contains('sewa-input');
+                const val = parseFloat(input.value);
+                if (isNaN(val)) { alert('Pastikan semua input berisi angka.'); return; }
+                if (isSewa) {
+                    changes.push({ index, field: 'sewa', old: data[index].sewa, new: val });
+                    data[index].sewa = val;
+                } else {
+                    changes.push({ index, field: 'fee', old: data[index].fee, new: val });
+                    data[index].fee = val;
+                }
+            });
+            // Update estimasi
+            const omzetRata = 5000000;
+            data.forEach(item => {
+                item.estimasi = item.sewa + (omzetRata * item.fee / 100);
+            });
+            saveSewaFee(data);
+
+            // Catat riwayat (gabungkan perubahan per role)
+            const riwayat = getSewaRiwayat();
+            const username = sessionStorage.getItem('username') || 'SuperAdmin';
+            const timestamp = new Date().toISOString();
+            data.forEach((item, idx) => {
+                const change = changes.filter(c => c.index === idx);
+                if (change.length > 0) {
+                    riwayat.unshift({
+                        timestamp: timestamp,
+                        role: item.role,
+                        sewaLama: change.find(c => c.field === 'sewa')?.old || item.sewa,
+                        sewaBaru: item.sewa,
+                        feeLama: change.find(c => c.field === 'fee')?.old || item.fee,
+                        feeBaru: item.fee,
+                        diubahOleh: username
+                    });
+                }
+            });
+            saveSewaRiwayat(riwayat);
+
+            renderSewaTable();
+            renderRiwayat();
+            alert('Semua data sewa & fee berhasil disimpan.');
+        });
+
+        // --- Render riwayat ---
+        function renderRiwayat() {
+            const tbody = document.getElementById('riwayat-table-body');
+            if (!tbody) return;
+            const riwayat = getSewaRiwayat();
+            tbody.innerHTML = '';
+            if (riwayat.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#999;">Belum ada riwayat perubahan.</td></tr>';
+                return;
+            }
+            riwayat.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding:8px;">${new Date(item.timestamp).toLocaleString('id-ID')}</td>
+                    <td style="padding:8px;">${item.role}</td>
+                    <td style="padding:8px;">Rp ${item.sewaBaru.toLocaleString()}</td>
+                    <td style="padding:8px;">${item.feeBaru}%</td>
+                    <td style="padding:8px;">${item.diubahOleh}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- Kalkulator ---
+        document.getElementById('hitung-kalkulator')?.addEventListener('click', function() {
+            const role = document.getElementById('calc-role').value;
+            const omzet = parseFloat(document.getElementById('calc-omzet').value);
+            const sewa = parseFloat(document.getElementById('calc-sewa').value);
+            const fee = parseFloat(document.getElementById('calc-fee').value);
+            if (!role) { alert('Pilih role terlebih dahulu.'); return; }
+            if (isNaN(omzet) || isNaN(sewa) || isNaN(fee)) { alert('Masukkan angka yang valid.'); return; }
+            const total = sewa + (omzet * fee / 100);
+            document.getElementById('hasil-total').textContent = 'Rp ' + total.toLocaleString();
+            document.getElementById('hasil-kalkulator').style.display = 'block';
+        });
+
+        // Saat role dipilih, otomatis isi sewa dan fee dari data tersimpan
+        document.getElementById('calc-role')?.addEventListener('change', function() {
+            const role = this.value;
+            const data = getSewaFee();
+            const found = data.find(item => item.role === role);
+            if (found) {
+                document.getElementById('calc-sewa').value = found.sewa;
+                document.getElementById('calc-fee').value = found.fee;
+            } else {
+                document.getElementById('calc-sewa').value = '';
+                document.getElementById('calc-fee').value = '';
+            }
+        });
+
+        // Render awal saat halaman sewa-fee dibuka
+        renderSewaTable();
+        renderRiwayat();
+
+        // ========== AKHIR DARI BLOK 4 R11 ==========
     });
 </script>
-<!-- ==================== AKHIR BLOK 4 R10 ==================== -->
+<!-- ==================== AKHIR BLOK 4 R11 ==================== -->
 <!-- ==================== BLOK 5: MODAL EDIT PROFIL ==================== -->
 <div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center;">
     <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
@@ -1998,5 +2223,143 @@
     </div>
 </div>
 <!-- ==================== AKHIR BLOK 11 R1 ==================== -->
+<!-- ==================== BLOK 12 R1: SEWA & FEE APLIKASI ==================== -->
+<div id="sewa-fee-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>TOKO ONLINE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
+                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
+                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
+                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
+                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
+                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
+                <a href="#" class="nav-item active" data-page="sewa-fee">Sewa &amp; Fee Aplikasi</a>
+                <a href="#" class="nav-item disabled">Laporan</a>
+                <a href="#" class="nav-item disabled">Pengaturan</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Selamat datang, <strong id="display-username-sewa">SuperAdmin</strong></span>
+                <button class="btn-logout" onclick="logout()">Keluar</button>
+            </header>
+
+            <div class="content">
+                <h2>🏠 Sewa &amp; Fee Aplikasi</h2>
+                <p class="breadcrumb">Home / Sewa &amp; Fee Aplikasi</p>
+                <p style="color: #555; margin-bottom: 25px;">Atur harga sewa dan fee per role. Estimasi dihitung berdasarkan rata-rata omzet bulanan role tersebut.</p>
+
+                <!-- Tab Navigation -->
+                <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">
+                    <button class="tab-btn active" data-tab="harga" style="padding: 10px 25px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💰 Harga</button>
+                    <button class="tab-btn" data-tab="kalkulator" style="padding: 10px 25px; background: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🧮 Kalkulator</button>
+                    <button class="tab-btn" data-tab="riwayat" style="padding: 10px 25px; background: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📜 Riwayat</button>
+                </div>
+
+                <!-- Tab Content: Harga -->
+                <div id="tab-harga" style="display: block;">
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 1100px; overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                            <thead>
+                                <tr style="background: #f5f6fa;">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Role</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Sewa/Bulan (Rp)</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Fee (%)</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Estimasi</th>
+                                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #ddd;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sewa-table-body">
+                                <!-- Data akan diisi oleh script -->
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 20px; color: #999;">Memuat data sewa & fee...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                            <button id="simpan-semua-sewa" style="padding: 12px 30px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💾 Simpan Semua Sewa &amp; Fee</button>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 0.85em; color: #888;">* Estimasi dihitung dari rata-rata omzet bulanan masing-masing role.</p>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Kalkulator -->
+                <div id="tab-kalkulator" style="display: none;">
+                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 600px;">
+                        <h3 style="margin-bottom: 15px;">🧮 Kalkulator Sewa & Fee</h3>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Role</label>
+                            <select id="calc-role" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                                <option value="">-- Pilih Role --</option>
+                                <option value="Toko Grosir">Toko Grosir</option>
+                                <option value="Toko Standar">Toko Standar</option>
+                                <option value="Toko Kecil">Toko Kecil</option>
+                                <option value="Kaki Lima">Kaki Lima</option>
+                                <option value="Toko Makanan">Toko Makanan</option>
+                                <option value="COD Seller">COD Seller</option>
+                                <option value="Owner Toko">Owner Toko</option>
+                                <option value="Ojek">Ojek</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Omzet Bulanan (Rp)</label>
+                            <input type="number" id="calc-omzet" placeholder="Masukkan omzet" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Sewa Bulanan (Rp)</label>
+                            <input type="number" id="calc-sewa" placeholder="Masukkan sewa" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Fee (%)</label>
+                            <input type="number" id="calc-fee" placeholder="Masukkan fee" step="0.1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <button id="hitung-kalkulator" style="padding: 10px 25px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Hitung</button>
+                        <div id="hasil-kalkulator" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; display: none;">
+                            <p style="font-weight: 600;">Hasil Estimasi:</p>
+                            <p>Total yang harus dibayar: <span id="hasil-total" style="color: #FF8C00; font-size: 1.2em;">Rp 0</span></p>
+                            <p style="font-size: 0.9em; color: #666;">(Sewa + (Omzet × Fee %))</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Riwayat -->
+                <div id="tab-riwayat" style="display: none;">
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 1100px; overflow-x: auto;">
+                        <h3 style="margin-bottom: 15px;">📜 Riwayat Perubahan Sewa & Fee</h3>
+                        <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                            <thead>
+                                <tr style="background: #f5f6fa;">
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Tanggal</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Role</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Sewa Baru</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Fee Baru</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Diubah Oleh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riwayat-table-body">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 20px; color: #999;">Belum ada riwayat perubahan.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+<!-- ==================== AKHIR BLOK 12 R1 ==================== -->
 </body>
 </html>
