@@ -1,2365 +1,1055 @@
-<!-- ==================== BLOK 1: LANDING PEMBUKAAN ==================== -->
+<!-- ==========================================
+BLOK PUB-01 - HEADER, SLOT IKLAN SUPERADMIN & RUNNING TEXT
+===========================================
+PENJELASAN FUNGSI PERINTAH:
+1. Blok ini adalah kerangka utama halaman publik sebelum pengunjung login.
+2. Memuat library eksternal (Bootstrap 5, Bootstrap Icons) untuk mendukung tampilan responsif profesional.
+3. Menampilkan slot iklan premium dari SuperAdmin di posisi paling atas layar untuk promosi berbayar.
+4. Menampilkan running text (teks berjalan) berisi pengumuman resmi dari pusat (SuperAdmin) kepada seluruh pengunjung.
+5. Navigasi sederhana di bagian atas untuk akses cepat ke halaman Login dan Pendaftaran.
+6. Tema warna oranye-putih yang konsisten untuk identitas Platform 2R.
+=========================================== -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOKO ONLINE - Login</title>
+    <title>Platform 2R - Ekosistem Toko Grosir & Ojek Digital</title>
+    <!-- Library Bootstrap 5 untuk tata letak modern -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Library Bootstrap Icons untuk simbol dan ikon -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
     <style>
-        * {
+        /* ========== PENGATURAN DASAR ========== */
+        body {
+            background-color: #fdfcfb;
+            color: #2b2b2b;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        body {
-            min-height: 100vh;
-            /* Background dipindahkan ke #login-page */
+        /* ========== PALET WARNA UTAMA ========== */
+        .bg-orange-custom {
+            background: linear-gradient(135deg, #ff6600, #ff8833) !important;
         }
-
-        #login-page {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #FF6B00, #FF8C00, #FFA500);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        
+        .text-orange-custom {
+            color: #ff6600 !important;
         }
-
-        .login-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .login-header h1 {
-            color: #FF6B00;
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-
-        .login-header p {
-            color: #777;
-            font-size: 0.95em;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #333;
-            font-size: 0.9em;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border 0.3s;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #FF6B00;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: #FF6B00;
-            color: white;
+        
+        .btn-orange {
+            background-color: #ff6600;
+            color: #ffffff;
+            font-weight: 700;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-orange:hover {
+            background-color: #e55500;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+        }
+        
+        .btn-outline-orange {
+            border: 2px solid #ff6600;
+            color: #ff6600;
+            font-weight: 700;
+            background-color: transparent;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-outline-orange:hover {
+            background-color: #ff6600;
+            color: #ffffff;
+        }
+
+        /* ========== NAVBAR ATAS ========== */
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 3px solid #ff6600;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .navbar-brand-custom {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ff6600 !important;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .navbar-brand-custom span {
+            color: #2b2b2b;
             font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
         }
 
-        .btn-login:hover {
-            background: #E55D00;
-            transform: translateY(-2px);
+        /* ========== SLOT IKLAN PREMIUM ========== */
+        .ads-zone {
+            background: linear-gradient(135deg, #ff6600, #ff8833);
+            padding: 12px 0;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .ads-badge {
+            background-color: #ffffff;
+            color: #ff6600;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-right: 10px;
+            letter-spacing: 0.5px;
         }
 
-        .btn-login:active {
-            transform: translateY(0);
+        /* ========== RUNNING TEXT ========== */
+        .running-text-container {
+            background-color: #2b2b2b;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 10px 0;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 3px solid #ff6600;
+            z-index: 9;
+        }
+        
+        .running-text-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scrollText 30s linear infinite;
+            padding-left: 100%;
+        }
+        
+        @keyframes scrollText {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        
+        .running-text-content i {
+            margin: 0 6px;
         }
 
-        .error-msg {
-            color: #e74c3c;
-            text-align: center;
-            margin-top: 10px;
-            font-size: 0.9em;
-            min-height: 20px;
+        /* ========== KARTU DAN EFEK ========== */
+        .card-custom {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(255, 102, 0, 0.08);
+            background: #ffffff;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(255, 102, 0, 0.15);
+        }
+
+        .border-top-orange {
+            border-top: 4px solid #ff6600 !important;
+        }
+
+        /* ========== RESPONSIF ========== */
+        @media (max-width: 768px) {
+            .navbar-brand-custom {
+                font-size: 1.2rem;
+            }
+            .ads-zone {
+                padding: 10px 0;
+            }
+            .ads-zone strong {
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="login-page">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>TOKO ONLINE</h1>
-                <p>Silakan masuk untuk melanjutkan</p>
+
+    <!-- ==================== NAVBAR ATAS ==================== -->
+    <nav class="navbar navbar-expand-lg navbar-custom py-2">
+        <div class="container">
+            <a class="navbar-brand-custom" href="#">
+                <i class="bi bi-shop-window me-2"></i>Platform <span>2R</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPublik" aria-controls="navbarPublik" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarPublik">
+                <ul class="navbar-nav align-items-center gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-dark" href="#">
+                            <i class="bi bi-info-circle-fill me-1 text-orange-custom"></i> Tentang Kami
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-orange px-4 py-2 fw-bold" onclick="alert('Menuju halaman Login')">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> MASUK
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-orange px-4 py-2 fw-bold" onclick="alert('Menuju halaman Pendaftaran')">
+                            <i class="bi bi-person-plus-fill me-1"></i> DAFTAR
+                        </button>
+                    </li>
+                </ul>
             </div>
-            <form id="loginForm">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Masukkan username" required>
+        </div>
+    </nav>
+
+    <!-- ==================== SLOT IKLAN SUPERADMIN ==================== -->
+    <div class="container-fluid ads-zone">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <span class="ads-badge">
+                        <i class="bi bi-megaphone-fill me-1"></i> IKLAN RESMI
+                    </span>
+                    <strong class="text-white" style="font-size: 1rem;">
+                        🔥 SPESIAL BULAN INI! Diskon 50% Biaya Langganan Akun PRO untuk 100 Pendaftar Pertama!
+                    </strong>
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Masukkan password" required>
-                </div>
-                <button type="submit" class="btn-login">Masuk</button>
-                <p id="error-msg" class="error-msg"></p>
-            </form>
+                <button class="btn btn-light text-orange-custom fw-bold px-4 py-2 rounded-pill mt-2 mt-md-0" onclick="alert('Mengarahkan ke formulir pendaftaran')">
+                    Klaim Sekarang <i class="bi bi-arrow-right-short ms-1"></i>
+                </button>
+            </div>
         </div>
     </div>
-    <!-- Script akan ditambahkan di blok berikutnya -->
-<!-- ==================== AKHIR BLOK 1 ==================== -->
-<!-- ==================== BLOK 2 R6: DASHBOARD (Sidebar + Restart System) ==================== -->
-<div id="dashboard-page" style="display: none;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item active" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
+    <!-- ==================== RUNNING TEXT PENGUMUMAN ==================== -->
+    <div class="container-fluid running-text-container">
+        <div class="running-text-content">
+            <i class="bi bi-info-circle-fill text-warning"></i> 
+            [PENGUMUMAN RESMI SUPERADMIN]: Seluruh calon Pemilik Toko Grosir dan Driver Ojek, pastikan dokumen KTP dan SKU Anda terbaca jelas saat proses unggah. Verifikasi berkas kini maksimal 1x24 jam kerja. 
+            <i class="bi bi-shield-fill-check text-success ms-4"></i> 
+            Sistem Keamanan Platform 2R Versi 4.0 telah aktif. Perlindungan data Anda terenkripsi penuh 24 jam nonstop. 
+            <i class="bi bi-clock-fill text-info ms-4"></i> 
+            Jam operasional Layanan Call Center: Senin - Sabtu, Pukul 08.00 - 20.00 WIB.
+        </div>
+    </div>
 
-            <div class="content">
-                <h2>Dashboard</h2>
-                <p class="breadcrumb">Home / Dashboard</p>
+    <!-- ==================== WRAPPER KONTEN UTAMA ==================== -->
+    <!-- Konten halaman publik lainnya (Radar Toko, Radar Ojek, Form Pendaftaran) 
+         akan dimuat di dalam div ini oleh blok-blok berikutnya -->
+    <div id="wrapper-konten-publik" class="container py-4">
+        <!-- Blok berikutnya akan mengisi area ini -->
+    </div>
 
-                <!-- Kotak Profil Super Admin -->
-                <div class="profile-card">
-                    <div class="profile-header">
-                        <div class="profile-avatar">SA</div>
-                        <div>
-                            <h3>PROFIL SUPER ADMIN</h3>
-                            <span class="role-badge">CEO TOKO ONLINE</span>
-                        </div>
+    <!-- ==================== SCRIPT ==================== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fungsi global untuk menampilkan pesan sementara (akan diperluas di blok lain)
+        function tampilkanPesan(pesan) {
+            alert(pesan);
+        }
+        
+        // Fungsi navigasi ke halaman login (akan diaktifkan penuh di blok autentikasi)
+        function menujuLogin() {
+            // Placeholder: di blok AUTH-01 nanti akan diimplementasikan
+            alert('Navigasi ke halaman Login');
+        }
+        
+        function menujuPendaftaran() {
+            // Placeholder: di blok PUB-04 nanti akan diimplementasikan
+            alert('Navigasi ke halaman Pendaftaran');
+        }
+    </script>
+    <!-- ==================== AKHIR BLOK PUB-01 ==================== -->
+<!-- ==========================================
+BLOK PUB-02 - RADAR TOKO TERDAFTAR & TERDEKAT
+===========================================
+PENJELASAN FUNGSI PERINTAH:
+1. Menampilkan daftar toko grosir yang sudah bergabung di platform sebagai bukti sosial (social proof) bahwa aplikasi aktif dan banyak digunakan.
+2. Menampilkan label jarak simulasi (misal: 0.5 km) untuk memancing minat pengunjung bahwa ada toko terdekat di sekitar mereka.
+3. Call to Action (CTA) Konversi Pendaftaran: Tombol "PESAN SEKARANG" pada setiap kartu toko. Jika diklik oleh pengunjung publik, sistem akan mengarahkan mereka ke form Pendaftaran Akun (memaksa konversi user baru).
+4. Desain konsisten dengan tema Oranye-Putih, menggunakan badge status operasional toko (Buka/Tutup), rating bintang, dan tata letak grid responsif.
+=========================================== -->
+<div class="container mt-5" id="halaman-radar-toko">
+    
+    <!-- Header Section Radar Toko -->
+    <div class="d-flex justify-content-between align-items-end mb-4 pb-2" style="border-bottom: 3px solid #ff6600;">
+        <div>
+            <span class="badge bg-orange-custom text-white mb-2 px-3 py-2 rounded-pill">
+                <i class="bi bi-radar me-1"></i> Live Radar
+            </span>
+            <h3 class="fw-bold text-dark mb-1">Toko Terdekat dari Lokasi Anda</h3>
+            <p class="text-muted small mb-0">Temukan berbagai kebutuhan harian dari mitra toko grosir resmi kami yang siap melayani Anda.</p>
+        </div>
+        <div class="d-none d-md-block">
+            <button type="button" class="btn btn-outline-orange btn-sm fw-bold px-3 py-2" onclick="alert('Menuju halaman pendaftaran untuk melihat semua toko')">
+                Lihat Semua Toko <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Grid Daftar Toko -->
+    <div class="row g-4">
+        
+        <!-- Kartu Toko 1: Grosir Sembako Makmur -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-0 overflow-hidden border-0">
+                <!-- Banner/Foto Toko (Simulasi) -->
+                <div class="bg-light d-flex justify-content-center align-items-center position-relative" style="height: 160px; border-bottom: 4px solid #ff6600;">
+                    <i class="bi bi-shop text-muted" style="font-size: 5rem; opacity: 0.15;"></i>
+                    <span class="position-absolute top-0 end-0 m-3 badge bg-success shadow-sm px-3 py-2">BUKA</span>
+                </div>
+                
+                <!-- Informasi Toko -->
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold mb-0 text-dark">Grosir Sembako Makmur</h5>
+                        <span class="badge bg-light text-orange-custom border border-warning shadow-sm">
+                            <i class="bi bi-geo-alt-fill me-1"></i> 0.5 km
+                        </span>
                     </div>
-                    <div class="profile-body">
-                        <table class="profile-table">
-                            <tbody>
-                                <tr>
-                                    <td>Nama</td>
-                                    <td>: <span id="profile-name">Dede</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Alamat</td>
-                                    <td>: <span id="profile-address">Ciamis, Jawa Barat</span></td>
-                                </tr>
-                                <tr>
-                                    <td>HP</td>
-                                    <td>: <span id="profile-phone">-</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Email</td>
-                                    <td>: <span id="profile-email">-</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Jabatan</td>
-                                    <td>: <span id="profile-position">CEO TOKO ONLINE</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <p class="text-muted small mb-3">Tersedia Beras, Minyak Goreng, Gula Pasir, dan Bumbu Dapur lengkap. Melayani pembelian eceran maupun grosir partai besar.</p>
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-half text-warning me-2"></i>
+                        <span class="small text-muted fw-bold">(4.8 / 5.0)</span>
+                    </div>
 
-                        <!-- Tombol Edit & Hapus -->
-                        <div style="margin-top: 20px; display: flex; gap: 10px;">
-                            <button id="btn-edit-profile" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Edit Profil</button>
-                            <button id="btn-delete-profile" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Hapus Profil</button>
-                        </div>
+                    <!-- Tombol CTA Pesan (Arahkan ke Pendaftaran) -->
+                    <button type="button" class="btn btn-orange w-100 fw-bold py-2 mt-auto" onclick="alert('Anda akan diarahkan ke halaman pendaftaran Pelanggan')">
+                        <i class="bi bi-cart-plus-fill me-2"></i> PESAN SEKARANG
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu Toko 2: Agen Makanan Ringan 2R -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-0 overflow-hidden border-0">
+                <!-- Banner/Foto Toko (Simulasi) -->
+                <div class="bg-light d-flex justify-content-center align-items-center position-relative" style="height: 160px; border-bottom: 4px solid #ff6600;">
+                    <i class="bi bi-shop-window text-muted" style="font-size: 5rem; opacity: 0.15;"></i>
+                    <span class="position-absolute top-0 end-0 m-3 badge bg-success shadow-sm px-3 py-2">BUKA</span>
+                </div>
+                
+                <!-- Informasi Toko -->
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold mb-0 text-dark">Agen Makanan Ringan 2R</h5>
+                        <span class="badge bg-light text-orange-custom border border-warning shadow-sm">
+                            <i class="bi bi-geo-alt-fill me-1"></i> 1.2 km
+                        </span>
+                    </div>
+                    <p class="text-muted small mb-3">Spesialis aneka jajanan anak, snack kiloan, dan minuman kemasan botol dengan harga agen langsung dari distributor.</p>
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-2"></i>
+                        <span class="small text-muted fw-bold">(5.0 / 5.0)</span>
+                    </div>
+
+                    <!-- Tombol CTA Pesan (Arahkan ke Pendaftaran) -->
+                    <button type="button" class="btn btn-orange w-100 fw-bold py-2 mt-auto" onclick="alert('Anda akan diarahkan ke halaman pendaftaran Pelanggan')">
+                        <i class="bi bi-cart-plus-fill me-2"></i> PESAN SEKARANG
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu Toko 3: Toko Kelontong Berkah -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-0 overflow-hidden border-0">
+                <!-- Banner/Foto Toko (Simulasi) -->
+                <div class="bg-light d-flex justify-content-center align-items-center position-relative" style="height: 160px; border-bottom: 4px solid #ff6600;">
+                    <i class="bi bi-basket2-fill text-muted" style="font-size: 5rem; opacity: 0.15;"></i>
+                    <span class="position-absolute top-0 end-0 m-3 badge bg-danger shadow-sm px-3 py-2">TUTUP</span>
+                </div>
+                
+                <!-- Informasi Toko -->
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold mb-0 text-dark">Toko Kelontong Berkah</h5>
+                        <span class="badge bg-light text-orange-custom border border-warning shadow-sm">
+                            <i class="bi bi-geo-alt-fill me-1"></i> 2.8 km
+                        </span>
+                    </div>
+                    <p class="text-muted small mb-3">Distributor rokok, alat mandi, perlengkapan mencuci, dan berbagai kebutuhan rumah tangga lainnya dengan harga bersaing.</p>
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <i class="bi bi-star-half text-warning me-1"></i>
+                        <i class="bi bi-star text-warning me-2"></i>
+                        <span class="small text-muted fw-bold">(3.5 / 5.0)</span>
+                    </div>
+
+                    <!-- Tombol CTA Lihat Toko (Arahkan ke Pendaftaran) -->
+                    <button type="button" class="btn btn-secondary w-100 fw-bold py-2 mt-auto" onclick="alert('Anda akan diarahkan ke halaman pendaftaran Pelanggan')">
+                        <i class="bi bi-info-circle-fill me-2"></i> LIHAT TOKO (DAFTAR)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Tombol Mobile Tampilkan Semua Toko -->
+    <div class="d-block d-md-none mt-4 text-center">
+         <button type="button" class="btn btn-outline-orange w-100 fw-bold py-2" onclick="alert('Menuju halaman pendaftaran untuk melihat semua toko')">
+             Lihat Semua Toko Terdekat <i class="bi bi-arrow-right ms-1"></i>
+         </button>
+    </div>
+
+</div>
+<!-- ==================== AKHIR BLOK PUB-02 ==================== -->
+    <!-- ==========================================
+BLOK PUB-03 - RADAR OJEK TERDEKAT
+===========================================
+PENJELASAN FUNGSI PERINTAH:
+1. Menampilkan simulasi armada Jasa Ojek (kurir) yang sedang aktif di sekitar lokasi pengunjung untuk meyakinkan calon pelanggan maupun toko bahwa pengiriman selalu tersedia dan cepat.
+2. Setiap kartu menampilkan Nama Driver, Jarak, Jenis Kendaraan, Plat Nomor (disamarkan), dan Rating Bintang untuk membangun rasa aman dan percaya.
+3. Call to Action (CTA) Konversi: Tombol "PANGGIL OJEK SEKARANG" akan mengarahkan pengunjung ke form Pendaftaran Akun Pelanggan (memaksa pendaftaran/login).
+4. Desain konsisten menggunakan tema Oranye-Putih, ikon kendaraan, dan lencana (badge) yang seragam dengan blok sebelumnya.
+=========================================== -->
+<div class="container mt-5" id="halaman-radar-ojek">
+    
+    <!-- Header Section Radar Ojek -->
+    <div class="d-flex justify-content-between align-items-end mb-4 pb-2" style="border-bottom: 3px solid #ff6600;">
+        <div>
+            <span class="badge bg-orange-custom text-white mb-2 px-3 py-2 rounded-pill">
+                <i class="bi bi-broadcast me-1"></i> Radar Armada
+            </span>
+            <h3 class="fw-bold text-dark mb-1">Driver Ojek Siap Antar Terdekat</h3>
+            <p class="text-muted small mb-0">Mitra pengemudi handal kami siap mengantar belanjaan Anda dengan aman dan cepat.</p>
+        </div>
+        <div class="d-none d-md-block">
+            <button type="button" class="btn btn-outline-orange btn-sm fw-bold px-3 py-2" onclick="alert('Menuju halaman pendaftaran untuk menjadi Mitra Ojek')">
+                Gabung Jadi Mitra Ojek <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Grid Daftar Ojek Terdekat -->
+    <div class="row g-4 justify-content-center">
+        
+        <!-- Kartu Driver 1: Agus Setiawan -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-0 border-top-orange d-flex flex-column">
+                <div class="p-4 d-flex align-items-center border-bottom bg-light">
+                    <div class="bg-white rounded-circle d-flex justify-content-center align-items-center shadow-sm" style="width: 60px; height: 60px; border: 2px solid #ff6600;">
+                        <i class="bi bi-person-fill text-orange-custom" style="font-size: 2rem;"></i>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-0 text-dark">Agus Setiawan</h5>
+                        <span class="badge bg-success small"><i class="bi bi-record-circle-fill me-1"></i>Aktif / Siap Narik</span>
                     </div>
                 </div>
+                
+                <div class="p-4 flex-grow-1">
+                    <div class="row text-center mb-3">
+                        <div class="col-6 border-end">
+                            <span class="d-block text-muted small">Jarak</span>
+                            <strong class="text-dark"><i class="bi bi-geo-alt-fill text-orange-custom me-1"></i> 0.2 km</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="d-block text-muted small">Rating</span>
+                            <strong class="text-dark"><i class="bi bi-star-fill text-warning me-1"></i> 4.9 / 5</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-light p-2 rounded text-center mb-4">
+                        <small class="d-block text-muted">Kendaraan</small>
+                        <span class="fw-bold text-dark"><i class="bi bi-scooter text-secondary me-1"></i> Honda Beat - B 31** XY</span>
+                    </div>
 
-                <p class="note">Seluruh fitur kini telah terhubung melalui sidebar. Restart System siap digunakan.</p>
+                    <button type="button" class="btn btn-orange w-100 fw-bold py-2 mt-auto" onclick="alert('Anda akan diarahkan ke halaman pendaftaran Pelanggan')">
+                        <i class="bi bi-motorcycle me-2"></i> PANGGIL OJEK SEKARANG
+                    </button>
+                </div>
             </div>
+        </div>
 
-            <!-- Footer Penutup -->
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
+        <!-- Kartu Driver 2: Budi Santoso -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-0 border-top-orange d-flex flex-column">
+                <div class="p-4 d-flex align-items-center border-bottom bg-light">
+                    <div class="bg-white rounded-circle d-flex justify-content-center align-items-center shadow-sm" style="width: 60px; height: 60px; border: 2px solid #ff6600;">
+                        <i class="bi bi-person-fill text-orange-custom" style="font-size: 2rem;"></i>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-0 text-dark">Budi Santoso</h5>
+                        <span class="badge bg-success small"><i class="bi bi-record-circle-fill me-1"></i>Aktif / Siap Narik</span>
+                    </div>
+                </div>
+                
+                <div class="p-4 flex-grow-1">
+                    <div class="row text-center mb-3">
+                        <div class="col-6 border-end">
+                            <span class="d-block text-muted small">Jarak</span>
+                            <strong class="text-dark"><i class="bi bi-geo-alt-fill text-orange-custom me-1"></i> 0.8 km</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="d-block text-muted small">Rating</span>
+                            <strong class="text-dark"><i class="bi bi-star-fill text-warning me-1"></i> 4.7 / 5</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-light p-2 rounded text-center mb-4">
+                        <small class="d-block text-muted">Kendaraan</small>
+                        <span class="fw-bold text-dark"><i class="bi bi-scooter text-secondary me-1"></i> Yamaha Vario - B 67** ZA</span>
+                    </div>
+
+                    <button type="button" class="btn btn-orange w-100 fw-bold py-2 mt-auto" onclick="alert('Anda akan diarahkan ke halaman pendaftaran Pelanggan')">
+                        <i class="bi bi-motorcycle me-2"></i> PANGGIL OJEK SEKARANG
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu Driver 3: Dedi Supriadi -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-0 border-top-orange d-flex flex-column">
+                <div class="p-4 d-flex align-items-center border-bottom bg-light">
+                    <div class="bg-white rounded-circle d-flex justify-content-center align-items-center shadow-sm" style="width: 60px; height: 60px; border: 2px solid #6c757d;">
+                        <i class="bi bi-person-fill text-secondary" style="font-size: 2rem;"></i>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-0 text-dark">Dedi Supriadi</h5>
+                        <span class="badge bg-danger small"><i class="bi bi-dash-circle-fill me-1"></i>Sedang Mengantar</span>
+                    </div>
+                </div>
+                
+                <div class="p-4 flex-grow-1">
+                    <div class="row text-center mb-3">
+                        <div class="col-6 border-end">
+                            <span class="d-block text-muted small">Jarak</span>
+                            <strong class="text-dark"><i class="bi bi-geo-alt-fill text-orange-custom me-1"></i> 1.5 km</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="d-block text-muted small">Rating</span>
+                            <strong class="text-dark"><i class="bi bi-star-fill text-warning me-1"></i> 5.0 / 5</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-light p-2 rounded text-center mb-4">
+                        <small class="d-block text-muted">Kendaraan</small>
+                        <span class="fw-bold text-dark"><i class="bi bi-scooter text-secondary me-1"></i> Honda Scoopy - B 12** KL</span>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary w-100 fw-bold py-2 mt-auto" onclick="alert('Anda akan diarahkan ke halaman pendaftaran Pelanggan')">
+                        <i class="bi bi-hourglass-split me-2"></i> CEK KETERSEDIAAN (DAFTAR)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tombol Mobile Tampilkan Semua Driver -->
+    <div class="d-block d-md-none mt-4 text-center">
+         <button type="button" class="btn btn-outline-orange w-100 fw-bold py-2" onclick="alert('Menuju halaman pendaftaran untuk menjadi Mitra Ojek')">
+             Gabung Jadi Mitra Ojek <i class="bi bi-arrow-right ms-1"></i>
+         </button>
+    </div>
+
+</div>
+<!-- ==================== AKHIR BLOK PUB-03 ==================== -->
+    <!-- ==========================================
+BLOK PUB-04 - FORM PENDAFTARAN TERPADU
+===========================================
+PENJELASAN FUNGSI PERINTAH:
+1. Form pendaftaran terpusat yang melayani tiga jenis pendaftaran: Pelanggan, Toko Grosir, dan Jasa Ojek dalam satu alur yang efisien.
+2. Logika Dinamis (Pilih Peran): Pengguna memilih jenis akun melalui tombol radio, dan sistem akan menyesuaikan data wajib sesuai kategori (misal: Toko memerlukan nama toko, Ojek memerlukan plat nomor).
+3. Validasi Ketat Anti Duplikat: Menerapkan aturan "Satu KTP, Satu Email, Satu Nomor HP untuk Satu Akun" demi integritas data dan keamanan aplikasi.
+4. Desain konsisten dengan tema Oranye-Putih, menonjolkan tombol "DAFTAR SEKARANG" yang kontras untuk meningkatkan angka konversi pendaftaran.
+5. Terdapat tombol kembali ke halaman Login bagi pengunjung yang sudah memiliki akun.
+=========================================== -->
+<div class="container mt-5 mb-5" id="halaman-pendaftaran">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card-custom border-top-orange shadow-lg">
+                <div class="text-center mb-4">
+                    <h3 class="text-orange-custom fw-bold">Form Pendaftaran Akun</h3>
+                    <p class="text-muted small">Lengkapi data diri Anda dengan benar untuk mulai menikmati seluruh layanan Platform 2R.</p>
+                </div>
+                
+                <form id="form-pendaftaran-terpadu" onsubmit="event.preventDefault(); prosesPendaftaran();">
+                    
+                    <!-- ========== PILIHAN JENIS AKUN ========== -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Pilih Jenis Akun <span class="text-danger">*</span></label>
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <input type="radio" class="btn-check" name="peran" id="peran-pelanggan" value="pelanggan" checked onchange="toggleFormPendaftaran()">
+                                <label class="btn btn-outline-orange w-100 fw-bold py-2" for="peran-pelanggan">
+                                    <i class="bi bi-person-fill d-block fs-4 mb-1"></i> Pelanggan
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <input type="radio" class="btn-check" name="peran" id="peran-toko" value="toko" onchange="toggleFormPendaftaran()">
+                                <label class="btn btn-outline-orange w-100 fw-bold py-2" for="peran-toko">
+                                    <i class="bi bi-shop d-block fs-4 mb-1"></i> Toko Grosir
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <input type="radio" class="btn-check" name="peran" id="peran-ojek" value="ojek" onchange="toggleFormPendaftaran()">
+                                <label class="btn btn-outline-orange w-100 fw-bold py-2" for="peran-ojek">
+                                    <i class="bi bi-motorcycle d-block fs-4 mb-1"></i> Jasa Ojek
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========== IDENTITAS UTAMA ========== -->
+                    <h6 class="text-orange-custom border-bottom pb-2 mb-3 fw-bold">
+                        <i class="bi bi-person-vcard me-2"></i> Data Identitas Utama
+                    </h6>
+
+                    <div class="mb-3">
+                        <label for="daftar-nama-lengkap" class="form-label fw-bold">Nama Lengkap (Sesuai KTP) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-orange-custom border-end-0">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                            <input type="text" id="daftar-nama-lengkap" class="form-control border-start-0 ps-0" placeholder="Masukkan nama lengkap Anda" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="daftar-nik" class="form-label fw-bold">NIK KTP (16 Digit) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-orange-custom border-end-0">
+                                    <i class="bi bi-credit-card-2-front-fill"></i>
+                                </span>
+                                <input type="number" id="daftar-nik" class="form-control border-start-0 ps-0" placeholder="Nomor Induk Kependudukan" required>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.7rem;">Pastikan NIK sesuai dengan KTP asli Anda.</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="daftar-telepon" class="form-label fw-bold">Nomor WhatsApp <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-success border-end-0">
+                                    <i class="bi bi-whatsapp"></i>
+                                </span>
+                                <input type="number" id="daftar-telepon" class="form-control border-start-0 ps-0" placeholder="Contoh: 081234567890" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="daftar-email" class="form-label fw-bold">Alamat Email Aktif <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-orange-custom border-end-0">
+                                <i class="bi bi-envelope-fill"></i>
+                            </span>
+                            <input type="email" id="daftar-email" class="form-control border-start-0 ps-0" placeholder="nama@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="daftar-alamat" class="form-label fw-bold">Alamat Lengkap <span class="text-danger">*</span></label>
+                        <textarea id="daftar-alamat" class="form-control" rows="2" placeholder="Masukkan alamat domisili atau lokasi usaha Anda" required></textarea>
+                    </div>
+
+                    <!-- ========== DATA KHUSUS TOKO (Tampil jika memilih Toko) ========== -->
+                    <div id="form-khusus-toko" style="display: none;">
+                        <h6 class="text-success border-bottom pb-2 mb-3 fw-bold">
+                            <i class="bi bi-shop me-2"></i> Data Khusus Toko Grosir
+                        </h6>
+                        <div class="mb-3">
+                            <label for="daftar-nama-toko" class="form-label fw-bold">Nama Toko <span class="text-danger">*</span></label>
+                            <input type="text" id="daftar-nama-toko" class="form-control" placeholder="Masukkan nama toko Anda">
+                        </div>
+                        <div class="mb-3">
+                            <label for="daftar-sku" class="form-label fw-bold">Nomor SKU / SIUP (Opsional)</label>
+                            <input type="text" id="daftar-sku" class="form-control" placeholder="Masukkan nomor surat izin usaha jika ada">
+                        </div>
+                    </div>
+
+                    <!-- ========== DATA KHUSUS OJEK (Tampil jika memilih Ojek) ========== -->
+                    <div id="form-khusus-ojek" style="display: none;">
+                        <h6 class="text-info border-bottom pb-2 mb-3 fw-bold">
+                            <i class="bi bi-motorcycle me-2"></i> Data Khusus Jasa Ojek
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="daftar-plat-nomor" class="form-label fw-bold">Plat Nomor Kendaraan <span class="text-danger">*</span></label>
+                                <input type="text" id="daftar-plat-nomor" class="form-control" placeholder="Contoh: B 1234 XYZ">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="daftar-jenis-kendaraan" class="form-label fw-bold">Jenis Kendaraan <span class="text-danger">*</span></label>
+                                <select id="daftar-jenis-kendaraan" class="form-select">
+                                    <option value="" selected disabled>-- Pilih Kendaraan --</option>
+                                    <option value="Matic">Motor Matic (Beat, Vario, Scoopy, dll)</option>
+                                    <option value="Bebek">Motor Bebek (Supra, Jupiter, dll)</option>
+                                    <option value="Sport">Motor Sport</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="daftar-sim" class="form-label fw-bold">Nomor SIM C <span class="text-danger">*</span></label>
+                            <input type="text" id="daftar-sim" class="form-control" placeholder="Masukkan nomor SIM C Anda">
+                        </div>
+                    </div>
+
+                    <!-- ========== PENGATURAN AKSES LOGIN ========== -->
+                    <h6 class="text-orange-custom border-bottom pb-2 mb-3 fw-bold">
+                        <i class="bi bi-key-fill me-2"></i> Pengaturan Akses Login
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="daftar-username" class="form-label fw-bold">Username <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-orange-custom border-end-0">
+                                    <i class="bi bi-at"></i>
+                                </span>
+                                <input type="text" id="daftar-username" class="form-control border-start-0 ps-0" placeholder="Buat username unik" required>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.7rem;">Gunakan kombinasi huruf dan angka tanpa spasi.</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="daftar-password" class="form-label fw-bold">Password <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-orange-custom border-end-0">
+                                    <i class="bi bi-lock-fill"></i>
+                                </span>
+                                <input type="password" id="daftar-password" class="form-control border-start-0 ps-0" placeholder="Minimal 6 karakter" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========== PERSETUJUAN ========== -->
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="setujuSyarat" required>
+                        <label class="form-check-label small text-muted" for="setujuSyarat">
+                            Saya menyatakan bahwa seluruh data yang diisi adalah benar dan menyetujui <a href="#" class="text-orange-custom fw-bold text-decoration-none">Syarat & Ketentuan</a> serta <a href="#" class="text-orange-custom fw-bold text-decoration-none">Kebijakan Privasi</a> Platform 2R.
+                        </label>
+                    </div>
+
+                    <!-- ========== TOMBOL DAFTAR ========== -->
+                    <button type="submit" class="btn btn-orange w-100 py-3 fw-bold fs-5 shadow-sm">
+                        <i class="bi bi-person-check-fill me-2"></i> DAFTAR SEKARANG
+                    </button>
+
+                    <!-- ========== KEMBALI KE LOGIN ========== -->
+                    <div class="text-center mt-3">
+                        <span class="text-muted small">Sudah memiliki akun?</span>
+                        <button type="button" class="btn btn-link text-orange-custom text-decoration-none fw-bold" onclick="alert('Kembali ke halaman Login')">
+                            <i class="bi bi-arrow-left me-1"></i> Kembali ke Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-<!-- ==================== AKHIR BLOK 2 R6 ==================== -->
-<!-- ==================== BLOK 3 R1: CSS (Duplikasi dihapus, hanya 1 Style) ==================== -->
-<style>
-    /* === RESET & GLOBAL === */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
 
-    body {
-        min-height: 100vh;
-    }
-
-    /* ========== HALAMAN LOGIN ========== */
-    #login-page {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #FF6B00, #FF8C00, #FFA500);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    .login-card {
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        animation: slideUp 0.5s ease;
-    }
-
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .login-header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .login-header h1 {
-        color: #FF6B00;
-        font-size: 2em;
-        margin-bottom: 5px;
-    }
-
-    .login-header p {
-        color: #777;
-        font-size: 0.95em;
-    }
-
-    .input-group {
-        margin-bottom: 20px;
-    }
-
-    .input-group label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 600;
-        color: #333;
-        font-size: 0.9em;
-    }
-
-    .input-group input {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 1em;
-        transition: border 0.3s;
-    }
-
-    .input-group input:focus {
-        outline: none;
-        border-color: #FF6B00;
-    }
-
-    .btn-login {
-        width: 100%;
-        padding: 14px;
-        background: #FF6B00;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 1.1em;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s, transform 0.2s;
-    }
-
-    .btn-login:hover {
-        background: #E55D00;
-        transform: translateY(-2px);
-    }
-
-    .btn-login:active {
-        transform: translateY(0);
-    }
-
-    .error-msg {
-        color: #e74c3c;
-        text-align: center;
-        margin-top: 10px;
-        font-size: 0.9em;
-        min-height: 20px;
-    }
-
-    /* ========== DASHBOARD ========== */
-    #dashboard-page {
-        display: none;
-        min-height: 100vh;
-        background: #f5f6fa;
-    }
-
-    .dashboard-container {
-        display: flex;
-        min-height: 100vh;
-    }
-
-    .sidebar {
-        width: 250px;
-        background: #1a1a2e;
-        color: white;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        display: flex;
-        flex-direction: column;
-        z-index: 100;
-    }
-
-    .sidebar-header {
-        padding: 25px 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar-header h2 {
-        font-size: 1.3em;
-        color: #FF8C00;
-    }
-
-    .sidebar-nav {
-        flex: 1;
-        padding: 15px 0;
-    }
-
-    .nav-item {
-        display: block;
-        padding: 12px 25px;
-        color: #bbb;
-        text-decoration: none;
-        transition: all 0.3s;
-        font-size: 0.95em;
-    }
-
-    .nav-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: white;
-    }
-
-    .nav-item.active {
-        background: rgba(255, 107, 0, 0.2);
-        color: #FF8C00;
-        border-right: 3px solid #FF8C00;
-        font-weight: 600;
-    }
-
-    .nav-item.disabled {
-        color: #666;
-        cursor: not-allowed;
-        pointer-events: none;
-    }
-
-    .main-content {
-        flex: 1;
-        margin-left: 250px;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-
-    .topbar {
-        background: white;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .topbar span {
-        color: #333;
-    }
-
-    .btn-logout {
-        padding: 8px 20px;
-        background: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.9em;
-        transition: background 0.3s;
-    }
-
-    .btn-logout:hover {
-        background: #c0392b;
-    }
-
-    .content {
-        padding: 30px;
-        flex: 1;
-    }
-
-    .content h2 {
-        color: #1a1a2e;
-        margin-bottom: 5px;
-    }
-
-    .breadcrumb {
-        color: #999;
-        font-size: 0.85em;
-        margin-bottom: 25px;
-    }
-
-    .profile-card {
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-        max-width: 600px;
-    }
-
-    .profile-header {
-        background: linear-gradient(135deg, #FF6B00, #FF8C00);
-        padding: 25px 30px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .profile-avatar {
-        width: 60px;
-        height: 60px;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3em;
-        font-weight: bold;
-        color: white;
-    }
-
-    .profile-header h3 {
-        color: white;
-        margin: 0;
-        font-size: 1.1em;
-    }
-
-    .role-badge {
-        background: rgba(255, 255, 255, 0.25);
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.8em;
-        color: white;
-        display: inline-block;
-        margin-top: 5px;
-    }
-
-    .profile-body {
-        padding: 25px 30px;
-    }
-
-    .profile-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .profile-table td {
-        padding: 10px 5px;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    .profile-table td:first-child {
-        font-weight: 600;
-        color: #555;
-        width: 100px;
-    }
-
-    .profile-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    .note {
-        margin-top: 25px;
-        padding: 15px 20px;
-        background: #fff3e0;
-        border-left: 4px solid #FF8C00;
-        border-radius: 5px;
-        color: #666;
-        font-size: 0.9em;
-        max-width: 600px;
-    }
-
-    .footer {
-        background: white;
-        padding: 15px 30px;
-        text-align: center;
-        color: #999;
-        font-size: 0.85em;
-        border-top: 1px solid #eee;
-    }
-
-    /* ========== RESPONSIVE ========== */
-    @media (max-width: 768px) {
-        .sidebar {
-            width: 70px;
-        }
-        .sidebar-header h2 {
-            font-size: 0;
-        }
-        .sidebar-header h2::first-letter {
-            font-size: 1.3em;
-        }
-        .nav-item {
-            padding: 12px;
-            text-align: center;
-            font-size: 0;
-        }
-        .nav-item::first-letter {
-            font-size: 1.2em;
-        }
-        .main-content {
-            margin-left: 70px;
-        }
-        .profile-header {
-            flex-direction: column;
-            text-align: center;
-        }
-    }
-</style>
-<!-- ==================== AKHIR BLOK 3 R1 ==================== -->
-<!-- ==================== BLOK 4 R11: SCRIPT FINAL (Sewa & Fee + semua fitur) ==================== -->
 <script>
-    // ========== DATA DEFAULT ==========
-    const defaultAccounts = [
-        { username: "SuperAdmin", password: "MyHand0286", role: "superadmin", name: "Dede", address: "Ciamis, Jawa Barat", phone: "-", email: "-", position: "CEO TOKO ONLINE", status: "Aktif" }
-    ];
+    // Fungsi untuk menampilkan/menyembunyikan form khusus berdasarkan jenis akun
+    function toggleFormPendaftaran() {
+        const peranToko = document.getElementById('peran-toko');
+        const peranOjek = document.getElementById('peran-ojek');
+        const formToko = document.getElementById('form-khusus-toko');
+        const formOjek = document.getElementById('form-khusus-ojek');
+        const namaToko = document.getElementById('daftar-nama-toko');
+        const platNomor = document.getElementById('daftar-plat-nomor');
+        const jenisKendaraan = document.getElementById('daftar-jenis-kendaraan');
+        const sim = document.getElementById('daftar-sim');
 
-    const defaultRekening = [
-        { bank: "BRI", nomor: "1234-5678-9012-3456", pemilik: "APP Toko Online", status: "Aktif" },
-        { bank: "MANDIRI", nomor: "9876-5432-1098-7654", pemilik: "APP Toko Online", status: "Aktif" },
-        { bank: "CASH", nomor: "-", pemilik: "Kas Utama", status: "Aktif" }
-    ];
-
-    const defaultTagihan = [
-        { id: 1, toko: "Toko A", jumlah: 50000, status: "Lunas" },
-        { id: 2, toko: "Toko B", jumlah: 75000, status: "Pending" },
-        { id: 3, toko: "Toko C", jumlah: 100000, status: "Lunas" }
-    ];
-
-    const defaultIklan = [
-        { id: 1, judul: "Promo Ramadhan", status: "Aktif" },
-        { id: 2, judul: "Diskon Akhir Tahun", status: "Nonaktif" }
-    ];
-
-    const defaultProduk = [
-        { id: 1, nama: "Produk A", harga: 10000, stok: 50, toko: "Toko A" },
-        { id: 2, nama: "Produk B", harga: 20000, stok: 30, toko: "Toko B" },
-        { id: 3, nama: "Produk C", harga: 15000, stok: 20, toko: "Toko C" }
-    ];
-
-    // --- Data default Sewa & Fee (Blok 12) ---
-    const defaultSewaFee = [
-        { role: "Toko Grosir", sewa: 100000, fee: 5, estimasi: 250000 },
-        { role: "Toko Standar", sewa: 50000, fee: 3, estimasi: 140000 },
-        { role: "Toko Kecil", sewa: 25000, fee: 2, estimasi: 85000 },
-        { role: "Kaki Lima", sewa: 15000, fee: 1, estimasi: 45000 },
-        { role: "Toko Makanan", sewa: 30000, fee: 2, estimasi: 90000 },
-        { role: "COD Seller", sewa: 20000, fee: 3, estimasi: 110000 },
-        { role: "Owner Toko", sewa: 75000, fee: 4, estimasi: 195000 },
-        { role: "Ojek", sewa: 25000, fee: 5, estimasi: 175000 }
-    ];
-
-    // --- Inisialisasi localStorage ---
-    if (!localStorage.getItem('accounts')) localStorage.setItem('accounts', JSON.stringify(defaultAccounts));
-    if (!localStorage.getItem('rekening')) localStorage.setItem('rekening', JSON.stringify(defaultRekening));
-    if (!localStorage.getItem('tagihan')) localStorage.setItem('tagihan', JSON.stringify(defaultTagihan));
-    if (!localStorage.getItem('iklan')) localStorage.setItem('iklan', JSON.stringify(defaultIklan));
-    if (!localStorage.getItem('produk')) localStorage.setItem('produk', JSON.stringify(defaultProduk));
-    if (!localStorage.getItem('sewaFeeData')) localStorage.setItem('sewaFeeData', JSON.stringify(defaultSewaFee));
-    if (!localStorage.getItem('sewaRiwayat')) localStorage.setItem('sewaRiwayat', JSON.stringify([]));
-
-    // ========== FUNGSI DATA ==========
-    function getAccounts() { return JSON.parse(localStorage.getItem('accounts')); }
-    function saveAccounts(accounts) { localStorage.setItem('accounts', JSON.stringify(accounts)); }
-    function getRekening() { return JSON.parse(localStorage.getItem('rekening')); }
-    function saveRekening(data) { localStorage.setItem('rekening', JSON.stringify(data)); }
-    function getTagihan() { return JSON.parse(localStorage.getItem('tagihan')); }
-    function getIklan() { return JSON.parse(localStorage.getItem('iklan')); }
-    function getProduk() { return JSON.parse(localStorage.getItem('produk')); }
-    // --- Fungsi Sewa & Fee ---
-    function getSewaFee() { return JSON.parse(localStorage.getItem('sewaFeeData')); }
-    function saveSewaFee(data) { localStorage.setItem('sewaFeeData', JSON.stringify(data)); }
-    function getSewaRiwayat() { return JSON.parse(localStorage.getItem('sewaRiwayat')); }
-    function saveSewaRiwayat(data) { localStorage.setItem('sewaRiwayat', JSON.stringify(data)); }
-
-    const defaultProfile = {
-        name: "Dede",
-        address: "Ciamis, Jawa Barat",
-        phone: "-",
-        email: "-",
-        position: "CEO TOKO ONLINE"
-    };
-    function getProfile() {
-        const stored = localStorage.getItem('profileData');
-        return stored ? JSON.parse(stored) : { ...defaultProfile };
+        if (peranToko.checked) {
+            formToko.style.display = 'block';
+            formOjek.style.display = 'none';
+            namaToko.setAttribute('required', '');
+            platNomor.removeAttribute('required');
+            jenisKendaraan.removeAttribute('required');
+            sim.removeAttribute('required');
+        } else if (peranOjek.checked) {
+            formToko.style.display = 'none';
+            formOjek.style.display = 'block';
+            namaToko.removeAttribute('required');
+            platNomor.setAttribute('required', '');
+            jenisKendaraan.setAttribute('required', '');
+            sim.setAttribute('required', '');
+        } else {
+            formToko.style.display = 'none';
+            formOjek.style.display = 'none';
+            namaToko.removeAttribute('required');
+            platNomor.removeAttribute('required');
+            jenisKendaraan.removeAttribute('required');
+            sim.removeAttribute('required');
+        }
     }
-    function saveProfile(data) { localStorage.setItem('profileData', JSON.stringify(data)); }
 
-    // ========== DOM CONTENT LOADED ==========
-    document.addEventListener('DOMContentLoaded', function() {
-        // Elemen halaman
-        const loginPage = document.getElementById('login-page');
-        const dashboardPage = document.getElementById('dashboard-page');
-        const kelolaAkunPage = document.getElementById('kelola-akun-page');
-        const importExportPage = document.getElementById('import-export-page');
-        const menuAkunPage = document.getElementById('menu-akun-page');
-        const rekeningFeePage = document.getElementById('rekening-fee-page');
-        const backupRestorePage = document.getElementById('backup-restore-page');
-        const restartSystemPage = document.getElementById('restart-system-page');
-        const sewaFeePage = document.getElementById('sewa-fee-page');
-        const editProfileModal = document.getElementById('edit-profile-modal');
-        const accountDetailModal = document.getElementById('account-detail-modal');
-        const addAccountModal = document.getElementById('add-account-modal');
+    // Fungsi proses pendaftaran (simulasi)
+    function prosesPendaftaran() {
+        const peranDipilih = document.querySelector('input[name="peran"]:checked').value;
+        const nama = document.getElementById('daftar-nama-lengkap').value;
+        const nik = document.getElementById('daftar-nik').value;
+        const telepon = document.getElementById('daftar-telepon').value;
+        const email = document.getElementById('daftar-email').value;
+        const username = document.getElementById('daftar-username').value;
 
-        if (!loginPage || !dashboardPage) {
-            console.error('Halaman login/dashboard tidak ditemukan.');
+        // Validasi panjang NIK
+        if (nik.length !== 16) {
+            alert('NIK KTP harus tepat 16 digit. Silakan periksa kembali.');
             return;
         }
 
-        // ========== SESSION & LOGIN ==========
-        const loginForm = document.getElementById('loginForm');
-        const errorMsg = document.getElementById('error-msg');
-
-        function updateAllUsernames(username) {
-            const ids = ['display-username', 'display-username-kelola', 'display-username-import', 'display-username-menu-akun', 'display-username-rekening', 'display-username-backup', 'display-username-restart', 'display-username-sewa'];
-            ids.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = username;
-            });
+        // Validasi panjang nomor HP
+        if (telepon.length < 10 || telepon.length > 13) {
+            alert('Nomor WhatsApp tidak valid. Silakan periksa kembali.');
+            return;
         }
 
-        if (sessionStorage.getItem('loggedIn') === 'true') {
-            loginPage.style.display = 'none';
-            showPage('dashboard');
-            updateAllUsernames(sessionStorage.getItem('username'));
-        }
-
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const accounts = getAccounts();
-                const acc = accounts.find(a => a.username === username && a.password === password);
-                if (acc) {
-                    if (acc.status === 'Nonaktif') {
-                        if (errorMsg) errorMsg.textContent = 'Akun ini dinonaktifkan.';
-                        return;
-                    }
-                    sessionStorage.setItem('loggedIn', 'true');
-                    sessionStorage.setItem('username', acc.username);
-                    sessionStorage.setItem('role', acc.role);
-                    loginPage.style.display = 'none';
-                    showPage('dashboard');
-                    updateAllUsernames(acc.username);
-                    if (errorMsg) errorMsg.textContent = '';
-                } else {
-                    if (errorMsg) errorMsg.textContent = 'Username atau password salah!';
-                    document.getElementById('password').value = '';
-                }
-            });
-        }
-
-        window.logout = function() {
-            sessionStorage.clear();
-            const pages = [dashboardPage, kelolaAkunPage, importExportPage, menuAkunPage, rekeningFeePage, backupRestorePage, restartSystemPage, sewaFeePage];
-            pages.forEach(p => { if (p) p.style.display = 'none'; });
-            loginPage.style.display = 'flex';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-        };
-
-        // ========== NAVIGASI ==========
-        function showPage(pageId) {
-            const pages = {
-                'dashboard': dashboardPage,
-                'kelola-akun': kelolaAkunPage,
-                'import-export': importExportPage,
-                'menu-akun': menuAkunPage,
-                'rekening-fee': rekeningFeePage,
-                'backup-restore': backupRestorePage,
-                'restart-system': restartSystemPage,
-                'sewa-fee': sewaFeePage
-            };
-            Object.values(pages).forEach(p => { if (p) p.style.display = 'none'; });
-            if (pages[pageId]) pages[pageId].style.display = 'block';
-
-            document.querySelectorAll('.nav-item[data-page]').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-page') === pageId) link.classList.add('active');
-            });
-
-            if (pageId === 'menu-akun') renderAccountTable();
-            if (pageId === 'rekening-fee') renderRekeningTable();
-            if (pageId === 'import-export') populateTokoDropdown();
-            if (pageId === 'backup-restore') updateBackupSummary();
-            if (pageId === 'restart-system') updateRestartStats();
-            if (pageId === 'sewa-fee') renderSewaTable();
-        }
-
-        document.body.addEventListener('click', function(e) {
-            const link = e.target.closest('.nav-item[data-page]');
-            if (!link) return;
-            const page = link.getAttribute('data-page');
-            if (['dashboard','kelola-akun','import-export','menu-akun','rekening-fee','backup-restore','restart-system','sewa-fee'].includes(page)) {
-                e.preventDefault();
-                showPage(page);
-            }
-        });
-
-        window.navigateTo = function(page) {
-            showPage(page);
-        };
-
-        // ========== PROFIL SUPER ADMIN ==========
-        let currentProfile = getProfile();
-        function renderProfile(data) {
-            document.getElementById('profile-name').textContent = data.name;
-            document.getElementById('profile-address').textContent = data.address;
-            document.getElementById('profile-phone').textContent = data.phone;
-            document.getElementById('profile-email').textContent = data.email;
-            document.getElementById('profile-position').textContent = data.position;
-        }
-        renderProfile(currentProfile);
-
-        document.getElementById('btn-edit-profile')?.addEventListener('click', function() {
-            const d = getProfile();
-            document.getElementById('edit-name').value = d.name;
-            document.getElementById('edit-address').value = d.address;
-            document.getElementById('edit-phone').value = d.phone;
-            document.getElementById('edit-email').value = d.email;
-            document.getElementById('edit-position').value = d.position;
-            editProfileModal.style.display = 'flex';
-        });
-        document.getElementById('btn-save-profile')?.addEventListener('click', function() {
-            currentProfile = {
-                name: document.getElementById('edit-name').value,
-                address: document.getElementById('edit-address').value,
-                phone: document.getElementById('edit-phone').value,
-                email: document.getElementById('edit-email').value,
-                position: document.getElementById('edit-position').value
-            };
-            saveProfile(currentProfile);
-            renderProfile(currentProfile);
-            editProfileModal.style.display = 'none';
-        });
-        document.getElementById('btn-cancel-edit')?.addEventListener('click', function() {
-            editProfileModal.style.display = 'none';
-        });
-        editProfileModal?.addEventListener('click', function(e) {
-            if (e.target === editProfileModal) editProfileModal.style.display = 'none';
-        });
-        document.getElementById('btn-delete-profile')?.addEventListener('click', function() {
-            if (confirm('Reset profil ke default?')) {
-                localStorage.removeItem('profileData');
-                currentProfile = { ...defaultProfile };
-                renderProfile(currentProfile);
-                editProfileModal.style.display = 'none';
-            }
-        });
-
-        // ========== IMPORT / EXPORT ==========
-        document.getElementById('export-users-btn')?.addEventListener('click', function() {
-            const accounts = getAccounts();
-            let csv = 'Username,Password,Role,Nama,Alamat,HP,Email,Jabatan,Status\n';
-            accounts.forEach(a => {
-                csv += `${a.username},${a.password},${a.role},${a.name},${a.address},${a.phone},${a.email},${a.position},${a.status}\n`;
-            });
-            downloadFile(csv, 'pengguna.csv', 'text/csv');
-        });
-
-        document.getElementById('export-product-btn')?.addEventListener('click', function() {
-            const select = document.getElementById('export-product-toko');
-            const selectedToko = select ? select.value : '';
-            if (!selectedToko) {
-                alert('Pilih toko terlebih dahulu.');
-                return;
-            }
-            const produk = getProduk().filter(p => p.toko === selectedToko);
-            if (produk.length === 0) {
-                alert('Tidak ada produk untuk toko ini.');
-                return;
-            }
-            let csv = 'ID,Nama Produk,Harga,Stok,Toko\n';
-            produk.forEach(p => {
-                csv += `${p.id},${p.nama},${p.harga},${p.stok},${p.toko}\n`;
-            });
-            downloadFile(csv, `produk_${selectedToko}.csv`, 'text/csv');
-        });
-
-        document.getElementById('import-btn')?.addEventListener('click', function() {
-            const file = document.getElementById('import-csv-file').files[0];
-            if (!file) { alert('Pilih file CSV.'); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const lines = e.target.result.split('\n').filter(l => l.trim());
-                if (lines.length < 2) { alert('File kosong.'); return; }
-                const header = lines[0].split(',');
-                if (header.length < 9 || header[0] !== 'Username') { alert('Format salah.'); return; }
-                const accounts = getAccounts();
-                let added = 0;
-                for (let i = 1; i < lines.length; i++) {
-                    const cols = lines[i].split(',');
-                    if (cols.length < 9) continue;
-                    const username = cols[0].trim();
-                    if (accounts.find(a => a.username === username)) continue;
-                    accounts.push({
-                        username, password: cols[1].trim(), role: cols[2].trim(), name: cols[3].trim(),
-                        address: cols[4].trim(), phone: cols[5].trim(), email: cols[6].trim(),
-                        position: cols[7].trim(), status: cols[8].trim() || 'Aktif'
-                    });
-                    added++;
-                }
-                saveAccounts(accounts);
-                alert(`${added} akun ditambahkan.`);
-                document.getElementById('import-csv-file').value = '';
-            };
-            reader.readAsText(file);
-        });
-
-        function downloadFile(content, filename, mimeType) {
-            const blob = new Blob([content], { type: mimeType });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            link.click();
-            URL.revokeObjectURL(link.href);
-        }
-
-        function populateTokoDropdown() {
-            const select = document.getElementById('export-product-toko');
-            if (!select) return;
-            while (select.options.length > 1) select.remove(1);
-            const accounts = getAccounts().filter(a => a.username !== 'SuperAdmin');
-            accounts.forEach(acc => {
-                const option = document.createElement('option');
-                option.value = acc.username;
-                option.textContent = acc.username + (acc.name ? ' - ' + acc.name : '');
-                select.appendChild(option);
-            });
-            select.disabled = false;
-            document.getElementById('export-product-btn').disabled = false;
-            document.getElementById('export-users-btn').disabled = false;
-            document.getElementById('import-btn').disabled = false;
-            document.getElementById('import-csv-file').disabled = false;
-        }
-
-        // ========== MENU AKUN APP ==========
-        function renderAccountTable() {
-            const tbody = document.getElementById('account-table-body');
-            if (!tbody) return;
-            const accounts = getAccounts();
-            tbody.innerHTML = '';
-            if (accounts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Tidak ada akun.</td></tr>';
-                document.getElementById('total-accounts').textContent = '0';
-                return;
-            }
-            accounts.forEach(acc => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="padding:8px;">${acc.username}</td>
-                    <td style="padding:8px;">${acc.name}</td>
-                    <td style="padding:8px;">${acc.role}</td>
-                    <td style="text-align:center; color:${acc.status==='Aktif'?'green':'red'};">${acc.status}</td>
-                    <td style="text-align:center;">
-                        <button class="btn-view-account" data-username="${acc.username}" style="background:#3498db;">Lihat</button>
-                        <button class="btn-toggle-account" data-username="${acc.username}" style="background:#f39c12;">${acc.status==='Aktif'?'Nonaktifkan':'Aktifkan'}</button>
-                        <button class="btn-delete-account" data-username="${acc.username}" style="background:#e74c3c;">Hapus</button>
-                    </td>`;
-                tbody.appendChild(tr);
-            });
-            document.getElementById('total-accounts').textContent = accounts.length;
-
-            document.querySelectorAll('.btn-view-account').forEach(b => b.addEventListener('click', function() {
-                viewAccount(this.dataset.username);
-            }));
-            document.querySelectorAll('.btn-toggle-account').forEach(b => b.addEventListener('click', function() {
-                toggleAccountStatus(this.dataset.username);
-            }));
-            document.querySelectorAll('.btn-delete-account').forEach(b => b.addEventListener('click', function() {
-                deleteAccount(this.dataset.username);
-            }));
-        }
-
-        function viewAccount(username) {
-            const acc = getAccounts().find(a => a.username === username);
-            if (!acc) return;
-            document.getElementById('modal-username').textContent = acc.username;
-            document.getElementById('modal-name').textContent = acc.name;
-            document.getElementById('modal-role').textContent = acc.role;
-            document.getElementById('modal-address').textContent = acc.address;
-            document.getElementById('modal-phone').textContent = acc.phone;
-            document.getElementById('modal-email').textContent = acc.email;
-            document.getElementById('modal-position').textContent = acc.position;
-            document.getElementById('modal-status').textContent = acc.status;
-            accountDetailModal.style.display = 'flex';
-            window.currentViewAccount = acc;
-        }
-
-        document.getElementById('modal-nonaktifkan-btn')?.addEventListener('click', function() {
-            if (window.currentViewAccount) {
-                toggleAccountStatus(window.currentViewAccount.username);
-                accountDetailModal.style.display = 'none';
-            }
-        });
-        document.getElementById('modal-hapus-btn')?.addEventListener('click', function() {
-            if (window.currentViewAccount) {
-                deleteAccount(window.currentViewAccount.username);
-                accountDetailModal.style.display = 'none';
-            }
-        });
-        document.getElementById('modal-close-btn')?.addEventListener('click', function() {
-            accountDetailModal.style.display = 'none';
-        });
-        accountDetailModal?.addEventListener('click', function(e) {
-            if (e.target === accountDetailModal) accountDetailModal.style.display = 'none';
-        });
-
-        function toggleAccountStatus(username) {
-            if (username === 'SuperAdmin') { alert('Tidak bisa menonaktifkan SuperAdmin.'); return; }
-            const accounts = getAccounts();
-            const acc = accounts.find(a => a.username === username);
-            if (acc) {
-                acc.status = acc.status === 'Aktif' ? 'Nonaktif' : 'Aktif';
-                saveAccounts(accounts);
-                renderAccountTable();
-            }
-        }
-        function deleteAccount(username) {
-            if (username === 'SuperAdmin') { alert('SuperAdmin tidak bisa dihapus.'); return; }
-            if (confirm(`Hapus akun ${username}?`)) {
-                const accounts = getAccounts().filter(a => a.username !== username);
-                saveAccounts(accounts);
-                renderAccountTable();
-            }
-        }
-
-        // ========== REKENING FEE ==========
-        const rekeningBank = document.getElementById('rekening-bank');
-        const rekeningNomor = document.getElementById('rekening-nomor');
-        const rekeningPemilik = document.getElementById('rekening-pemilik');
-        const rekeningStatus = document.getElementById('rekening-status');
-        const btnSimpanRekening = document.getElementById('btn-simpan-rekening');
-        const btnResetRekening = document.getElementById('btn-reset-rekening');
-        let editingIndex = -1;
-
-        function resetRekeningForm() {
-            if (rekeningBank) rekeningBank.value = '';
-            if (rekeningNomor) rekeningNomor.value = '';
-            if (rekeningPemilik) rekeningPemilik.value = 'APP Toko Online';
-            if (rekeningStatus) rekeningStatus.value = 'Aktif';
-            editingIndex = -1;
-            if (btnSimpanRekening) btnSimpanRekening.textContent = '💾 Simpan';
-        }
-
-        function renderRekeningTable() {
-            const tbody = document.getElementById('rekening-table-body');
-            if (!tbody) return;
-            const data = getRekening();
-            tbody.innerHTML = '';
-            data.forEach((rek, index) => {
-                const tr = document.createElement('tr');
-                let statusIcon = '';
-                if (rek.bank === 'CASH') statusIcon = '<span style="color:#2ecc71;">💵</span>';
-                else if (rek.bank === 'BRI') statusIcon = '<span style="color:#3498db;">🔵</span>';
-                else if (rek.bank === 'MANDIRI') statusIcon = '<span style="color:#f1c40f;">🟡</span>';
-                else statusIcon = '<span style="color:#95a5a6;">⚪</span>';
-                tr.innerHTML = `
-                    <td style="text-align:center;">${statusIcon}</td>
-                    <td>${rek.bank}</td>
-                    <td>${rek.nomor}</td>
-                    <td>👤 ${rek.pemilik}</td>
-                    <td style="text-align:center;">
-                        <button class="btn-edit-rekening" data-index="${index}" style="background:#f39c12;">✏️</button>
-                        <button class="btn-delete-rekening" data-index="${index}" style="background:#e74c3c;">🗑️</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.querySelectorAll('.btn-edit-rekening').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    const rek = getRekening()[index];
-                    if (rek) {
-                        rekeningBank.value = rek.bank;
-                        rekeningNomor.value = rek.nomor;
-                        rekeningPemilik.value = rek.pemilik;
-                        rekeningStatus.value = rek.status;
-                        editingIndex = index;
-                        btnSimpanRekening.textContent = '✏️ Update';
-                    }
-                });
-            });
-            document.querySelectorAll('.btn-delete-rekening').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    const rek = getRekening()[index];
-                    if (confirm(`Hapus rekening ${rek.bank} - ${rek.nomor}?`)) {
-                        const data = getRekening();
-                        data.splice(index, 1);
-                        saveRekening(data);
-                        renderRekeningTable();
-                        resetRekeningForm();
-                    }
-                });
-            });
-        }
-
-        btnSimpanRekening?.addEventListener('click', function() {
-            const bank = rekeningBank?.value.trim();
-            const nomor = rekeningNomor?.value.trim();
-            const pemilik = rekeningPemilik?.value.trim() || 'APP Toko Online';
-            const status = rekeningStatus?.value || 'Aktif';
-            if (!bank || !nomor) { alert('Bank dan Nomor Rekening wajib diisi.'); return; }
-            const data = getRekening();
-            const newRek = { bank, nomor, pemilik, status };
-            if (editingIndex >= 0) data[editingIndex] = newRek;
-            else data.push(newRek);
-            saveRekening(data);
-            renderRekeningTable();
-            resetRekeningForm();
-        });
-        btnResetRekening?.addEventListener('click', resetRekeningForm);
-
-        // ========== BACKUP & RESTORE ==========
-        function updateBackupSummary() {
-            const accounts = getAccounts();
-            document.getElementById('summary-pengguna').textContent = accounts.length + ' akun';
-            document.getElementById('summary-tagihan').textContent = getTagihan().length + ' tagihan';
-            document.getElementById('summary-chat').textContent = '0 kontak';
-            document.getElementById('summary-iklan').textContent = getIklan().length + ' iklan';
-
-            let totalSize = 0;
-            for (let key in localStorage) {
-                if (localStorage.hasOwnProperty(key)) {
-                    totalSize += localStorage.getItem(key).length * 2;
-                }
-            }
-            document.getElementById('summary-storage').textContent = (totalSize / 1024).toFixed(1) + ' KB';
-        }
-
-        document.getElementById('download-json-btn')?.addEventListener('click', function() {
-            const backupData = {
-                accounts: getAccounts(),
-                profileData: getProfile(),
-                rekening: getRekening(),
-                tagihan: getTagihan(),
-                iklan: getIklan(),
-                produk: getProduk(),
-                sewaFeeData: getSewaFee(),         // tambahan
-                sewaRiwayat: getSewaRiwayat(),     // tambahan
-                timestamp: new Date().toISOString()
-            };
-            const json = JSON.stringify(backupData, null, 2);
-            downloadFile(json, 'backup_data.json', 'application/json');
-            alert('File JSON berhasil diunduh.');
-        });
-
-        document.getElementById('download-html-btn')?.addEventListener('click', function() {
-            const html = document.documentElement.outerHTML;
-            downloadFile('<!DOCTYPE html>\n' + html, 'index.html', 'text/html');
-            alert('File HTML berhasil diunduh.');
-        });
-
-        document.getElementById('restore-btn')?.addEventListener('click', function() {
-            const fileInput = document.getElementById('restore-file-input');
-            const file = fileInput.files[0];
-            if (!file) { alert('Pilih file JSON backup terlebih dahulu.'); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.accounts) saveAccounts(data.accounts);
-                    if (data.profileData) saveProfile(data.profileData);
-                    if (data.rekening) saveRekening(data.rekening);
-                    if (data.tagihan) localStorage.setItem('tagihan', JSON.stringify(data.tagihan));
-                    if (data.iklan) localStorage.setItem('iklan', JSON.stringify(data.iklan));
-                    if (data.produk) localStorage.setItem('produk', JSON.stringify(data.produk));
-                    if (data.sewaFeeData) saveSewaFee(data.sewaFeeData);
-                    if (data.sewaRiwayat) saveSewaRiwayat(data.sewaRiwayat);
-                    alert('Data berhasil direstore. Halaman akan dimuat ulang.');
-                    location.reload();
-                } catch (error) {
-                    alert('File JSON tidak valid.');
-                }
-            };
-            reader.readAsText(file);
-        });
-
-        // ========== LOGIKA MODAL TAMBAH AKUN BARU ==========
-        if (addAccountModal) {
-            const addRoleDisplay = document.getElementById('add-role-display');
-            const addUsername = document.getElementById('add-username');
-            const addPassword = document.getElementById('add-password');
-            const addName = document.getElementById('add-name');
-            const addAddress = document.getElementById('add-address');
-            const addPhone = document.getElementById('add-phone');
-            const addEmail = document.getElementById('add-email');
-            const addPosition = document.getElementById('add-position');
-            const btnSaveNewAccount = document.getElementById('btn-save-new-account');
-            const btnCancelAddAccount = document.getElementById('btn-cancel-add-account');
-            let selectedRoleForNewAccount = '';
-
-            document.querySelectorAll('.btn-buat-akun').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const roleMap = {
-                        'staf': 'Staf',
-                        'cs': 'Customer Service',
-                        'marketing': 'Marketing',
-                        'owner-toko': 'Owner Toko',
-                        'owner-ojek': 'Owner Ojek',
-                        'pangkalan': 'Pemilik Pangkalan',
-                        'grosir': 'Grosir',
-                        'toko-standar': 'Toko Standar',
-                        'toko-kecil': 'Toko Kecil',
-                        'seller': 'Toko Seller',
-                        'toko-makanan': 'Toko Makanan',
-                        'cod-seller': 'COD Seller',
-                        'ojek': 'Ojek'
-                    };
-                    selectedRoleForNewAccount = this.dataset.role;
-                    addRoleDisplay.value = roleMap[selectedRoleForNewAccount] || selectedRoleForNewAccount;
-                    addAccountModal.style.display = 'flex';
-                });
-            });
-
-            btnCancelAddAccount?.addEventListener('click', function() {
-                addAccountModal.style.display = 'none';
-            });
-            addAccountModal?.addEventListener('click', function(e) {
-                if (e.target === addAccountModal) addAccountModal.style.display = 'none';
-            });
-
-            btnSaveNewAccount?.addEventListener('click', function() {
-                const username = addUsername.value.trim();
-                const password = addPassword.value.trim();
-                if (!username || !password) {
-                    alert('Username dan Password wajib diisi!');
-                    return;
-                }
-                const accounts = getAccounts();
-                if (accounts.find(a => a.username === username)) {
-                    alert('Username sudah digunakan!');
-                    return;
-                }
-                const newAccount = {
-                    username: username,
-                    password: password,
-                    role: selectedRoleForNewAccount,
-                    name: addName.value.trim(),
-                    address: addAddress.value.trim(),
-                    phone: addPhone.value.trim(),
-                    email: addEmail.value.trim(),
-                    position: addPosition.value.trim(),
-                    status: 'Aktif'
-                };
-                accounts.push(newAccount);
-                saveAccounts(accounts);
-                alert('Akun berhasil ditambahkan!');
-                addAccountModal.style.display = 'none';
-                addUsername.value = '';
-                addPassword.value = '';
-                addName.value = '';
-                addAddress.value = '';
-                addPhone.value = '';
-                addEmail.value = '';
-                addPosition.value = '';
-                renderAccountTable();
-            });
-        }
-
-        // ========== RESTART SYSTEM (BLOK 11) ==========
-        function updateRestartStats() {
-            const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
-            document.getElementById('total-chat').textContent = chatData.length;
-
-            const kontakData = JSON.parse(localStorage.getItem('kontakData')) || [];
-            document.getElementById('total-kontak').textContent = kontakData.length;
-
-            let totalSize = 0;
-            for (let key in localStorage) {
-                if (localStorage.hasOwnProperty(key)) {
-                    totalSize += localStorage.getItem(key).length * 2;
-                }
-            }
-            document.getElementById('restart-storage').textContent = (totalSize / 1024).toFixed(1) + ' KB';
-            document.getElementById('storage-keys').textContent = localStorage.length + ' keys';
-            document.getElementById('data-size').textContent = (totalSize / 1024).toFixed(1) + ' KB';
-
-            document.getElementById('browser-info').textContent = navigator.userAgent;
-            document.getElementById('online-status').textContent = navigator.onLine ? '✅ Ya' : '❌ Tidak';
-            document.getElementById('online-status').style.color = navigator.onLine ? '#27ae60' : '#e74c3c';
-            document.getElementById('current-time').textContent = new Date().toLocaleString('id-ID');
-        }
-        updateRestartStats();
-        setInterval(updateRestartStats, 60000);
-
-        const maintenanceStatus = document.getElementById('maintenance-status');
-        const toggleMaintenanceBtn = document.getElementById('toggle-maintenance-btn');
-        let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
-
-        function updateMaintenanceUI() {
-            if (isMaintenance) {
-                maintenanceStatus.innerHTML = '🚧 MAINTENANCE MODE';
-                maintenanceStatus.style.color = '#e74c3c';
-                toggleMaintenanceBtn.textContent = '✅ Nonaktifkan Maintenance';
-                toggleMaintenanceBtn.style.background = '#27ae60';
-            } else {
-                maintenanceStatus.innerHTML = '✅ APLIKASI NORMAL';
-                maintenanceStatus.style.color = '#27ae60';
-                toggleMaintenanceBtn.textContent = '🚧 Aktifkan Maintenance';
-                toggleMaintenanceBtn.style.background = '#f39c12';
-            }
-        }
-        updateMaintenanceUI();
-
-        toggleMaintenanceBtn.addEventListener('click', function() {
-            isMaintenance = !isMaintenance;
-            localStorage.setItem('maintenanceMode', isMaintenance ? 'true' : 'false');
-            updateMaintenanceUI();
-            alert(isMaintenance ? 'Maintenance Mode diaktifkan.' : 'Maintenance Mode dinonaktifkan.');
-        });
-
-        document.getElementById('delete-old-chat-btn').addEventListener('click', function() {
-            if (!confirm('⚠️ Semua chat lebih dari 1 bulan akan dihapus permanen. Lanjutkan?')) return;
-            const chatData = JSON.parse(localStorage.getItem('chatData')) || [];
-            const oneMonthAgo = new Date();
-            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-            const filtered = chatData.filter(chat => {
-                const chatDate = new Date(chat.timestamp || chat.date || Date.now());
-                return chatDate > oneMonthAgo;
-            });
-            localStorage.setItem('chatData', JSON.stringify(filtered));
-            alert(`Berhasil menghapus ${chatData.length - filtered.length} chat lama.`);
-            updateRestartStats();
-        });
-
-        document.getElementById('clear-cache-btn').addEventListener('click', function() {
-            if (!confirm('🧹 Hapus semua cache sementara? (Data penting seperti akun, rekening, produk TIDAK akan dihapus)')) return;
-            const keysToRemove = [];
-            for (let key in localStorage) {
-                if (localStorage.hasOwnProperty(key) && key.startsWith('cache_')) {
-                    keysToRemove.push(key);
-                }
-            }
-            keysToRemove.forEach(key => localStorage.removeItem(key));
-            alert(`Berhasil menghapus ${keysToRemove.length} item cache.`);
-            updateRestartStats();
-        });
-
-        // ========== SEWA & FEE APLIKASI (BLOK 12) ==========
-
-        // --- Tab switching ---
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabHarga = document.getElementById('tab-harga');
-        const tabKalkulator = document.getElementById('tab-kalkulator');
-        const tabRiwayat = document.getElementById('tab-riwayat');
-
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                tabBtns.forEach(b => {
-                    b.style.background = '#e0e0e0';
-                    b.style.color = '#333';
-                });
-                this.style.background = '#FF8C00';
-                this.style.color = 'white';
-
-                const tab = this.dataset.tab;
-                tabHarga.style.display = tab === 'harga' ? 'block' : 'none';
-                tabKalkulator.style.display = tab === 'kalkulator' ? 'block' : 'none';
-                tabRiwayat.style.display = tab === 'riwayat' ? 'block' : 'none';
-            });
-        });
-
-        // --- Render tabel sewa ---
-        function renderSewaTable() {
-            const tbody = document.getElementById('sewa-table-body');
-            if (!tbody) return;
-            const data = getSewaFee();
-            tbody.innerHTML = '';
-            data.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                // Gunakan emoji sederhana jika icon tidak tersedia
-                let icon = '';
-                if (item.role.includes('Grosir')) icon = '📦';
-                else if (item.role.includes('Standar')) icon = '🏪';
-                else if (item.role.includes('Kecil')) icon = '🏠';
-                else if (item.role.includes('Kaki Lima')) icon = '🛒';
-                else if (item.role.includes('Makanan')) icon = '🍜';
-                else if (item.role.includes('COD')) icon = '📦';
-                else if (item.role.includes('Owner')) icon = '🏬';
-                else if (item.role.includes('Ojek')) icon = '🏍️';
-                else icon = '📌';
-
-                tr.innerHTML = `
-                    <td style="padding:8px;">${icon} ${item.role}</td>
-                    <td style="padding:8px;">
-                        <input type="number" class="sewa-input" data-index="${index}" value="${item.sewa}" style="width:100px; padding:6px; border:1px solid #ddd; border-radius:5px;">
-                    </td>
-                    <td style="padding:8px;">
-                        <input type="number" class="fee-input" data-index="${index}" value="${item.fee}" step="0.1" style="width:80px; padding:6px; border:1px solid #ddd; border-radius:5px;">
-                    </td>
-                    <td style="padding:8px; font-weight:600; color:#FF8C00;">≈ Rp ${item.estimasi.toLocaleString()}</td>
-                    <td style="text-align:center; padding:8px;">
-                        <button class="btn-save-sewa-row" data-index="${index}" style="padding:6px 12px; background:#f39c12; color:white; border:none; border-radius:5px; cursor:pointer;">💾</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Event listener untuk tombol simpan per baris
-            document.querySelectorAll('.btn-save-sewa-row').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    const data = getSewaFee();
-                    const sewaInput = document.querySelector(`.sewa-input[data-index="${index}"]`);
-                    const feeInput = document.querySelector(`.fee-input[data-index="${index}"]`);
-                    const newSewa = parseInt(sewaInput.value);
-                    const newFee = parseFloat(feeInput.value);
-                    if (isNaN(newSewa) || isNaN(newFee)) { alert('Masukkan angka yang valid.'); return; }
-                    const old = data[index];
-                    const oldSewa = old.sewa;
-                    const oldFee = old.fee;
-                    data[index].sewa = newSewa;
-                    data[index].fee = newFee;
-                    // Estimasi sederhana: asumsikan omzet rata-rata 5.000.000 untuk semua role (bisa disesuaikan)
-                    const omzetRata = 5000000;
-                    data[index].estimasi = newSewa + (omzetRata * newFee / 100);
-                    saveSewaFee(data);
-
-                    // Catat riwayat
-                    const riwayat = getSewaRiwayat();
-                    const username = sessionStorage.getItem('username') || 'SuperAdmin';
-                    riwayat.unshift({
-                        timestamp: new Date().toISOString(),
-                        role: old.role,
-                        sewaLama: oldSewa,
-                        sewaBaru: newSewa,
-                        feeLama: oldFee,
-                        feeBaru: newFee,
-                        diubahOleh: username
-                    });
-                    saveSewaRiwayat(riwayat);
-
-                    renderSewaTable();
-                    renderRiwayat();
-                    alert('Data sewa & fee berhasil disimpan.');
-                });
-            });
-        }
-
-        // --- Simpan semua ---
-        document.getElementById('simpan-semua-sewa')?.addEventListener('click', function() {
-            const data = getSewaFee();
-            const inputs = document.querySelectorAll('.sewa-input, .fee-input');
-            const changes = [];
-            inputs.forEach(input => {
-                const index = parseInt(input.dataset.index);
-                const isSewa = input.classList.contains('sewa-input');
-                const val = parseFloat(input.value);
-                if (isNaN(val)) { alert('Pastikan semua input berisi angka.'); return; }
-                if (isSewa) {
-                    changes.push({ index, field: 'sewa', old: data[index].sewa, new: val });
-                    data[index].sewa = val;
-                } else {
-                    changes.push({ index, field: 'fee', old: data[index].fee, new: val });
-                    data[index].fee = val;
-                }
-            });
-            // Update estimasi
-            const omzetRata = 5000000;
-            data.forEach(item => {
-                item.estimasi = item.sewa + (omzetRata * item.fee / 100);
-            });
-            saveSewaFee(data);
-
-            // Catat riwayat (gabungkan perubahan per role)
-            const riwayat = getSewaRiwayat();
-            const username = sessionStorage.getItem('username') || 'SuperAdmin';
-            const timestamp = new Date().toISOString();
-            data.forEach((item, idx) => {
-                const change = changes.filter(c => c.index === idx);
-                if (change.length > 0) {
-                    riwayat.unshift({
-                        timestamp: timestamp,
-                        role: item.role,
-                        sewaLama: change.find(c => c.field === 'sewa')?.old || item.sewa,
-                        sewaBaru: item.sewa,
-                        feeLama: change.find(c => c.field === 'fee')?.old || item.fee,
-                        feeBaru: item.fee,
-                        diubahOleh: username
-                    });
-                }
-            });
-            saveSewaRiwayat(riwayat);
-
-            renderSewaTable();
-            renderRiwayat();
-            alert('Semua data sewa & fee berhasil disimpan.');
-        });
-
-        // --- Render riwayat ---
-        function renderRiwayat() {
-            const tbody = document.getElementById('riwayat-table-body');
-            if (!tbody) return;
-            const riwayat = getSewaRiwayat();
-            tbody.innerHTML = '';
-            if (riwayat.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#999;">Belum ada riwayat perubahan.</td></tr>';
-                return;
-            }
-            riwayat.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="padding:8px;">${new Date(item.timestamp).toLocaleString('id-ID')}</td>
-                    <td style="padding:8px;">${item.role}</td>
-                    <td style="padding:8px;">Rp ${item.sewaBaru.toLocaleString()}</td>
-                    <td style="padding:8px;">${item.feeBaru}%</td>
-                    <td style="padding:8px;">${item.diubahOleh}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // --- Kalkulator ---
-        document.getElementById('hitung-kalkulator')?.addEventListener('click', function() {
-            const role = document.getElementById('calc-role').value;
-            const omzet = parseFloat(document.getElementById('calc-omzet').value);
-            const sewa = parseFloat(document.getElementById('calc-sewa').value);
-            const fee = parseFloat(document.getElementById('calc-fee').value);
-            if (!role) { alert('Pilih role terlebih dahulu.'); return; }
-            if (isNaN(omzet) || isNaN(sewa) || isNaN(fee)) { alert('Masukkan angka yang valid.'); return; }
-            const total = sewa + (omzet * fee / 100);
-            document.getElementById('hasil-total').textContent = 'Rp ' + total.toLocaleString();
-            document.getElementById('hasil-kalkulator').style.display = 'block';
-        });
-
-        // Saat role dipilih, otomatis isi sewa dan fee dari data tersimpan
-        document.getElementById('calc-role')?.addEventListener('change', function() {
-            const role = this.value;
-            const data = getSewaFee();
-            const found = data.find(item => item.role === role);
-            if (found) {
-                document.getElementById('calc-sewa').value = found.sewa;
-                document.getElementById('calc-fee').value = found.fee;
-            } else {
-                document.getElementById('calc-sewa').value = '';
-                document.getElementById('calc-fee').value = '';
-            }
-        });
-
-        // Render awal saat halaman sewa-fee dibuka
-        renderSewaTable();
-        renderRiwayat();
-
-        // ========== AKHIR DARI BLOK 4 R11 ==========
-    });
+        let pesanSukses = 'Pendaftaran berhasil!\n\n';
+        pesanSukses += 'Jenis Akun: ' + peranDipilih.toUpperCase() + '\n';
+        pesanSukses += 'Nama: ' + nama + '\n';
+        pesanSukses += 'Username: ' + username + '\n\n';
+        pesanSukses += 'Silakan login menggunakan akun Anda.';
+        
+        alert(pesanSukses);
+        
+        // Reset form setelah pendaftaran
+        document.getElementById('form-pendaftaran-terpadu').reset();
+        toggleFormPendaftaran();
+    }
 </script>
-<!-- ==================== AKHIR BLOK 4 R11 ==================== -->
-<!-- ==================== BLOK 5: MODAL EDIT PROFIL ==================== -->
-<div id="edit-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center;">
-    <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
-        <h2 style="margin-bottom: 20px; color: #FF6B00;">Edit Profil</h2>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama</label>
-            <input type="text" id="edit-name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Alamat</label>
-            <input type="text" id="edit-address" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">HP</label>
-            <input type="text" id="edit-phone" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Email</label>
-            <input type="email" id="edit-email" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 25px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Jabatan</label>
-            <input type="text" id="edit-position" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button id="btn-save-profile" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Simpan</button>
-            <button id="btn-cancel-edit" style="padding: 10px 25px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Batal</button>
-        </div>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 5 ==================== -->
-<!-- ==================== BLOK 6 R3: KELOLA AKUN (Sidebar + Restart System) ==================== -->
-<div id="kelola-akun-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item active" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username-kelola">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
-
-            <div class="content">
-                <h2>Kelola Akun</h2>
-                <p class="breadcrumb">Home / Kelola Akun</p>
-
-                <p style="margin-bottom: 20px; color: #555;">Pilih jenis akun yang ingin dibuat:</p>
-
-                <!-- Grid Daftar Akun -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 900px;">
-                    
-                    <!-- 1. Akun Staf -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">👤</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Staf</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Staf internal toko</p>
-                        <button class="btn-buat-akun" data-role="staf" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 2. Akun Customer Service -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🎧</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Customer Service</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Layanan pelanggan</p>
-                        <button class="btn-buat-akun" data-role="cs" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 3. Akun Marketing -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">📈</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Marketing</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Promosi dan iklan</p>
-                        <button class="btn-buat-akun" data-role="marketing" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 4. Owner Toko -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🏪</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Owner Toko</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pemilik toko utama</p>
-                        <button class="btn-buat-akun" data-role="owner-toko" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 5. Owner Ojek -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🛵</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Owner Ojek</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pengelola armada ojek</p>
-                        <button class="btn-buat-akun" data-role="owner-ojek" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 6. Akun Pemilik Pangkalan -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🏚️</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Pemilik Pangkalan</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Pangkalan gas/minyak</p>
-                        <button class="btn-buat-akun" data-role="pangkalan" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 7. Akun Grosir -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">📦</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Grosir</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjualan partai besar</p>
-                        <button class="btn-buat-akun" data-role="grosir" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 8. Akun Toko Standar -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🏬</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Standar</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Toko umum standar</p>
-                        <button class="btn-buat-akun" data-role="toko-standar" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 9. Akun Toko Kecil -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🏪</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Kecil</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Usaha kecil/rumahan</p>
-                        <button class="btn-buat-akun" data-role="toko-kecil" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 10. Akun Toko Seller -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🛒</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Seller</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjual marketplace</p>
-                        <button class="btn-buat-akun" data-role="seller" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 11. Akun Toko Makanan -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🍽️</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Toko Makanan</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Usaha kuliner/makanan</p>
-                        <button class="btn-buat-akun" data-role="toko-makanan" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 12. Akun COD Seller -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">💵</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun COD Seller</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Penjual sistem COD</p>
-                        <button class="btn-buat-akun" data-role="cod-seller" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                    <!-- 13. Akun Ojek -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🏍️</div>
-                        <h3 style="margin-bottom: 5px; color: #1a1a2e;">Akun Ojek</h3>
-                        <p style="font-size: 0.85em; color: #777; margin-bottom: 15px;">Driver ojek online</p>
-                        <button class="btn-buat-akun" data-role="ojek" style="padding: 8px 20px; background: #FF8C00; color: white; border: none; border-radius: 5px; cursor: pointer;">Buat Akun</button>
-                    </div>
-
-                </div>
-
-                <p class="note" style="max-width: 900px; margin-top: 25px;">Fitur pembuatan akun telah aktif. Pilih jenis akun, lalu klik Buat Akun untuk menambahkan.</p>
-            </div>
-
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 6 R3 ==================== -->
-<!-- ==================== BLOK 7 R3: IMPORT/EXPORT DATA (Sidebar + Restart System) ==================== -->
-<div id="import-export-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item active" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username-import">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
-
-            <div class="content">
-                <h2>Import/Export Data</h2>
-                <p class="breadcrumb">Home / Import/Export Data</p>
-
-                <!-- Grid Kartu -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 1000px;">
-
-                    <!-- 1. Export Data Pengguna -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                            <div style="font-size: 2em;">👤</div>
-                            <h3 style="color: #1a1a2e;">Export Data Pengguna</h3>
-                        </div>
-                        <p style="color: #666; font-size: 0.9em; margin-bottom: 20px; flex: 1;">Download semua data pengguna dalam format CSV.</p>
-                        <button id="export-users-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Export Pengguna CSV</button>
-                    </div>
-
-                    <!-- 2. Export Data Produk -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                            <div style="font-size: 2em;">📦</div>
-                            <h3 style="color: #1a1a2e;">Export Data Produk</h3>
-                        </div>
-                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Download data produk dari toko tertentu.</p>
-                        <div style="margin-bottom: 15px;">
-                            <select id="export-product-toko" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em;">
-                                <option value="">-- Pilih Toko --</option>
-                                <!-- Opsi toko akan diisi oleh script -->
-                            </select>
-                        </div>
-                        <button id="export-product-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Export Produk CSV</button>
-                    </div>
-
-                    <!-- 3. Import Data Pengguna -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                            <div style="font-size: 2em;">📤</div>
-                            <h3 style="color: #1a1a2e;">Import Data Pengguna</h3>
-                        </div>
-                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Upload file CSV untuk mengimport pengguna baru.</p>
-                        <p style="color: #888; font-size: 0.8em; margin-bottom: 15px; background: #f9f9f9; padding: 8px; border-radius: 5px;">
-                            Format: Username,Password,Role,Nama,Alamat,HP,Email,Jabatan,Status
-                        </p>
-                        <div style="margin-bottom: 15px;">
-                            <input type="file" id="import-csv-file" accept=".csv" style="width: 100%;">
-                        </div>
-                        <button id="import-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📤 Upload CSV</button>
-                    </div>
-
-                </div>
-
-                <p class="note" style="max-width: 1000px; margin-top: 25px;">Fitur import/export telah terhubung dengan data produk dan pengguna.</p>
-            </div>
-
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 7 R3 ==================== -->
-<!-- ==================== BLOK 8 R2: MENU AKUN APP (Sidebar + Restart System) ==================== -->
-<div id="menu-akun-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item active" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username-menu-akun">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
-
-            <div class="content">
-                <h2>Menu Akun App</h2>
-                <p class="breadcrumb">Home / Menu Akun App</p>
-
-                <!-- Tabel Daftar Akun -->
-                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 1100px; overflow-x: auto;">
-                    <h3 style="margin-bottom: 15px; color: #1a1a2e;">Daftar Semua Akun</h3>
-                    <table id="account-table" style="width: 100%; border-collapse: collapse; min-width: 700px;">
-                        <thead>
-                            <tr style="background: #f5f6fa; color: #333;">
-                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Username</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Nama</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Role</th>
-                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Status</th>
-                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="account-table-body">
-                            <!-- Data akan diisi oleh script -->
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 20px; color: #999;">Memuat data akun...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p style="margin-top: 10px; font-size: 0.85em; color: #888;">Total akun: <span id="total-accounts">0</span></p>
-                </div>
-
-                <!-- Tombol navigasi cepat -->
-                <div style="margin-top: 20px;">
-                    <button onclick="navigateTo('kelola-akun')" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">+ Tambah Akun Baru</button>
-                </div>
-
-                <p class="note" style="max-width: 1100px; margin-top: 20px;">Gunakan tombol <strong>Lihat Profil</strong> untuk melihat detail lengkap. <strong>Nonaktifkan</strong> untuk menangguhkan akun tanpa menghapus data. <strong>Hapus</strong> untuk menghapus permanen.</p>
-            </div>
-
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
-    </div>
-</div>
-
-<!-- ==================== MODAL PROFIL LENGKAP (Tetap ada) ==================== -->
-<div id="account-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; max-height: 80vh; overflow-y: auto;">
-        <h2 style="margin-bottom: 20px; color: #FF6B00;">Profil Lengkap Akun</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-            <tbody>
-                <tr><td style="padding: 8px; font-weight: 600; width: 120px;">Username</td><td style="padding: 8px;">: <span id="modal-username">-</span></td></tr>
-                <tr><td style="padding: 8px; font-weight: 600;">Nama</td><td style="padding: 8px;">: <span id="modal-name">-</span></td></tr>
-                <tr><td style="padding: 8px; font-weight: 600;">Role</td><td style="padding: 8px;">: <span id="modal-role">-</span></td></tr>
-                <tr><td style="padding: 8px; font-weight: 600;">Alamat</td><td style="padding: 8px;">: <span id="modal-address">-</span></td></tr>
-                <tr><td style="padding: 8px; font-weight: 600;">HP</td><td style="padding: 8px;">: <span id="modal-phone">-</span></td></tr>
-                <tr><td style="padding: 8px; font-weight: 600;">Email</td><td style="padding: 8px;">: <span id="modal-email">-</span></td></tr>
-                <tr><td style="padding: 8px; font-weight: 600;">Jabatan</td><td style="padding: 8px;">: <span id="modal-position">-</span></td></tr>
-                <tr><td style="padding: 8px; font-weight: 600;">Status</td><td style="padding: 8px;">: <span id="modal-status">-</span></td></tr>
-            </tbody>
-        </table>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button id="modal-nonaktifkan-btn" style="padding: 10px 20px; background: #f39c12; color: white; border: none; border-radius: 8px; cursor: pointer;">Nonaktifkan</button>
-            <button id="modal-hapus-btn" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer;">Hapus Akun</button>
-            <button id="modal-close-btn" style="padding: 10px 20px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer;">Tutup</button>
-        </div>
-    </div>
-</div>
-
-<!-- ==================== MODAL TAMBAH AKUN BARU (Tetap ada) ==================== -->
-<div id="add-account-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1001; justify-content: center; align-items: center;">
-    <div style="background: white; border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
-        <h2 style="margin-bottom: 20px; color: #FF6B00;">Tambah Akun Baru</h2>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Role yang dipilih</label>
-            <input type="text" id="add-role-display" disabled style="width: 100%; padding: 10px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Username *</label>
-            <input type="text" id="add-username" placeholder="Masukkan username" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Password *</label>
-            <input type="password" id="add-password" placeholder="Masukkan password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama Lengkap</label>
-            <input type="text" id="add-name" placeholder="Nama" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Alamat</label>
-            <input type="text" id="add-address" placeholder="Alamat" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">HP</label>
-            <input type="text" id="add-phone" placeholder="Nomor HP" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Email</label>
-            <input type="email" id="add-email" placeholder="Email" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="margin-bottom: 25px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Jabatan</label>
-            <input type="text" id="add-position" placeholder="Jabatan" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-        </div>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button id="btn-save-new-account" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Simpan</button>
-            <button id="btn-cancel-add-account" style="padding: 10px 25px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Batal</button>
-        </div>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 8 R2 ==================== -->
-<!-- ==================== BLOK 9 R2: REKENING FEE (Sidebar + Restart System) ==================== -->
-<div id="rekening-fee-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item active" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username-rekening">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
-
-            <div class="content">
-                <h2>🏠 Rekening Penerima Fee</h2>
-                <p class="breadcrumb">Home / Rekening Penerima Fee</p>
-                <p style="color: #555; margin-bottom: 20px;">Kelola rekening untuk pembayaran sewa aplikasi dan fee penjualan.</p>
-
-                <!-- Tabel Daftar Rekening -->
-                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 900px; margin-bottom: 30px;">
-                    <h3 style="margin-bottom: 15px; color: #1a1a2e;">Daftar Rekening Aktif</h3>
-                    <table style="width: 100%; border-collapse: collapse;" id="rekening-table">
-                        <thead>
-                            <tr style="background: #f5f6fa;">
-                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Status</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Bank</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Nomor Rekening</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Nama Pemilik</th>
-                                <th style="padding: 10px; text-align: center; border-bottom: 2px solid #ddd;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rekening-table-body">
-                            <!-- Data akan diisi oleh script -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Form Tambah Rekening Baru -->
-                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 600px;">
-                    <h3 style="margin-bottom: 20px; color: #1a1a2e;">➕ Tambah Rekening Baru</h3>
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama Bank *</label>
-                        <select id="rekening-bank" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                            <option value="">-- Pilih --</option>
-                            <option value="BRI">BRI</option>
-                            <option value="MANDIRI">MANDIRI</option>
-                            <option value="BCA">BCA</option>
-                            <option value="BNI">BNI</option>
-                            <option value="CASH">CASH</option>
-                        </select>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nomor Rekening *</label>
-                        <input type="text" id="rekening-nomor" placeholder="Masukkan nomor rekening" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Nama Pemilik</label>
-                        <input type="text" id="rekening-pemilik" value="APP Toko Online" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                    </div>
-                    <div style="margin-bottom: 25px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Status</label>
-                        <select id="rekening-status" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Nonaktif">Nonaktif</option>
-                        </select>
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button id="btn-simpan-rekening" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💾 Simpan</button>
-                        <button id="btn-reset-rekening" style="padding: 10px 25px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🔄 Reset</button>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 9 R2 ==================== -->
-<!-- ==================== BLOK 10 R2: BACKUP & RESTORE (Sidebar + Restart System) ==================== -->
-<div id="backup-restore-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item active" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username-backup">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
-
-            <div class="content">
-                <h2>💾 Backup &amp; Restore</h2>
-                <p class="breadcrumb">Home / Backup &amp; Restore</p>
-                <p style="color: #555; margin-bottom: 25px;">Backup dan pulihkan data aplikasi.</p>
-
-                <!-- Ringkasan Data -->
-                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 900px; margin-bottom: 25px;">
-                    <h3 style="margin-bottom: 15px;">📊 Ringkasan Data</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2em;">👥</div>
-                            <div style="font-weight: 600;">Data Pengguna</div>
-                            <div id="summary-pengguna" style="font-size: 1.5em; color: #FF8C00;">1 akun</div>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2em;">💰</div>
-                            <div style="font-weight: 600;">Data Tagihan</div>
-                            <div id="summary-tagihan" style="font-size: 1.5em; color: #FF8C00;">3 tagihan</div>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2em;">💬</div>
-                            <div style="font-weight: 600;">Data Chat</div>
-                            <div id="summary-chat" style="font-size: 1.5em; color: #FF8C00;">0 kontak</div>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2em;">📺</div>
-                            <div style="font-weight: 600;">Data Iklan</div>
-                            <div id="summary-iklan" style="font-size: 1.5em; color: #FF8C00;">2 iklan</div>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2em;">💾</div>
-                            <div style="font-weight: 600;">Ukuran Storage</div>
-                            <div id="summary-storage" style="font-size: 1.5em; color: #FF8C00;">9.0 KB</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Grid Aksi Backup & Restore -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 900px;">
-                    <!-- Download Data JSON -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <div style="font-size: 2em; margin-bottom: 10px;">📦</div>
-                        <h3>Download Data JSON</h3>
-                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Backup seluruh data aplikasi dalam format JSON.</p>
-                        <button id="download-json-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Download JSON</button>
-                    </div>
-
-                    <!-- Download File App (HTML) -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <div style="font-size: 2em; margin-bottom: 10px;">📄</div>
-                        <h3>Download File App</h3>
-                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Download file index.html lengkap.</p>
-                        <button id="download-html-btn" style="padding: 10px 20px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 Download HTML</button>
-                    </div>
-
-                    <!-- Restore Data -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <div style="font-size: 2em; margin-bottom: 10px;">📤</div>
-                        <h3>Restore Data</h3>
-                        <p style="color: #e74c3c; font-size: 0.85em; margin-bottom: 10px;">⚠️ Data saat ini akan ditimpa!</p>
-                        <div style="margin-bottom: 15px;">
-                            <input type="file" id="restore-file-input" accept=".json" style="width: 100%;">
-                        </div>
-                        <button id="restore-btn" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📤 Restore Data</button>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 10 R2 ==================== -->
-<!-- ==================== BLOK 11 R1: RESTART SYSTEM ==================== -->
-<div id="restart-system-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item active" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username-restart">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
-
-            <div class="content">
-                <h2>🏠 Restart System</h2>
-                <p class="breadcrumb">Home / Restart System</p>
-                <p style="color: #555; margin-bottom: 25px;">Pembersihan chat, cache, maintenance mode.</p>
-
-                <!-- Ringkasan Statistik -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; max-width: 800px; margin-bottom: 25px;">
-                    <div style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); text-align: center;">
-                        <div style="font-size: 2em;">💬</div>
-                        <div style="font-weight: 600;">Total Chat</div>
-                        <div id="total-chat" style="font-size: 1.5em; color: #FF8C00;">0</div>
-                    </div>
-                    <div style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); text-align: center;">
-                        <div style="font-size: 2em;">👤</div>
-                        <div style="font-weight: 600;">Kontak</div>
-                        <div id="total-kontak" style="font-size: 1.5em; color: #FF8C00;">0</div>
-                    </div>
-                    <div style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); text-align: center;">
-                        <div style="font-size: 2em;">💾</div>
-                        <div style="font-weight: 600;">Storage</div>
-                        <div id="restart-storage" style="font-size: 1.5em; color: #FF8C00;">33 KB</div>
-                    </div>
-                </div>
-
-                <!-- Grid Aksi -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 900px;">
-
-                    <!-- 1. Maintenance Mode -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <h3 style="margin-bottom: 10px;">🚧 Maintenance Mode</h3>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #f8f9fa; padding: 10px; border-radius: 8px;">
-                            <span id="maintenance-status" style="font-weight: 600; color: #27ae60;">✅ APLIKASI NORMAL</span>
-                            <button id="toggle-maintenance-btn" style="padding: 5px 15px; background: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer;">🚧 Aktifkan Maintenance</button>
-                        </div>
-                    </div>
-
-                    <!-- 2. Hapus Chat Lama -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <h3 style="margin-bottom: 10px;">💬 Hapus Chat Lama (> 1 Bulan)</h3>
-                        <p style="color: #e74c3c; font-size: 0.85em; margin-bottom: 10px;">⚠️ Chat yang dihapus tidak dapat dikembalikan!</p>
-                        <button id="delete-old-chat-btn" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🗑️ Hapus Chat > 1 Bulan</button>
-                    </div>
-
-                    <!-- 3. Clear Cache & Optimasi -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <h3 style="margin-bottom: 10px;">🧹 Clear Cache & Optimasi</h3>
-                        <button id="clear-cache-btn" style="padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🧹 Clear Cache ⚡ Optimasi</button>
-                    </div>
-
-                    <!-- 4. Info Sistem -->
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); grid-column: 1 / -1; max-width: 100%;">
-                        <h3 style="margin-bottom: 15px;">ℹ️ Info Sistem</h3>
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <tbody>
-                                <tr><td style="padding: 6px; font-weight: 600; width: 140px;">Aplikasi</td><td style="padding: 6px;">: APP TOKO ONLINE v1.0</td></tr>
-                                <tr><td style="padding: 6px; font-weight: 600;">Browser</td><td style="padding: 6px;">: <span id="browser-info">Chrome/109.0.0.0 Safari/537.36</span></td></tr>
-                                <tr><td style="padding: 6px; font-weight: 600;">Online</td><td style="padding: 6px;">: <span id="online-status" style="color: #27ae60;">✅ Ya</span></td></tr>
-                                <tr><td style="padding: 6px; font-weight: 600;">Storage Keys</td><td style="padding: 6px;">: <span id="storage-keys">48 keys</span></td></tr>
-                                <tr><td style="padding: 6px; font-weight: 600;">Ukuran Data</td><td style="padding: 6px;">: <span id="data-size">33 KB</span></td></tr>
-                                <tr><td style="padding: 6px; font-weight: 600;">Waktu</td><td style="padding: 6px;">: <span id="current-time">10/7/2026 02.26.26</span></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 11 R1 ==================== -->
-<!-- ==================== BLOK 12 R1: SEWA & FEE APLIKASI ==================== -->
-<div id="sewa-fee-page" style="display: none; min-height: 100vh; background: #f5f6fa;">
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>TOKO ONLINE</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item" data-page="dashboard">Dashboard</a>
-                <a href="#" class="nav-item" data-page="kelola-akun">Kelola Akun</a>
-                <a href="#" class="nav-item" data-page="import-export">Import/Export Data</a>
-                <a href="#" class="nav-item" data-page="menu-akun">Menu Akun App</a>
-                <a href="#" class="nav-item" data-page="rekening-fee">Rekening Fee</a>
-                <a href="#" class="nav-item" data-page="backup-restore">Backup &amp; Restore</a>
-                <a href="#" class="nav-item" data-page="restart-system">Restart System</a>
-                <a href="#" class="nav-item active" data-page="sewa-fee">Sewa &amp; Fee Aplikasi</a>
-                <a href="#" class="nav-item disabled">Laporan</a>
-                <a href="#" class="nav-item disabled">Pengaturan</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <span>Selamat datang, <strong id="display-username-sewa">SuperAdmin</strong></span>
-                <button class="btn-logout" onclick="logout()">Keluar</button>
-            </header>
-
-            <div class="content">
-                <h2>🏠 Sewa &amp; Fee Aplikasi</h2>
-                <p class="breadcrumb">Home / Sewa &amp; Fee Aplikasi</p>
-                <p style="color: #555; margin-bottom: 25px;">Atur harga sewa dan fee per role. Estimasi dihitung berdasarkan rata-rata omzet bulanan role tersebut.</p>
-
-                <!-- Tab Navigation -->
-                <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">
-                    <button class="tab-btn active" data-tab="harga" style="padding: 10px 25px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💰 Harga</button>
-                    <button class="tab-btn" data-tab="kalkulator" style="padding: 10px 25px; background: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🧮 Kalkulator</button>
-                    <button class="tab-btn" data-tab="riwayat" style="padding: 10px 25px; background: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📜 Riwayat</button>
-                </div>
-
-                <!-- Tab Content: Harga -->
-                <div id="tab-harga" style="display: block;">
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 1100px; overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
-                            <thead>
-                                <tr style="background: #f5f6fa;">
-                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Role</th>
-                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Sewa/Bulan (Rp)</th>
-                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Fee (%)</th>
-                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Estimasi</th>
-                                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #ddd;">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sewa-table-body">
-                                <!-- Data akan diisi oleh script -->
-                                <tr>
-                                    <td colspan="5" style="text-align: center; padding: 20px; color: #999;">Memuat data sewa & fee...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
-                            <button id="simpan-semua-sewa" style="padding: 12px 30px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💾 Simpan Semua Sewa &amp; Fee</button>
-                        </div>
-                        <p style="margin-top: 10px; font-size: 0.85em; color: #888;">* Estimasi dihitung dari rata-rata omzet bulanan masing-masing role.</p>
-                    </div>
-                </div>
-
-                <!-- Tab Content: Kalkulator -->
-                <div id="tab-kalkulator" style="display: none;">
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 600px;">
-                        <h3 style="margin-bottom: 15px;">🧮 Kalkulator Sewa & Fee</h3>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Role</label>
-                            <select id="calc-role" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                                <option value="">-- Pilih Role --</option>
-                                <option value="Toko Grosir">Toko Grosir</option>
-                                <option value="Toko Standar">Toko Standar</option>
-                                <option value="Toko Kecil">Toko Kecil</option>
-                                <option value="Kaki Lima">Kaki Lima</option>
-                                <option value="Toko Makanan">Toko Makanan</option>
-                                <option value="COD Seller">COD Seller</option>
-                                <option value="Owner Toko">Owner Toko</option>
-                                <option value="Ojek">Ojek</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Omzet Bulanan (Rp)</label>
-                            <input type="number" id="calc-omzet" placeholder="Masukkan omzet" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Sewa Bulanan (Rp)</label>
-                            <input type="number" id="calc-sewa" placeholder="Masukkan sewa" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-weight: 600; margin-bottom: 5px;">Fee (%)</label>
-                            <input type="number" id="calc-fee" placeholder="Masukkan fee" step="0.1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        </div>
-                        <button id="hitung-kalkulator" style="padding: 10px 25px; background: #FF8C00; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Hitung</button>
-                        <div id="hasil-kalkulator" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; display: none;">
-                            <p style="font-weight: 600;">Hasil Estimasi:</p>
-                            <p>Total yang harus dibayar: <span id="hasil-total" style="color: #FF8C00; font-size: 1.2em;">Rp 0</span></p>
-                            <p style="font-size: 0.9em; color: #666;">(Sewa + (Omzet × Fee %))</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab Content: Riwayat -->
-                <div id="tab-riwayat" style="display: none;">
-                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); max-width: 1100px; overflow-x: auto;">
-                        <h3 style="margin-bottom: 15px;">📜 Riwayat Perubahan Sewa & Fee</h3>
-                        <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
-                            <thead>
-                                <tr style="background: #f5f6fa;">
-                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Tanggal</th>
-                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Role</th>
-                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Sewa Baru</th>
-                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Fee Baru</th>
-                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Diubah Oleh</th>
-                                </tr>
-                            </thead>
-                            <tbody id="riwayat-table-body">
-                                <tr>
-                                    <td colspan="5" style="text-align: center; padding: 20px; color: #999;">Belum ada riwayat perubahan.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="footer">
-                <p>© 2024 TOKO ONLINE. All rights reserved.</p>
-            </footer>
-        </main>
-    </div>
-</div>
-<!-- ==================== AKHIR BLOK 12 R1 ==================== -->
+<!-- ==================== AKHIR BLOK PUB-04 ==================== -->
+    <!-- ==========================================
+BLOK APP-SW-01 R1 - SERVICE WORKER (PWA)
+===========================================
+PENJELASAN FUNGSI PERINTAH:
+1. File service worker (sw.js) untuk caching aset aplikasi.
+2. Memungkinkan aplikasi diakses secara offline setelah pertama kali dibuka.
+3. Disalin ke dalam folder yang sama dengan index.html.
+=========================================== -->
+<script>
+// Service Worker untuk Platform 2R
+const CACHE_NAME = 'platform2r-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/logo-192.png',
+  '/logo-512.png'
+];
+
+// Install service worker
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        console.log('Cache terbuka');
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
+
+// Ambil dari cache jika offline
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request)
+      .then(function(response) {
+        // Return cache jika ada, jika tidak fetch dari network
+        return response || fetch(event.request);
+      })
+  );
+});
+
+// Update cache jika ada versi baru
+self.addEventListener('activate', function(event) {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
+</script>
+<!-- ==================== AKHIR BLOK APP-SW-01 R1 ==================== -->
+<!-- ==========================================
+BLOK APP-PWA-01 R1 - MANIFEST JSON (PWA)
+===========================================
+PENJELASAN FUNGSI PERINTAH:
+1. File manifest.json untuk mengonfigurasi aplikasi sebagai Progressive Web App (PWA).
+2. Menentukan nama aplikasi, ikon, warna tema, dan mode tampilan.
+3. Disalin ke dalam folder yang sama dengan index.html.
+=========================================== -->
+{
+  "name": "Platform 2R - Ekosistem Grosir & Ojek Digital",
+  "short_name": "Platform 2R",
+  "description": "Aplikasi marketplace, ojek, dan komunitas untuk Ciamis dan sekitarnya.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff6600",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+<!-- ==================== AKHIR BLOK APP-PWA-01 R1 ==================== -->
+    <!-- ==========================================
+BLOK APP-ENGINE R4 - OTAK APLIKASI (FIX BUG PUBLIK + GLOBAL DATA)
+============================================
+PENJELASAN FUNGSI PERINTAH:
+1. Memperbaiki bug halaman publik yang tidak hilang saat login.
+2. Menyediakan dataProduk global untuk modul M4 dan M5.
+3. Menangani routing, login 16 akun demo, dan session.
+============================================ -->
+<script>
+    // ========== DATA GLOBAL ==========
+    const dataProduk = [
+        {foto:'📦',nama:'Indomie Goreng',kode:'MKN-001',kategori:'Makanan',harga:3500,stok:120,kadaluarsa:'10 Des 2027'},
+        {foto:'🛢️',nama:'Minyak Bimoli 2L',kode:'SEM-002',kategori:'Sembako',harga:38000,stok:5,kadaluarsa:'01 Jan 2028'},
+        {foto:'🍞',nama:'Roti Tawar',kode:'MKN-003',kategori:'Makanan',harga:12000,stok:10,kadaluarsa:'10 Jul 2026'},
+        {foto:'☕',nama:'Kopi Kapal Api',kode:'MIN-004',kategori:'Minuman',harga:1500,stok:200,kadaluarsa:'15 Mar 2028'},
+        {foto:'🍬',nama:'Gula Pasir 1kg',kode:'SEM-005',kategori:'Sembako',harga:18000,stok:30,kadaluarsa:'20 Jun 2028'},
+        {foto:'🚬',nama:'Rokok Surya 16',kode:'ROK-006',kategori:'Rokok',harga:32000,stok:15,kadaluarsa:'-'}
+    ];
+
+    // ========== AKUN DEMO ==========
+    const AKUN_DEMO = {
+        'superadmin':   { role: 'SuperAdmin', dashboard: 'dashboard-sa' },
+        'tokogrosir':   { role: 'Toko Grosir', dashboard: 'dashboard-toko-grosir' },
+        'tokostandar':  { role: 'Toko Standar', dashboard: 'dashboard-toko-standar' },
+        'pkl':          { role: 'Pedagang Kaki Lima', dashboard: 'dashboard-pkl' },
+        'pasar':        { role: 'Pedagang Pasar', dashboard: 'dashboard-pasar' },
+        'codseller':    { role: 'COD Seller', dashboard: 'dashboard-cod' },
+        'ojek':         { role: 'Driver Ojek', dashboard: 'dashboard-ojek' },
+        'pelanggan':    { role: 'Pelanggan', dashboard: 'dashboard-pelanggan' },
+        'sponsor':      { role: 'Sponsorship', dashboard: 'dashboard-sponsor' },
+        'cs':           { role: 'Customer Service', dashboard: 'dashboard-cs' },
+        'marketing':    { role: 'Marketing', dashboard: 'dashboard-marketing' },
+        'tokomakanan':  { role: 'Toko Makanan', dashboard: 'dashboard-toko-makanan' },
+        'ownertoko':    { role: 'Owner Toko', dashboard: 'dashboard-owner-toko' },
+        'ownerojek':    { role: 'Owner Ojek', dashboard: 'dashboard-owner-ojek' },
+        'warga':        { role: 'Warga', dashboard: 'dashboard-warga' }
+    };
+
+    // ========== ROUTING ==========
+    function showPage(pageId) {
+        const semuaHalaman = [
+            // Halaman Publik
+            'halaman-login', 'halaman-daftar-pelanggan', 'halaman-daftar-toko',
+            'halaman-daftar-ojek', 'halaman-daftar-sponsor', 'halaman-daftar-owner',
+            'halaman-radar-toko', 'halaman-radar-ojek', 'halaman-pendaftaran',
+            // Dashboard
+            'dashboard-sa', 'dashboard-cs', 'dashboard-marketing',
+            'dashboard-toko-grosir', 'dashboard-toko-standar', 'dashboard-pkl',
+            'dashboard-pasar', 'dashboard-cod', 'dashboard-ojek',
+            'dashboard-pelanggan', 'dashboard-sponsor', 'dashboard-toko-kecil',
+            'dashboard-toko-makanan', 'dashboard-owner-toko', 'dashboard-owner-ojek',
+            'dashboard-warga',
+            // Modul Master Data
+            'modul-profil', 'modul-ubah-login', 'modul-rekening', 'modul-modal-cash',
+            'modul-input-produk', 'modul-tabel-produk', 'modul-etalase',
+            'modul-pengajuan-kuota', 'modul-audit-stok', 'modul-akun-kasir',
+            // Modul Transaksi
+            'modul-pos', 'modul-data-transaksi', 'modul-rekap',
+            'modul-kasbon', 'modul-order-masuk', 'modul-biaya-operasional',
+            // Modul Administrasi
+            'modul-pengajuan-pro', 'modul-upload-syarat', 'modul-tagihan',
+            'modul-konfigurasi', 'modul-bantuan',
+            // Modul Komunikasi
+            'modul-chat-cs', 'modul-chat-ojek', 'modul-chat-pelanggan', 'modul-promosi',
+            // Modul SuperAdmin
+            'modul-sa-profil', 'modul-sa-dokumen', 'modul-sa-verif', 'modul-sa-akun',
+            'modul-sa-log', 'modul-sa-global', 'modul-sa-notif', 'modul-sa-laporan',
+            'modul-sa-sponsor', 'modul-sa-poin', 'modul-sa-logo',
+            'modul-sa-fee', 'modul-sa-owner', 'modul-sa-target', 'modul-sa-peta', 'modul-sa-diskon',
+            // Modul Marketing
+            'modul-mkt-rekrut', 'modul-mkt-broadcast',
+            // Modul Owner
+            'modul-owner-buat-toko', 'modul-owner-buat-ojek',
+            'modul-owner-rekrutan-toko', 'modul-owner-rekrutan-ojek',
+            'modul-owner-penjualan-toko', 'modul-owner-order-ojek',
+            'modul-owner-profil',
+            // Modul Keinginan
+            'modul-keinginan', 'modul-chat-keinginan'
+        ];
+
+        semuaHalaman.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+
+        const target = document.getElementById(pageId);
+        if (target) {
+            target.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    // ========== LOGIN ==========
+    function prosesLoginApp(username, password) {
+        const akun = AKUN_DEMO[username.toLowerCase()];
+        if (!akun || password !== '123456') {
+            alert('Username atau Password salah.');
+            return false;
+        }
+        sessionStorage.setItem('loggedIn', 'true');
+        sessionStorage.setItem('username', username);
+        sessionStorage.setItem('role', akun.role);
+        sessionStorage.setItem('dashboard', akun.dashboard);
+        showPage(akun.dashboard);
+        return true;
+    }
+
+    function logoutApp() {
+        sessionStorage.clear();
+        showPage('halaman-login');
+        const formLogin = document.getElementById('form-login-utama');
+        if (formLogin) formLogin.reset();
+    }
+
+    // ========== INISIALISASI ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        if (sessionStorage.getItem('loggedIn') === 'true') {
+            const dashboardId = sessionStorage.getItem('dashboard');
+            if (dashboardId) showPage(dashboardId);
+        } else {
+            showPage('halaman-login');
+        }
+    });
+
+    // ========== FUNGSI BANTU ==========
+    function isiAkunDemo(username, password) {
+        const inputUser = document.getElementById('login-username');
+        const inputPass = document.getElementById('login-password');
+        if (inputUser && inputPass) {
+            inputUser.value = username;
+            inputPass.value = password;
+        }
+        prosesLoginApp(username, password);
+    }
+
+    console.log('APP-ENGINE R4 siap.');
+</script>
+<!-- ==================== AKHIR BLOK APP-ENGINE R4 ==================== -->
 </body>
 </html>
+<!-- ==================== AKHIR BLOK PUB-01 ==================== -->
